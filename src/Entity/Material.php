@@ -16,6 +16,9 @@ class Material
     #[ORM\Column(length: 32)]
     private ?string $label = null;
 
+    #[ORM\ManyToOne(inversedBy: 'material')]
+    private ?Room $room = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -29,6 +32,18 @@ class Material
     public function setLabel(string $label): static
     {
         $this->label = $label;
+
+        return $this;
+    }
+
+    public function getRoom(): ?Room
+    {
+        return $this->room;
+    }
+
+    public function setRoom(?Room $room): static
+    {
+        $this->room = $room;
 
         return $this;
     }

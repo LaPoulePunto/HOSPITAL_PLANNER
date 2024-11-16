@@ -27,9 +27,13 @@ class Room
     #[ORM\OneToMany(targetEntity: Consultation::class, mappedBy: 'room')]
     private Collection $consultation;
 
+    #[ORM\OneToMany(targetEntity: Material::class, mappedBy: 'room')]
+    private Collection $material;
+
     public function __construct()
     {
         $this->consultation = new ArrayCollection();
+        $this->material = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -97,6 +101,36 @@ class Room
             // set the owning side to null (unless already changed)
             if ($consultation->getRoom() === $this) {
                 $consultation->setRoom(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Material>
+     */
+    public function getMaterial(): Collection
+    {
+        return $this->material;
+    }
+
+    public function addMaterial(Material $material): static
+    {
+        if (!$this->material->contains($material)) {
+            $this->material->add($material);
+            $material->setRoom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMaterial(Material $material): static
+    {
+        if ($this->material->removeElement($material)) {
+            // set the owning side to null (unless already changed)
+            if ($material->getRoom() === $this) {
+                $material->setRoom(null);
             }
         }
 
