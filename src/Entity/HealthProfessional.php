@@ -29,11 +29,15 @@ class HealthProfessional extends User
     #[ORM\OneToMany(targetEntity: Availability::class, mappedBy: 'healthprofessional')]
     private Collection $availability;
 
+    #[ORM\ManyToMany(targetEntity: Speciality::class, mappedBy: 'healthprofessional')]
+    private Collection $speciality;
+
     public function __construct()
     {
         $this->consultation = new ArrayCollection();
         $this->reservation = new ArrayCollection();
         $this->availability = new ArrayCollection();
+        $this->speciality = new ArrayCollection();
     }
 
     public function getJob(): ?string
@@ -157,6 +161,33 @@ class HealthProfessional extends User
             if ($availability->getHealthprofessional() === $this) {
                 $availability->setHealthprofessional(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Speciality>
+     */
+    public function getSpeciality(): Collection
+    {
+        return $this->speciality;
+    }
+
+    public function addSpeciality(Speciality $speciality): static
+    {
+        if (!$this->speciality->contains($speciality)) {
+            $this->speciality->add($speciality);
+            $speciality->addHealthprofessional($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSpeciality(Speciality $speciality): static
+    {
+        if ($this->speciality->removeElement($speciality)) {
+            $speciality->removeHealthprofessional($this);
         }
 
         return $this;
