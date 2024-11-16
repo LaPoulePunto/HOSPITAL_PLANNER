@@ -40,7 +40,13 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-
+            $patient->setLogin(
+                strtolower(
+                    substr($patient->getFirstname(), 0, 2).
+                            substr($patient->getLastname(), 0, 2)
+                ).
+                        $patient->getBirthDate()->format('Y')
+            );
             $entityManager->persist($patient);
             $entityManager->flush();
 
