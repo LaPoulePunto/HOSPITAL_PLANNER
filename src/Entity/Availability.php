@@ -23,6 +23,9 @@ class Availability
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTimeInterface $endTime = null;
 
+    #[ORM\ManyToOne(inversedBy: 'availability')]
+    private ?HealthProfessional $healthprofessional = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +63,18 @@ class Availability
     public function setEndTime(\DateTimeInterface $endTime): static
     {
         $this->endTime = $endTime;
+
+        return $this;
+    }
+
+    public function getHealthprofessional(): ?HealthProfessional
+    {
+        return $this->healthprofessional;
+    }
+
+    public function setHealthprofessional(?HealthProfessional $healthprofessional): static
+    {
+        $this->healthprofessional = $healthprofessional;
 
         return $this;
     }
