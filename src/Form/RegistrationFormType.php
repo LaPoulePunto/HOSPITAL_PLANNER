@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\User;
+use App\Entity\Patient;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -17,14 +17,16 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email')
+            ->add('email', null, [
+                'label' => 'Adresse mail',
+            ])
             ->add('agreeTerms', CheckboxType::class, [
                                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
                         'message' => 'You should agree to our terms.',
                     ]),
-                ],
+                ], 'label' => 'J\'accepte les conditions',
             ])
             ->add('plainPassword', PasswordType::class, [
                                 // instead of being set onto the object directly,
@@ -33,15 +35,37 @@ class RegistrationFormType extends AbstractType
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password',
+                        'message' => 'Veuillez renseigner votre mot de passe',
                     ]),
                     new Length([
                         'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
+                        'minMessage' => 'Votre mot de passe doit contenir au minimum {{ limit }} charactères',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),
                 ],
+                'label' => 'Mot de passe',
+            ])
+            ->add('firstname', null, [
+                'label' => 'Prénom',
+            ])
+            ->add('lastname', null, [
+                'label' => 'Nom',
+            ])
+            ->add('city', null, [
+                'label' => 'Ville',
+            ])
+            ->add('postCode', null, [
+                'label' => 'Code postale',
+            ])
+            ->add('address', null, [
+                'label' => 'Adresse',
+            ])
+            ->add('gender', null, [
+                'label' => 'Genre',
+            ])
+            ->add('phone', null, [
+                'label' => 'Telephone',
             ])
         ;
     }
@@ -49,7 +73,7 @@ class RegistrationFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
+            'data_class' => Patient::class,
         ]);
     }
 }
