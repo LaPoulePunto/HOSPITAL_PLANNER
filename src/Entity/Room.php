@@ -19,6 +19,9 @@ class Room
     #[ORM\Column(length: 3)]
     private ?string $floor = null;
 
+    #[ORM\ManyToOne(inversedBy: 'room')]
+    private ?RoomType $roomtype = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +47,18 @@ class Room
     public function setFloor(string $floor): static
     {
         $this->floor = $floor;
+
+        return $this;
+    }
+
+    public function getRoomtype(): ?RoomType
+    {
+        return $this->roomtype;
+    }
+
+    public function setRoomtype(?RoomType $roomtype): static
+    {
+        $this->roomtype = $roomtype;
 
         return $this;
     }
