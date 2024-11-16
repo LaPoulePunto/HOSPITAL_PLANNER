@@ -23,6 +23,18 @@ class Consultation
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTimeInterface $endTime = null;
 
+    #[ORM\ManyToOne(inversedBy: 'consultation')]
+    private ?Room $room = null;
+
+    #[ORM\ManyToOne(inversedBy: 'consultation')]
+    private ?ConsultationType $consultationtype = null;
+
+    #[ORM\ManyToOne(inversedBy: 'consultation')]
+    private ?Patient $patient = null;
+
+    #[ORM\ManyToOne(inversedBy: 'consultation')]
+    private ?HealthProfessional $healthprofessional = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +72,54 @@ class Consultation
     public function setEndTime(\DateTimeInterface $endTime): static
     {
         $this->endTime = $endTime;
+
+        return $this;
+    }
+
+    public function getRoom(): ?Room
+    {
+        return $this->room;
+    }
+
+    public function setRoom(?Room $room): static
+    {
+        $this->room = $room;
+
+        return $this;
+    }
+
+    public function getConsultationtype(): ?ConsultationType
+    {
+        return $this->consultationtype;
+    }
+
+    public function setConsultationtype(?ConsultationType $consultationtype): static
+    {
+        $this->consultationtype = $consultationtype;
+
+        return $this;
+    }
+
+    public function getPatient(): ?Patient
+    {
+        return $this->patient;
+    }
+
+    public function setPatient(?Patient $patient): static
+    {
+        $this->patient = $patient;
+
+        return $this;
+    }
+
+    public function getHealthprofessional(): ?HealthProfessional
+    {
+        return $this->healthprofessional;
+    }
+
+    public function setHealthprofessional(?HealthProfessional $healthprofessional): static
+    {
+        $this->healthprofessional = $healthprofessional;
 
         return $this;
     }

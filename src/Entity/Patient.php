@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PatientRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PatientRepository::class)]
@@ -28,6 +30,14 @@ class Patient extends User
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $treatments = null;
+
+    #[ORM\OneToMany(targetEntity: Consultation::class, mappedBy: 'patient')]
+    private Collection $consultation;
+
+    public function __construct()
+    {
+        $this->consultation = new ArrayCollection();
+    }
 
     public function getCity(): ?string
     {
@@ -109,6 +119,36 @@ class Patient extends User
     public function setTreatments(?string $treatments): static
     {
         $this->treatments = $treatments;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Consultation>
+     */
+    public function getConsultation(): Collection
+    {
+        return $this->consultation;
+    }
+
+    public function addConsultation(Consultation $consultation): static
+    {
+        if (!$this->consultation->contains($consultation)) {
+            $this->consultation->add($consultation);
+            $consultation->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConsultation(Consultation $consultation): static
+    {
+        if ($this->consultation->removeElement($consultation)) {
+            // set the owning side to null (unless already changed)
+            if ($consultation->getPatient() === $this) {
+                $consultation->setPatient(null);
+            }
+        }
 
         return $this;
     }
