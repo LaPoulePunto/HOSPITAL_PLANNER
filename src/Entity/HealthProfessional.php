@@ -23,9 +23,13 @@ class HealthProfessional extends User
     #[ORM\OneToMany(targetEntity: Consultation::class, mappedBy: 'healthprofessional')]
     private Collection $consultation;
 
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'healthprofessional')]
+    private Collection $reservation;
+
     public function __construct()
     {
         $this->consultation = new ArrayCollection();
+        $this->reservation = new ArrayCollection();
     }
 
     public function getJob(): ?string
@@ -88,6 +92,36 @@ class HealthProfessional extends User
             // set the owning side to null (unless already changed)
             if ($consultation->getHealthprofessional() === $this) {
                 $consultation->setHealthprofessional(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservation(): Collection
+    {
+        return $this->reservation;
+    }
+
+    public function addReservation(Reservation $reservation): static
+    {
+        if (!$this->reservation->contains($reservation)) {
+            $this->reservation->add($reservation);
+            $reservation->setHealthprofessional($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): static
+    {
+        if ($this->reservation->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getHealthprofessional() === $this) {
+                $reservation->setHealthprofessional(null);
             }
         }
 
