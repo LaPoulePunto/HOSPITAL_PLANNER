@@ -42,6 +42,18 @@ class Patient extends User
         $this->consultation = new ArrayCollection();
     }
 
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(string $phone): static
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
     public function getCity(): ?string
     {
         return $this->city;
