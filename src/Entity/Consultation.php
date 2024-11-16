@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ConsultationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -32,8 +34,13 @@ class Consultation
     #[ORM\ManyToOne(inversedBy: 'consultation')]
     private ?Patient $patient = null;
 
-    #[ORM\ManyToOne(inversedBy: 'consultation')]
-    private ?HealthProfessional $healthprofessional = null;
+    #[ORM\ManyToMany(targetEntity: HealthProfessional::class, inversedBy: 'consultation')]
+    private Collection $healthprofessional;
+
+    public function __construct()
+    {
+        $this->healthprofessional = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -120,6 +127,22 @@ class Consultation
     public function setHealthprofessional(?HealthProfessional $healthprofessional): static
     {
         $this->healthprofessional = $healthprofessional;
+
+        return $this;
+    }
+
+    public function addHealthprofessional(HealthProfessional $healthprofessional): static
+    {
+        if (!$this->healthprofessional->contains($healthprofessional)) {
+            $this->healthprofessional->add($healthprofessional);
+        }
+
+        return $this;
+    }
+
+    public function removeHealthprofessional(HealthProfessional $healthprofessional): static
+    {
+        $this->healthprofessional->removeElement($healthprofessional);
 
         return $this;
     }

@@ -20,9 +20,6 @@ class HealthProfessional extends User
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $departureDate = null;
 
-    #[ORM\OneToMany(targetEntity: Consultation::class, mappedBy: 'healthprofessional')]
-    private Collection $consultation;
-
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'healthprofessional')]
     private Collection $reservation;
 
@@ -31,6 +28,9 @@ class HealthProfessional extends User
 
     #[ORM\ManyToMany(targetEntity: Speciality::class, mappedBy: 'healthprofessional')]
     private Collection $speciality;
+
+    #[ORM\ManyToMany(targetEntity: Consultation::class, mappedBy: 'healthprofessional')]
+    private Collection $consultation;
 
     public function __construct()
     {
