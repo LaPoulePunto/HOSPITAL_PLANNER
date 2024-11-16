@@ -16,6 +16,9 @@ class Patient extends User
     #[ORM\Column]
     private ?int $postCode = null;
 
+    #[ORM\Column]
+    private ?int $phone = null;
+
     #[ORM\Column(length: 32, nullable: true)]
     private ?string $address = null;
 
@@ -37,6 +40,18 @@ class Patient extends User
     public function __construct()
     {
         $this->consultation = new ArrayCollection();
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(string $phone): static
+    {
+        $this->phone = $phone;
+
+        return $this;
     }
 
     public function getCity(): ?string
