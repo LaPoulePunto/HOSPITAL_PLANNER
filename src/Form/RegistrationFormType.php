@@ -52,9 +52,6 @@ class RegistrationFormType extends AbstractType
             ->add('lastname', null, [
                 'label' => 'Nom',
             ])
-            ->add('login', null, [
-                'label' => 'Identifiant',
-            ])
             ->add('city', null, [
                 'label' => 'Ville',
             ])
