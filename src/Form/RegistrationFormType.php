@@ -59,7 +59,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Ville',
             ])
             ->add('postCode', null, [
-                'label' => 'Code postale',
+                'label' => 'Code postal',
             ])
             ->add('address', null, [
                 'label' => 'Adresse',
