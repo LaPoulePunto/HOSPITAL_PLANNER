@@ -21,6 +21,17 @@ class ConsultationRepository extends ServiceEntityRepository
         parent::__construct($registry, Consultation::class);
     }
 
+    public function getConsultationById(int $consultationId): ?Consultation
+    {
+        $consultation = $this->createQueryBuilder('c')
+            ->andWhere('c.id = :consultationID')
+            ->setParameter('consultationID', $consultationId)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        return $consultation;
+    }
     //    /**
     //     * @return Consultation[] Returns an array of Consultation objects
     //     */
