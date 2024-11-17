@@ -16,10 +16,10 @@ class Patient extends User
     #[ORM\Column]
     private ?int $postCode = null;
 
-    #[ORM\Column]
-    private ?int $phone = null;
+    #[ORM\Column(length: 20)]
+    private ?string $phone = null;
 
-    #[ORM\Column(length: 32, nullable: true)]
+    #[ORM\Column(length: 128, nullable: true)]
     private ?string $address = null;
 
     #[ORM\Column(length: 3, nullable: true)]
