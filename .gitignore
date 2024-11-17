@@ -33,5 +33,3 @@
 ###> vincentlanglet/twig-cs-fixer ###
 /.twig-cs-fixer.cache
 ###< vincentlanglet/twig-cs-fixer ###
-
-/migrations/
