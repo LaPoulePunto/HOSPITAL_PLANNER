@@ -15,4 +15,13 @@ class UserController extends AbstractController
             'controller_name' => 'UserController',
         ]);
     }
+
+    #[Route('/user/profile', name: 'app_user_profile')]
+    public function profile(): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        return $this->render('user/profile.html.twig', ['user' => $this->getUser()]);
+    }
 }
