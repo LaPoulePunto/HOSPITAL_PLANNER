@@ -4,6 +4,7 @@ namespace App\Factory;
 
 use App\Entity\Patient;
 use App\Repository\PatientRepository;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 use Zenstruck\Foundry\Persistence\Proxy;
 use Zenstruck\Foundry\Persistence\ProxyRepositoryDecorator;
@@ -27,14 +28,14 @@ use Zenstruck\Foundry\Persistence\ProxyRepositoryDecorator;
  * @method static Patient[]|Proxy[]                          randomRange(int $min, int $max, array $attributes = [])
  * @method static Patient[]|Proxy[]                          randomSet(int $number, array $attributes = [])
  */
-final class PatientFactory extends PersistentProxyObjectFactory
+final class PatientFactory extends UserFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
      */
-    public function __construct()
+    public function __construct(UserPasswordHasherInterface $userPasswordHasher)
     {
-        $this->translate = \Transliterator::create('Any-Lower; Latin-ASCII');
+        parent::__construct($userPasswordHasher);
     }
 
     public static function class(): string
@@ -42,28 +43,12 @@ final class PatientFactory extends PersistentProxyObjectFactory
         return Patient::class;
     }
 
-    public function normalizeName(string $name): string
-    {
-        return preg_replace('/[^a-z]/', '-', mb_strtolower($this->translate->transliterate($name)));
-    }
-
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
      */
     protected function defaults(): array|callable
     {
-        $firstname = self::faker()->firstName();
-        $lastname = self::faker()->lastName();
-
-        return [
-            'email' => $this->normalizeName($firstname)
-                .'.'
-                .$this->normalizeName($lastname)
-                .'@'
-                .self::faker()->domainName(),
-            'password' => 'password',
-            'firstname' => $firstname,
-            'lastname' => $lastname,
+        return array_merge(parent::defaults(), [
             'city' => self::faker()->city(),
             'postCode' => self::faker()->numberBetween(1000, 99999),
             'phone' => self::faker()->phoneNumber(),
@@ -72,10 +57,7 @@ final class PatientFactory extends PersistentProxyObjectFactory
             'allergies' => self::faker()->optional()->sentence(),
             'comments' => self::faker()->optional()->sentence(),
             'treatments' => self::faker()->optional()->sentence(),
-            'birthDate' => self::faker()->dateTimeBetween('-80 years', '-18 years'),
-            'login' => $this->normalizeName($lastname).self::faker()->numberBetween(0, 999),
-            'gender' => self::faker()->numberBetween(0, 1),
-        ];
+        ]);
     }
 
     /**
@@ -83,8 +65,6 @@ final class PatientFactory extends PersistentProxyObjectFactory
      */
     protected function initialize(): static
     {
-        return $this
-            // ->afterInstantiate(function(Patient $patient): void {})
-        ;
+        return parent::initialize();
     }
 }
