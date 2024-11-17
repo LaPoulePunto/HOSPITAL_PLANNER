@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Fiche Patient</h1>
+    <br>
+    <h2>{{ patient.lastname }} {{ patient.firstname }}</h2>
+    <dl>
+        <dt>Groupe sanguin :</dt>
+        <dd>{{ patient.bloodGroup }}</dd>
+
+        <dt>Allergies :</dt>
+        <dd>{{ patient.allergies }}</dd>
+
+        <dt>Traitements suivis :</dt>
+        <dd>{{ patient.treatments }}</dd>
+
+        <dt>Autres consultations :</dt>
+        <dd>{{ patient.consultation }}</dd>
+
+        <dt>Commentaires :</dt>
+        <dd>{{ patient.comments }}</dd>
+    </dl>
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+
