@@ -36,11 +36,17 @@ final class HealthProfessionalFactory extends PersistentProxyObjectFactory{
      */
     public function __construct()
     {
+        $this->translate = \Transliterator::create('Any-Lower; Latin-ASCII');
     }
 
     public static function class(): string
     {
         return HealthProfessional::class;
+    }
+
+    public function normalizeName(string $name): string
+    {
+        return preg_replace('/[^a-z]/', '-', mb_strtolower($this->translate->transliterate($name)));
     }
 
     /**
@@ -50,13 +56,31 @@ final class HealthProfessionalFactory extends PersistentProxyObjectFactory{
      */
     protected function defaults(): array|callable
     {
+        $firstname = self::faker()->firstName();
+        $lastname = self::faker()->lastName();
+        $medicalJobs = [
+            'Médecin généraliste',
+            'Chirurgien',
+            'Infirmier',
+            'Urgentiste',
+            'Kinésithérapeute',
+        ];
+
         return [
-            'birthDate' => self::faker()->dateTime(),
-            'email' => self::faker()->text(180),
-            'isVerified' => self::faker()->boolean(),
-            'job' => self::faker()->text(32),
-            'password' => self::faker()->text(),
-            'roles' => [],
+            'email' => $this->normalizeName($firstname)
+                .'.'
+                .$this->normalizeName($lastname)
+                .'@'
+                .self::faker()->domainName(),
+            'password' => 'password',
+            'firstname' => $firstname,
+            'lastname' => $lastname,
+            'login' => $this->normalizeName($lastname).self::faker()->numberBetween(0, 999),
+            'gender' => self::faker()->numberBetween(0, 1),
+            'birthDate' => self::faker()->dateTimeBetween('-65 years', '-18 years'),
+            'job' => self::faker()->randomElement($medicalJobs),
+            'hiringDate' => self::faker()->dateTimeBetween('-10 years', 'now'),
+            'departureDate' => self::faker()->optional()->dateTimeBetween('-10years','now'),
         ];
     }
 

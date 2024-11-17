@@ -31,7 +31,6 @@ final class PatientFactory extends PersistentProxyObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
-     *
      */
     public function __construct()
     {
@@ -50,12 +49,12 @@ final class PatientFactory extends PersistentProxyObjectFactory
 
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
-     *
      */
     protected function defaults(): array|callable
     {
         $firstname = self::faker()->firstName();
         $lastname = self::faker()->lastName();
+
         return [
             'email' => $this->normalizeName($firstname)
                 .'.'
@@ -74,8 +73,8 @@ final class PatientFactory extends PersistentProxyObjectFactory
             'comments' => self::faker()->optional()->sentence(),
             'treatments' => self::faker()->optional()->sentence(),
             'birthDate' => self::faker()->dateTimeBetween('-80 years', '-18 years'),
-            'login' => $this->normalizeName($lastname).self::faker()->numberBetween(0,999),
-            'gender' => self::faker()->numberBetween(0,1),
+            'login' => $this->normalizeName($lastname).self::faker()->numberBetween(0, 999),
+            'gender' => self::faker()->numberBetween(0, 1),
         ];
     }
 
