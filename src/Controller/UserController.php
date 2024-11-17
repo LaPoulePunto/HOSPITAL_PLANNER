@@ -16,7 +16,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/user/{id}', name: 'app_user_profile')]
+    #[Route('/user/profile', name: 'app_user_profile')]
     public function profile(): Response
     {
         if (!$this->getUser()) {
