@@ -16,7 +16,7 @@
         <dd>{{ user.email }}</dd>
 
         <dt>Genre</dt>
-        <dd>{{ user.gender }}</dd>
+        <dd>{{ user.gender == 1 ? 'Homme' : (user.gender == 2 ? 'Femme' : 'Genre non spécifié') }}</dd>
     </dl>
 {% endblock %}
 
