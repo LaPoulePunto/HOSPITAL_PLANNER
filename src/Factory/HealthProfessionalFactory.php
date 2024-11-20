@@ -55,7 +55,8 @@ final class HealthProfessionalFactory extends UserFactory
             'Urgentiste',
             'Kinésithérapeute',
         ];
-        return array_merge(parent::defaults(),[
+
+        return array_merge(parent::defaults(), [
             'job' => self::faker()->randomElement($medicalJobs),
             'hiringDate' => self::faker()->dateTimeBetween('-10 years', 'now'),
             'departureDate' => self::faker()->optional()->dateTimeBetween('-10years', 'now'),
