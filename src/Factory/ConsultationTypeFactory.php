@@ -31,8 +31,6 @@ use Zenstruck\Foundry\Persistence\ProxyRepositoryDecorator;
 final class ConsultationTypeFactory extends PersistentProxyObjectFactory{
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
-     *
-     * @todo inject services if required
      */
     public function __construct()
     {
