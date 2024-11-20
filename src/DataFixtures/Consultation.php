@@ -19,6 +19,7 @@ class Consultation extends Fixture implements DependentFixtureInterface
                 $room = $manager->getRepository(Room::class)->find(rand(1, 10));
                 $consType = $manager->getRepository(ConsultationType::class)->find(rand(1, 10));
                 $patient = $manager->getRepository(Patient::class)->find(rand(1, 10));
+
                 return ['room' => $room, 'consultationtype' => $consType, 'patient' => $patient];
             });
     }
