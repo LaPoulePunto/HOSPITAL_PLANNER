@@ -63,7 +63,7 @@ final class ConsultationFactory extends PersistentProxyObjectFactory
     protected function initialize(): static
     {
         return $this
-            // ->afterInstantiate(function(Consultation $consultation): void {})
+            // ->afterInstantiate(function(ConsultationFixtures $consultation): void {})
         ;
     }
 }

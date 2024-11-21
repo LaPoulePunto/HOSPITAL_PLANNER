@@ -33,7 +33,7 @@ class ConsultationRepository extends ServiceEntityRepository
         return $consultation;
     }
     //    /**
-    //     * @return Consultation[] Returns an array of Consultation objects
+    //     * @return ConsultationFixtures[] Returns an array of ConsultationFixtures objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -47,7 +47,7 @@ class ConsultationRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Consultation
+    //    public function findOneBySomeField($value): ?ConsultationFixtures
     //    {
     //        return $this->createQueryBuilder('c')
     //            ->andWhere('c.exampleField = :val')
