@@ -28,7 +28,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/user/update', name: 'app_user_update')]
+    #[Route('/user/update/{id}', name: 'app_user_update', requirements: ['id' => '\d+'])]
     public function read(User $user): Response
     {
         return $this->render('user/update.html.twig', [
