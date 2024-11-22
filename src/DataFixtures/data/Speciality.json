@@ -1,23 +1,14 @@
 [
   {
-    "label": "Cardiologie"
+    "label": "Kinésithérapie"
   },
   {
-    "label": "Pédiatrie"
+    "label": "Ergothérapie"
   },
   {
-    "label": "Orthopédie"
+    "label": "Orthophonie"
   },
   {
-    "label": "Neurologie"
-  },
-  {
-    "label": "Dermatologie"
-  },
-  {
-    "label": "Psychiatrie"
-  },
-  {
-    "label": "Oncologie"
+    "label": "Activité Physique Adaptée"
   }
 ]

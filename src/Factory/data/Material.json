@@ -1,9 +1,6 @@
 [
   {
-    "label": "Électrocardiogramme (ECG)"
-  },
-  {
-    "label": "Balance bébé"
+    "label": "Semelle orthopédique"
   },
   {
     "label": "Lampe d’examen"
@@ -12,16 +9,13 @@
     "label": "Dermatoscope"
   },
   {
-    "label": "Appareil de radiographie"
+    "label": "Miroir pour rééducation"
   },
   {
     "label": "Attelle orthopédique"
   },
   {
     "label": "Table d'examen médical"
-  },
-  {
-    "label": "Électroencéphalogramme (EEG)"
   },
   {
     "label": "Moniteur de fréquence cardiaque"
@@ -33,31 +27,16 @@
     "label": "Matelas anti-escarres"
   },
   {
-    "label": "Pompe à perfusion"
-  },
-  {
-    "label": "Appareil d’échographie"
-  },
-  {
     "label": "Thermomètre électronique"
   },
   {
-    "label": "Défibrillateur automatique"
+    "label": "Plateforme d'équilibre"
   },
   {
-    "label": "Lampe de Wood"
+    "label": "Élastiques de résistance"
   },
   {
-    "label": "Marteau à réflexes"
-  },
-  {
-    "label": "Ventilateur respiratoire"
-  },
-  {
-    "label": "Cathéter intraveineux"
-  },
-  {
-    "label": "Chariot de soins"
+    "label": "Ballon d'exercice"
   },
   {
     "label": "Pèse-personne médical"
