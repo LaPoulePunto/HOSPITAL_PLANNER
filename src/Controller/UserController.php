@@ -27,10 +27,10 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/user/read', name: 'app_user_read')]
+    #[Route('/user/update', name: 'app_user_update')]
     public function read(): Response
     {
-        return $this->render('user/read.html.twig', [
+        return $this->render('user/update.html.twig', [
             'user' => $this->getUser(),
         ]);
     }
