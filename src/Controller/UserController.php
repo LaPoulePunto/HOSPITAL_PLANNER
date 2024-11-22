@@ -123,4 +123,12 @@ class UserController extends AbstractController
             'user' => $user,
         ]);
     }
+
+    #[Route('/user/read', name: 'app_user_read')]
+    public function read(): Response
+    {
+        return $this->render('user/read.html.twig', [
+            'user' => $this->getUser(),
+        ]);
+    }
 }
