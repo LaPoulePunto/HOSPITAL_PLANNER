@@ -51,7 +51,7 @@ final class ConsultationFactory extends PersistentProxyObjectFactory
         $endTime = clone $startTime;
 
         return [
-            'date' => self::faker()->dateTimeBetween('-1 year'),
+            'date' => self::faker()->dateTimeBetween('-1 year', '+1 month'),
             'startTime' => $startTime,
             'endTime' => $endTime->modify('+30 minutes'),
         ];
@@ -63,7 +63,7 @@ final class ConsultationFactory extends PersistentProxyObjectFactory
     protected function initialize(): static
     {
         return $this
-            // ->afterInstantiate(function(Consultation $consultation): void {})
+            // ->afterInstantiate(function(ConsultationFixtures $consultation): void {})
         ;
     }
 }

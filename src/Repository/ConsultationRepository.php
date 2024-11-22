@@ -23,17 +23,27 @@ class ConsultationRepository extends ServiceEntityRepository
 
     public function getConsultationById(int $consultationId): ?Consultation
     {
-        $consultation = $this->createQueryBuilder('c')
+        return $this->createQueryBuilder('c')
             ->andWhere('c.id = :consultationID')
             ->setParameter('consultationID', $consultationId)
             ->getQuery()
             ->getOneOrNullResult()
         ;
-
-        return $consultation;
     }
+
+    public function getAllConsultationsByHealthProfessionalId(int $healthProfessionalId)
+    {
+        return $this->createQueryBuilder('c')
+            ->select('c.date', 'c.startTime', 'c.endTime')
+            ->innerJoin('c.healthprofessional', 'hp')
+            ->where('hp.id = :healthProfessionalId')
+            ->setParameter('healthProfessionalId', $healthProfessionalId)
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
-    //     * @return Consultation[] Returns an array of Consultation objects
+    //     * @return ConsultationFixtures[] Returns an array of ConsultationFixtures objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -47,7 +57,7 @@ class ConsultationRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Consultation
+    //    public function findOneBySomeField($value): ?ConsultationFixtures
     //    {
     //        return $this->createQueryBuilder('c')
     //            ->andWhere('c.exampleField = :val')
