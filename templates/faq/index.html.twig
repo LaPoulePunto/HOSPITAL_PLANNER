@@ -4,67 +4,70 @@
 
 {% block stylesheets %}
 <style>
-    *, ::before, ::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+    nav{
+        background-color: #C1170A;
     }
+            *, ::before, ::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            }
 
-    h1 {
-    text-align: center;
-    padding: 35px 0;
-    font-size: 40px;
-    }
+            h1 {
+            text-align: center;
+            padding: 35px 0;
+            font-size: 40px;
+            }
 
-    .container-faq {
-    width: 70%;
-    max-width: 900px;
-    min-width: 700px;
-    height: auto;
-    margin: 10px auto 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    }
+            .container-faq {
+            width: 70%;
+            max-width: 900px;
+            min-width: 700px;
+            height: auto;
+            margin: 10px auto 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            }
 
-    .questions {
-    width: 100%;
-    height: auto;
-    margin: 5px;
-    }
+            .questions {
+            width: 100%;
+            height: auto;
+            margin: 5px;
+            }
 
-    .visible-panel {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #f1f1f1;
-    border-radius: 10px;
-    position: relative;
-    z-index: 100;
-    }
+            .visible-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f1f1f1;
+            border-radius: 10px;
+            position: relative;
+            z-index: 100;
+            }
 
-    .visible-panel h2 {
-    margin-left: 10px;
-    padding: 15px 5px;
-    font-size: 25px;
-    }
+            .visible-panel h2 {
+            margin-left: 10px;
+            padding: 15px 5px;
+            font-size: 25px;
+            }
 
-    .toggle-panel {
-    padding: 0px 15px;
-    height: 0px;
-    opacity: 0;
-    }
+            .toggle-panel {
+            padding: 0px 15px;
+            height: 0px;
+            opacity: 0;
+            }
 
-    .toggle-panel h4 {
-    font-size: 18px;
-    padding-bottom: 10px;
-    }
+            .toggle-panel h4 {
+            font-size: 18px;
+            padding-bottom: 10px;
+            }
 
-    .toggle-panel p {
-    line-height: 1.5;
-    }
-</style>
+            .toggle-panel p {
+            line-height: 1.5;
+            }
+       </style>
 {% endblock %}
 
 
