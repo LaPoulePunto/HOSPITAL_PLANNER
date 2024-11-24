@@ -17,3 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
     );
     calendar.render();
 });
+
+export function addEventSource(events) {
+    calendar.addEventSource(events);
+}
