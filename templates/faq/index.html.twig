@@ -3,18 +3,28 @@
 {% block title %}Hello FaqController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <h1>Consultez la Foire aux questions !</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div class="container-faq">
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/Thibault/Desktop/S3_S4/sae3_real_01/src/Controller/FaqController.php</code></li>
-        <li>Your template at <code>C:/Users/Thibault/Desktop/S3_S4/sae3_real_01/templates/faq/index.html.twig</code></li>
-    </ul>
-</div>
+        <div class="questions">
+            <div class="visible-pannel">
+                <h2>Comment puis-je réserver une consultation en ligne ?</h2>
+            </div>
+            <div class="toggle-pannel">
+                <h4>Comment puis-je réserver une consultation en ligne ?</h4>
+                <p>Vous pouvez réserver une consultation en ligne en vous rendant sur notre plateforme de réservation. Sélectionnez votre spécialité, le médecin de votre choix, et un créneau disponible. Une confirmation vous sera envoyée par email une fois la réservation effectuée.</p>
+            </div>
+        </div>
+
+        <div class="questions">
+            <div class="visible-pannel">
+                <h2>Dois-je créer un compte pour prendre rendez-vous ?</h2>
+            </div>
+            <div class="toggle-pannel">
+                <h4>Dois-je créer un compte pour prendre rendez-vous ?</h4>
+                <p>Oui, il est nécessaire de créer un compte patient pour accéder à notre service de réservation en ligne. Cela permet de gérer vos rendez-vous et de recevoir des rappels automatiquement.</p>
+            </div>
+        </div>
+    </div>
 {% endblock %}
