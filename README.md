@@ -67,3 +67,15 @@ composer test:codeception
 ```shell
 composer db
 ```
+
+### Test Codeception
+
+- Pour nettoyer le répertoire « _output » et le code généré par Codeception. Puis lancer les tests de Codeception
+```shell
+composer test:codeception
+```
+
+- Pour tester la mise en forme du code PHP, Twig et lancer le script composer des tests avec Codeception (ci-dessus)
+```shell
+composer test:codeception
+```
