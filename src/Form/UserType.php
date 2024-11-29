@@ -2,38 +2,45 @@
 
 namespace App\Form;
 
-use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email')
-            ->add('password')
-            ->add('lastname')
-            ->add('firstname')
-            ->add('login')
-            ->add('gender', ChoiceType::class, [
-                'choices' => [
-                    'Homme' => 0,
-                    'Femme' => 1,
-                ],
-                'expanded' => true, // Radio boutons
-                'multiple' => false, // Une seule sélection possible
+            ->add('email', EmailType::class, [
+                'label' => 'Adresse e-mail',
             ])
-            ->add('birthDate')
-        ;
-    }
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'data_class' => User::class,
-        ]);
+            ->add('password', PasswordType::class, [
+                'label' => 'Mot de passe',
+                'required' => false,
+                'empty_data' => 'oui',
+            ])
+            ->add('lastname', null, [
+                'label' => 'Nom',
+            ])
+            ->add('firstname', null, [
+                'label' => 'Prénom',
+            ])
+            ->add('login', null, [
+                'label' => 'Identifiant',
+            ])
+            ->add('gender', ChoiceType::class, [
+                'label' => 'Genre',
+                'choices' => [
+                    'Homme' => 1,
+                    'Femme' => 0,
+                ],
+                'expanded' => true,
+            ])
+            ->add('birthDate', null, [
+                'label' => 'Date de naissance',
+                'widget' => 'single_text',
+            ]);
     }
 }
