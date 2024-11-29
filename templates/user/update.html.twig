@@ -1,24 +1,15 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Log in!{% endblock %}
 
 {% block title %}
     {{ titre }}
 {% endblock %}
 {% block body %}
     <h1>{{ titre }}</h1>
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="alert alert-{{ label }}">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endfor %}
     {{ form_errors(form) }}
     {{ form_start(form) }}
     {{ form_widget(form) }}
     <button type="submit" class="btn">Mettre à jour le compte</button>
     {{ form_end(form) }}
-    {{ mdp ?? 'non'}}
-    {{ bool ?? 'aucun'}}
-    {{ pswrd ?? 'non plus'}}
 {% endblock %}
