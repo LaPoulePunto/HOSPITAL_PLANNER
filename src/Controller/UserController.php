@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Patient;
 use App\Entity\User;
 use App\Form\UpdateUserForm;
 use Doctrine\ORM\EntityManagerInterface;
@@ -79,12 +80,17 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted()) {
             if ($form->get('delete')->isClicked()) {
+                if ($user instanceof Patient) {
+                    foreach ($user->getConsultations() as $consultation) {
+                        $entityManager->remove($consultation);
+                    }
+                }
                 $entityManager->remove($user);
                 $entityManager->flush();
 
                 $this->addFlash('success', 'Utilisateur supprimé avec succès.');
 
-                return $this->redirectToRoute('/');
+                return $this->redirectToRoute('app_home');
             }
 
             if ($form->get('cancel')->isClicked()) {
