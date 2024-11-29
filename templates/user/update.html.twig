@@ -1,3 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% set titre = 'Édition de ' ~ user.lastName ~ ', ' ~ user.firstName %}
+
+{% block title %}
+    {{ titre }}
+{% endblock %}
+{% block body %}
+    <h1>{{ titre }}</h1>
+    {{ form_errors(form) }}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button type="submit" class="btn">Mettre à jour le compte</button>
+    {{ form_end(form) }}
+{% endblock %}
