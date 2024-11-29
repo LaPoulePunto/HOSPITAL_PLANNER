@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% set titre = 'Suppression du compte de ' ~ user.lastName ~ ', ' ~ user.firstName %}
+
+{% block title %}
+    {{ titre }}
+{% endblock %}
+{% block body %}
+    <h1>{{ titre }}</h1>
+    {{ form_errors(form) }}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+{% endblock %}
