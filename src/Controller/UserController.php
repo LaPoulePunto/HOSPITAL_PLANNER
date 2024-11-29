@@ -3,9 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\UserType;
+use App\Form\UpdateUserForm;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -36,7 +37,7 @@ class UserController extends AbstractController
     #[Route('/user/{id}/update', name: 'app_user_update', requirements: ['id' => '\d+'])]
     public function update(Request $request, User $user, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UpdateUserForm::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -60,9 +61,40 @@ class UserController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-    #[Route('/user/{id}/delete', name: 'app_user_delete', requirements: ['id' => '\d+'])]
-    public function delete(User $user)
-    {
 
+    #[Route('/user/{id}/delete', name: 'app_user_delete', requirements: ['id' => '\d+'])]
+    public function delete(User $user, Request $request, EntityManagerInterface $entityManager)
+    {
+        $form = $this->createFormBuilder()
+            ->add('delete', SubmitType::class, [
+                'label' => 'Supprimer',
+                'attr' => ['class' => 'btn btn-danger'],
+            ])
+            ->add('cancel', SubmitType::class, [
+                'label' => 'Annuler',
+                'attr' => ['class' => 'btn btn-secondary'],
+            ])
+            ->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->get('delete')->isClicked()) {
+                $entityManager->remove($user);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Utilisateur supprimé avec succès.');
+
+                return $this->redirectToRoute('/');
+            }
+
+            if ($form->get('cancel')->isClicked()) {
+                $this->addFlash('info', 'Suppression annulée.');
+                return $this->redirectToRoute('/', ['id' => $user->getId()]);
+            }
+        }
+        return $this->render('user/delete.html.twig', [
+            'form' => $form->createView(),
+            'user' => $user,
+        ]);
     }
 }
