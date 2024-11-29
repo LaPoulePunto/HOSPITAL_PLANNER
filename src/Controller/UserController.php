@@ -60,4 +60,9 @@ class UserController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+    #[Route('/user/{id}/delete', name: 'app_user_delete', requirements: ['id' => '\d+'])]
+    public function delete(User $user)
+    {
+
+    }
 }
