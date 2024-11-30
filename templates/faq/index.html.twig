@@ -3,133 +3,58 @@
 {% block title %}Hello FaqController!{% endblock %}
 
 {% block stylesheets %}
-<style>
-    nav{
-        background-color: #C1170A;
-    }
-            *, ::before, ::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            }
-
-            h1 {
-            text-align: center;
-            padding: 35px 0;
-            font-size: 40px;
-            font-weight: bold;
-            }
-
-            .container-faq {
-            width: 70%;
-            max-width: 900px;
-            min-width: 700px;
-            height: auto;
-            margin: 10px auto 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            }
-
-            .questions {
-            width: 100%;
-            height: auto;
-            margin: 5px;
-            }
-
-            .visible-panel {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f1f1f1;
-            border-radius: 10px;
-            position: relative;
-            z-index: 100;
-            }
-
-            .visible-panel h2 {
-            margin-left: 10px;
-            padding: 15px 5px;
-            font-size: 25px;
-            font-weight: bold;
-            }
-
-            .visible-panel img {
-                margin-right: 10px;
-                width: 35px;
-                cursor: pointer;
-            }
-
-            .toggle-panel {
-            padding: 0 15px;
-            height: 0;
-            opacity: 0;
-            }
-
-            .toggle-panel h4 {
-            font-size: 18px;
-            padding-top: 10px;
-            font-weight: bold;
-            }
-
-            .toggle-panel p {
-            line-height: 1.5;
-            }
-       </style>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="{{ asset('/styles/app.css') }}" rel="stylesheet">
 {% endblock %}
 
 
 {% block body %}
-    <h1>Consultez la Foire aux questions !</h1>
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Consultez la Foire aux Questions</h1>
 
-    <div class="container-faq">
+        <!-- Accordéon FAQ -->
+        <div class="accordion" id="faqAccordion">
+            <!-- Question 1 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        Comment puis-je réserver une consultation en ligne ?
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Vous pouvez réserver une consultation en ligne en vous rendant sur notre plateforme de réservation. Sélectionnez votre spécialité, le médecin de votre choix, et un créneau disponible. Une confirmation vous sera envoyée par email une fois la réservation effectuée.
+                    </div>
+                </div>
+            </div>
 
-        <div class="questions">
-            <div class="visible-panel">
-                <h2>Comment puis-je réserver une consultation en ligne ?</h2>
-                <img src="{{ asset('images/croix.png') }}" alt="croix animation">
+            <!-- Question 2 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Dois-je créer un compte pour prendre rendez-vous ?
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Oui, il est nécessaire de créer un compte patient pour accéder à notre service de réservation en ligne. Cela permet de gérer vos rendez-vous et de recevoir des rappels automatiquement.
+                    </div>
+                </div>
             </div>
-            <div class="toggle-panel">
-                <h4>Comment puis-je réserver une consultation en ligne ?</h4>
-                <p>Vous pouvez réserver une consultation en ligne en vous rendant sur notre plateforme de réservation. Sélectionnez votre spécialité, le médecin de votre choix, et un créneau disponible. Une confirmation vous sera envoyée par email une fois la réservation effectuée.</p>
-            </div>
-        </div>
 
-        <div class="questions">
-            <div class="visible-panel">
-                <h2>Dois-je créer un compte pour prendre rendez-vous ?</h2>
-                <img src="{{ asset('images/croix.png') }}" alt="croix animation">
-            </div>
-            <div class="toggle-panel">
-                <h4>Dois-je créer un compte pour prendre rendez-vous ?</h4>
-                <p>Oui, il est nécessaire de créer un compte patient pour accéder à notre service de réservation en ligne. Cela permet de gérer vos rendez-vous et de recevoir des rappels automatiquement.</p>
+            <!-- Question 3 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        Quels documents dois-je apporter pour ma consultation ?
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Merci d'apporter votre pièce d'identité, votre carte d'assurance santé, et, si applicable, vos résultats d'examens récents ou votre dossier médical.
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.0/gsap.min.js"></script>
-{% endblock %}
-
-{% block javascripts %}
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const allPanels = document.querySelectorAll('.visible-panel');
-
-            allPanels.forEach(panel => {
-                panel.addEventListener('click', function () {
-                    const cross = this.querySelector('img');
-                    const currentChoice = this.parentNode.querySelector('.toggle-panel');
-                    const height = currentChoice.scrollHeight;
-
-                    if (cross.src.includes('croix')) {
-                        cross.src = '{{ asset("images/minus.png") }}';
-                        gsap.to(currentChoice, { duration: 0.2, height: height + 40, opacity: 1, padding: '20px 15px' });
-                    } else if (cross.src.includes('minus')) {
-                        cross.src = '{{ asset("images/croix.png") }}';
-                        gsap.to(currentChoice, { duration: 0.2, height: 0, opacity: 0, padding: '0px 15px' });
-                    }
-                });
-            });
-        });
-    </script>
 {% endblock %}
