@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\HealthProfessional;
 use App\Entity\Patient;
 use App\Entity\User;
 use App\Form\UpdateUserForm;
@@ -81,9 +82,13 @@ class UserController extends AbstractController
         if ($form->isSubmitted()) {
             if ($form->get('delete')->isClicked()) {
                 if ($user instanceof Patient) {
-                    foreach ($user->getConsultations() as $consultation) {
+                    foreach ($user->getConsultation() as $consultation) {
                         $entityManager->remove($consultation);
                     }
+                }
+                if ($user instanceof HealthProfessional) {
+                    $this->addFlash('error', 'Votre compte peut seulement être supprimé par un administrateur.');
+                    return $this->redirectToRoute('app_home');
                 }
                 $entityManager->remove($user);
                 $entityManager->flush();
@@ -95,9 +100,11 @@ class UserController extends AbstractController
 
             if ($form->get('cancel')->isClicked()) {
                 $this->addFlash('info', 'Suppression annulée.');
+
                 return $this->redirectToRoute('/', ['id' => $user->getId()]);
             }
         }
+
         return $this->render('user/delete.html.twig', [
             'form' => $form->createView(),
             'user' => $user,
