@@ -13,6 +13,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 center: 'title',
                 end: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
+            eventClick: function(info) {
+                Swal.fire({
+                    title:  "Détail de la consultation",
+                    text: info.event.title,
+                    icon: "info",
+                    returnFocus: false,
+                });
+            }
         }
     );
     calendar.render();
