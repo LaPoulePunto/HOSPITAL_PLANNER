@@ -20,11 +20,7 @@ class UpdateUserForm extends AbstractType
             ->add('currentPassword', PasswordType::class, [
                 'label' => 'Mot de passe actuel',
                 'mapped' => false,
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer votre mot de passe actuel.',
-                    ]),
-                ],
+                'required' => true,
             ])
             ->add('password', PasswordType::class, [
                 'label' => 'Mot de passe',
