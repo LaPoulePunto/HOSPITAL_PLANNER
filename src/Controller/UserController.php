@@ -39,12 +39,23 @@ class UserController extends AbstractController
     #[Route('/user/{id}/update', name: 'app_user_update', requirements: ['id' => '\d+'])]
     public function update(Request $request, User $user, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
+        $originalUser = clone $user;
         $form = $this->createForm(UpdateUserForm::class, $user);
         $form->handleRequest($request);
 
+        $currentPassword = $form->get('currentPassword')->getData();
+        if (!$userPasswordHasher->isPasswordValid($user, $currentPassword)) {
+            $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
+            $user = $originalUser;
+
+            return $this->render('user/update.html.twig', [
+                'user' => $user,
+                'form' => $form->createView(),
+            ]);
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->has('password') && $form->get('password')->getData()) {
-                var_dump($form->get('password')->getData());
                 $user->setPassword(
                     $userPasswordHasher->hashPassword($user, $form->get('password')->getData())
                 );
@@ -88,6 +99,7 @@ class UserController extends AbstractController
                 }
                 if ($user instanceof HealthProfessional) {
                     $this->addFlash('error', 'Votre compte peut seulement être supprimé par un administrateur.');
+
                     return $this->redirectToRoute('app_home');
                 }
                 $entityManager->remove($user);
