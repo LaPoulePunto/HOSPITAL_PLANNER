@@ -7,6 +7,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UpdateUserForm extends AbstractType
 {
@@ -16,10 +17,19 @@ class UpdateUserForm extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => 'Adresse e-mail',
             ])
+            ->add('currentPassword', PasswordType::class, [
+                'label' => 'Mot de passe actuel',
+                'mapped' => false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez entrer votre mot de passe actuel.',
+                    ]),
+                ],
+            ])
             ->add('password', PasswordType::class, [
                 'label' => 'Mot de passe',
                 'required' => false,
-                'empty_data' => 'oui',
+                'empty_data' => '',
             ])
             ->add('lastname', null, [
                 'label' => 'Nom',
