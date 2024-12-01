@@ -40,24 +40,34 @@ class UserController extends AbstractController
     public function update(Request $request, User $user, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $originalUser = clone $user;
+
         $form = $this->createForm(UpdateUserForm::class, $user);
         $form->handleRequest($request);
 
-        $currentPassword = $form->get('currentPassword')->getData();
-        if (!$userPasswordHasher->isPasswordValid($user, $currentPassword)) {
-            $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
-            $user = $originalUser;
-
-            return $this->render('user/update.html.twig', [
-                'user' => $user,
-                'form' => $form->createView(),
-            ]);
-        }
-
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($form->has('password') && $form->get('password')->getData()) {
+            $currentPassword = $form->get('currentPassword')->getData() ?? '';
+
+            if ($userPasswordHasher->isPasswordValid($originalUser, $currentPassword)) {
+                $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
+                $user = $originalUser;
+
+                return $this->render('user/update.html.twig', [
+                    'user' => $user,
+                    'form' => $form->createView(),
+                    'mdp' => $currentPassword,
+                    'bool' => ($form->get('password')->getData()) ? 'true' : 'false',
+                ]);
+            }
+            if ($form->get('password')->getData()) {
                 $user->setPassword(
                     $userPasswordHasher->hashPassword($user, $form->get('password')->getData())
+                );
+                $originalUser->setPassword(
+                    $userPasswordHasher->hashPassword($user, $form->get('password')->getData())
+                );
+            } else {
+                $user->setPassword(
+                    $userPasswordHasher->hashPassword($user, $originalUser->getPassword())
                 );
             }
 
@@ -66,7 +76,13 @@ class UserController extends AbstractController
 
             $this->addFlash('success', 'Les informations de l\'utilisateur ont été mises à jour.');
 
-            return $this->redirectToRoute('app_user_update', ['id' => $user->getId()]);
+            return $this->render('user/update.html.twig', [
+                'user' => $user,
+                'form' => $form->createView(),
+                'mdp' => $originalUser->getPassword(),
+                'bool' => ($form->get('password')->getData()) ? 'true' : 'false',
+            ]);
+            //            return $this->redirectToRoute('app_home');
         }
 
         return $this->render('user/update.html.twig', [
