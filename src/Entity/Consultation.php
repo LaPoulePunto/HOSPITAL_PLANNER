@@ -120,7 +120,7 @@ class Consultation
         return $this;
     }
 
-    public function getHealthProfessional(): ?HealthProfessional
+    public function getHealthprofessional(): Collection
     {
         return $this->healthProfessional;
     }
