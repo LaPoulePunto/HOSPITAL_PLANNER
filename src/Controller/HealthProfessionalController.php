@@ -44,7 +44,7 @@ class HealthProfessionalController extends AbstractController
         $healthProfessionals = $this->getUser();
         $appointments = $healthProfessionalRepository->findConsultationByHpId($healthProfessionals->getId());
         return $this->render('health_professional/calendar.html.twig', [
-            'appointments' => $appointments[0],
+            'appointments' => $appointments[0] ?? null,
         ]);
     }
 }

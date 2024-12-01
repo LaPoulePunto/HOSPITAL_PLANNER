@@ -8,16 +8,18 @@
         document.addEventListener('DOMContentLoaded', function () {
 
             addEventSource([
-                {% for consultation in appointments.consultation %}
-                {
-                    id: '{{ consultation.id }}',
-                    title: 'PATIENT : {{ consultation.patient.lastname|upper }} {{ consultation.patient.firstname
-                    }} | TYPE : {{ consultation.consultationtype.label }} | SALLE : {{ consultation.room.num
-                    }} | ÉTAGE : {{ consultation.room.floor }} | TYPE DE SALLE : {{ consultation.room.roomtype.label }}',
-                    start: '{{ consultation.date|date("Y-m-d") }}T{{ consultation.startTime|date("H:i:s") }}',
-                    end: '{{ consultation.date|date("Y-m-d") }}T{{ consultation.endTime|date("H:i:s") }}',
-                },
-                {% endfor %}
+                {% if appointments is not null %}
+                    {% for consultation in appointments.consultation %}
+                    {
+                        id: '{{ consultation.id }}',
+                        title: 'PATIENT : {{ consultation.patient.lastname|upper }} {{ consultation.patient.firstname
+                        }} | TYPE : {{ consultation.consultationtype.label }} | SALLE : {{ consultation.room.num
+                        }} | ÉTAGE : {{ consultation.room.floor }} | TYPE DE SALLE : {{ consultation.room.roomtype.label }}',
+                        start: '{{ consultation.date|date('Y-m-d') }}T{{ consultation.startTime|date('H:i:s') }}',
+                        end: '{{ consultation.date|date('Y-m-d') }}T{{ consultation.endTime|date('H:i:s') }}',
+                    },
+                    {% endfor %}
+                {% endif %}
             ]);
             calendar.render();
         });
