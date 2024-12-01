@@ -23,7 +23,7 @@ class UpdateUserForm extends AbstractType
                 'required' => true,
             ])
             ->add('password', PasswordType::class, [
-                'label' => 'Mot de passe',
+                'label' => 'Nouveau mot de passe',
                 'required' => false,
                 'empty_data' => '',
             ])
