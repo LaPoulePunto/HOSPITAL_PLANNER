@@ -4,8 +4,14 @@ namespace App\Form;
 
 use App\Entity\Patient;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
@@ -17,66 +23,112 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email', null, [
-                'label' => 'Adresse mail',
-            ])
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
-                ], 'label' => 'J\'accepte les conditions',
+            ->add('email', EmailType::class, [
+                'label' => false,
+                'attr' => [
+                    'class' => $options['inputClass'],
+                    'placeholder' => 'Adresse mail',
+                ],
             ])
             ->add('plainPassword', PasswordType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
                 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
+                'attr' => [
+                    'class' => $options['inputClass'],
+                    'autocomplete' => 'new-password',
+                    'placeholder' => 'Mot de passe',
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez renseigner votre mot de passe',
                     ]),
                     new Length([
                         'min' => 6,
-                        'minMessage' => 'Votre mot de passe doit contenir au minimum {{ limit }} charactères',
-                        // max length allowed by Symfony for security reasons
+                        'minMessage' => 'Votre mot de passe doit contenir au minimum {{ limit }} caractères',
                         'max' => 4096,
                     ]),
                 ],
-                'label' => 'Mot de passe',
+                'label' => false,
             ])
-            ->add('firstname', null, [
-                'label' => 'Prénom',
+            ->add('firstname', TextType::class, [
+                'label' => false,
+                'attr' => [
+                    'class' => $options['inputClass'],
+                    'placeholder' => 'Prénom',
+                ],
             ])
-            ->add('lastname', null, [
-                'label' => 'Nom',
+            ->add('lastname', TextType::class, [
+                'label' => false,
+                'attr' => [
+                    'class' => $options['inputClass'],
+                    'placeholder' => 'Nom',
+                ],
             ])
-            ->add('birthDate', null, [
-                'label' => 'Date de naissance',
+            ->add('birthDate', BirthdayType::class, [
+                'label' => 'Date de naissance :',
+                'attr' => [
+                    'class' => 'mb-4',
+                    'placeholder' => 'Date de naissance',
+                ],
             ])
-            ->add('city', null, [
-                'label' => 'Ville',
+            ->add('city', TextType::class, [
+                'label' => false,
+                'attr' => [
+                    'class' => $options['inputClass'],
+                    'placeholder' => 'Ville',
+                ],
             ])
-            ->add('postCode', null, [
-                'label' => 'Code postal',
+            ->add('postCode', IntegerType::class, [
+                'label' => false,
+                'attr' => [
+                    'class' => $options['inputClass'],
+                    'placeholder' => 'Code postal',
+                ],
             ])
-            ->add('address', null, [
-                'label' => 'Adresse',
+            ->add('address', TextType::class, [
+                'label' => false,
+                'attr' => [
+                    'class' => $options['inputClass'],
+                    'placeholder' => 'Adresse',
+                ],
             ])
-            ->add('gender', null, [
-                'label' => 'Genre',
+            ->add('gender', ChoiceType::class, [
+                'label' => 'Sexe :',
+                'choices' => [
+                    '--Choisir--' => null,
+                    'Homme' => 1,
+                    'Femme' => 0,
+                ],
+                'attr' => [
+                    'class' => 'form-select mb-4',
+                ],
             ])
-            ->add('phone', null, [
-                'label' => 'Telephone',
+            ->add('phone', TelType::class, [
+                'label' => false,
+                'attr' => [
+                    'class' => $options['inputClass'],
+                    'placeholder' => 'Téléphone',
+                ],
             ])
-        ;
+            ->add('agreeTerms', CheckboxType::class, [
+                'mapped' => false,
+                'constraints' => [
+                    new IsTrue([
+                        'message' => 'Vous devez accepter les conditions.',
+                    ]),
+                ],
+                'label' => 'J\'accepte les conditions',
+                'attr' => [
+                    'class' => 'checkbox-inline ms-1',
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Patient::class,
+            'inputClass' => 'form-control',
         ]);
+        $resolver->setAllowedTypes('inputClass', 'string');
     }
 }
