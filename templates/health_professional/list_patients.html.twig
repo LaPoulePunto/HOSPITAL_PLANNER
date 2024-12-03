@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Liste de vos patients
+{% endblock %}
+
+{% block body %}
+    <h1>Vos patients :</h1>
+    <ul class="patients">
+        {% for patient in patients %}
+            {% set consultation = patient.consultation|last %}
+            <li><a href="{{ path('app_display_patient_file', {consultationId: consultation.id}) }}">
+                   <span class="lastname"
+                    >{{ patient.lastname }}</span>, <span class="firstname"
+                    >{{ patient.firstname }}</span></a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
