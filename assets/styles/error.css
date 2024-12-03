@@ -1,49 +1,13 @@
 body {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     background: url('../images/error_background.jpg') no-repeat center center fixed;
     background-size: cover;
-    text-align: center;
 }
 
-.error {
-    font-size: 4rem;
-    margin: 0;
-}
-
-.status_text {
-    font-size: 1.5rem;
-}
-
-.home {
-    border: 2px solid #ff5722;
-    border-radius: 10px;
-    padding: 10px 20px;
-    color: #ff5722;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-}
-
-.home:hover {
-    background-color: #ff5722;
-    color: white;
-}
-
-@media (max-width: 1000px) {
-    .error {
-        font-size: 100px;
+@media (max-width: 700px) {
+    .display-1{
+        font-size: calc(1rem + 11vw);
     }
-
-    .status_text {
-        font-size: 80px;
-    }
-
-    .home {
-        font-size: 30px;
+    .lead{
+        font-size: calc(0.5rem + 5vw);
     }
 }
