@@ -1,0 +1,11 @@
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/error.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="error_container">
+        <h1 class="error">Erreur {{ exception.statusCode }}</h1>
+        <p class="status_text">{{ exception.statusText }}</p>
+        <a href="{{ path('app_home') }}" class="home">Retour à l'accueil</a>
+    </div>
+{% endblock %}
