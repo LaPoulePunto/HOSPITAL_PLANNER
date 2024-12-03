@@ -28,7 +28,7 @@ class HealthProfessionalController extends AbstractController
             throw $this->createNotFoundException("Aucun patient n'est associé à cette consultation.");
         }
 
-        return $this->render('health_professional/displayPatientFile.html.twig', ['patient' => $patient]);
+        return $this->render('health_professional/display_patient_file.html.twig', ['patient' => $patient]);
     }
 
     #[Route('/health-professional/calendar', name: 'app_health_professional_calendar')]
@@ -44,4 +44,22 @@ class HealthProfessionalController extends AbstractController
             'appointments' => $appointments ?? null,
         ]);
     }
+
+    #[Route('/health-professional/list_patients', name: 'app_health_professional_patients')]
+    public function listPatients(PatientRepository $patientRepository): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user || !$this->isGranted('ROLE_HEALTH_PROFESSIONAL')) {
+            throw $this->createAccessDeniedException('Accès refusé. Vous devez être un professionnel de santé.');
+        }
+
+        $patients = $patientRepository->findPatientsByHealthProfessional($user->getId());
+
+
+        return $this->render('health_professional/list_patients.html.twig', [
+            'patients' => $patients,
+        ]);
+    }
+
 }
