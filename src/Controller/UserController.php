@@ -45,26 +45,27 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $currentPassword = $form->get('currentPassword')->getData() ?? '';
+            //            $currentPassword = $form->get('currentPassword')->getData() ?? '';
 
-            if ($userPasswordHasher->isPasswordValid($originalUser, $currentPassword)) {
-                $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
-                $user = $originalUser;
-
-                return $this->render('user/update.html.twig', [
-                    'user' => $user,
-                    'form' => $form->createView(),
-                    'mdp' => $currentPassword,
-                    'bool' => ($form->get('password')->getData()) ? 'true' : 'false',
-                ]);
-            }
+            //            if (!$userPasswordHasher->isPasswordValid($originalUser, $currentPassword)) {
+            //                $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
+            //                $user = $originalUser;
+            //
+            //                return $this->render('user/update.html.twig', [
+            //                    'user' => $user,
+            //                    'form' => $form->createView(),
+            //                    'mdp' => $originalUser->getPassword(),
+            //                    'bool' => ($form->get('password')->getData()) ? 'true' : 'false',
+            //                ]);
+            //            }
+            //            Vérification que le mot de passe passé correspond au mdp de l'utilisateur
             if ($form->get('password')->getData()) {
                 $user->setPassword(
                     $userPasswordHasher->hashPassword($user, $form->get('password')->getData())
                 );
-                $originalUser->setPassword(
-                    $userPasswordHasher->hashPassword($user, $form->get('password')->getData())
-                );
+            //                $originalUser->setPassword(
+            //                    $userPasswordHasher->hashPassword($user, $form->get('password')->getData())
+            //                );
             } else {
                 $user->setPassword(
                     $userPasswordHasher->hashPassword($user, $originalUser->getPassword())
