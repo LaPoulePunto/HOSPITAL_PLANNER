@@ -36,46 +36,47 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/user/{id}/update', name: 'app_user_update', requirements: ['id' => '\d+'])]
-    public function update(Request $request, User $user, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    #[Route('/user/update', name: 'app_user_update')]
+    public function update(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
-        $originalUser = clone $user;
+        if ($user = $this->getUser()) {
+            $form = $this->createForm(UpdateUserForm::class, $user);
+            $form->handleRequest($request);
+            $user = $this->getUser();
+            $originalUser = clone $user;
+            if ($form->isSubmitted() && $form->isValid()) {
+                //            $currentPassword = $form->get('currentPassword')->getData() ?? '';
 
-        $form = $this->createForm(UpdateUserForm::class, $user);
-        $form->handleRequest($request);
+                //            if (!$userPasswordHasher->isPasswordValid($originalUser, $currentPassword)) {
+                //                $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
+                //                $user = $originalUser;
+                //
+                //                return $this->render('user/update.html.twig', [
+                //                    'user' => $user,
+                //                    'form' => $form->createView(),
+                //                    'mdp' => $originalUser->getPassword(),
+                //                    'bool' => ($form->get('password')->getData()) ? 'true' : 'false',
+                //                ]);
+                //            }
+                //            Vérification que le mot de passe passé correspond au mdp de l'utilisateur
+                if ($form->get('password')->getData()) {
+                    $user->setPassword(
+                        $userPasswordHasher->hashPassword($user, $form->get('password')->getData())
+                    );
+                //                $originalUser->setPassword(
+                //                    $userPasswordHasher->hashPassword($user, $form->get('password')->getData())
+                //                );
+                } else {
+                    $user->setPassword(
+                        $userPasswordHasher->hashPassword($user, $originalUser->getPassword())
+                    );
+                }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            //            $currentPassword = $form->get('currentPassword')->getData() ?? '';
+                $entityManager->persist($user);
+                $entityManager->flush();
 
-            //            if (!$userPasswordHasher->isPasswordValid($originalUser, $currentPassword)) {
-            //                $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
-            //                $user = $originalUser;
-            //
-            //                return $this->render('user/update.html.twig', [
-            //                    'user' => $user,
-            //                    'form' => $form->createView(),
-            //                    'mdp' => $originalUser->getPassword(),
-            //                    'bool' => ($form->get('password')->getData()) ? 'true' : 'false',
-            //                ]);
-            //            }
-            //            Vérification que le mot de passe passé correspond au mdp de l'utilisateur
-            if ($form->get('password')->getData()) {
-                $user->setPassword(
-                    $userPasswordHasher->hashPassword($user, $form->get('password')->getData())
-                );
-            //                $originalUser->setPassword(
-            //                    $userPasswordHasher->hashPassword($user, $form->get('password')->getData())
-            //                );
-            } else {
-                $user->setPassword(
-                    $userPasswordHasher->hashPassword($user, $originalUser->getPassword())
-                );
+                $this->addFlash('success', 'Les informations de l\'utilisateur ont été mises à jour.');
             }
-
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Les informations de l\'utilisateur ont été mises à jour.');
 
             return $this->render('user/update.html.twig', [
                 'user' => $user,
@@ -86,10 +87,7 @@ class UserController extends AbstractController
             //            return $this->redirectToRoute('app_home');
         }
 
-        return $this->render('user/update.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
-        ]);
+        return $this->redirectToRoute('app_login');
     }
 
     #[Route('/user/{id}/delete', name: 'app_user_delete', requirements: ['id' => '\d+'])]
