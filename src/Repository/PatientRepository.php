@@ -29,18 +29,18 @@ class PatientRepository extends ServiceEntityRepository
             ->addSelect('c')
             ->where('p.id = :id');
         // Si time vaut true, alors on récupère les consultations futures
-            if($isFuture){
-                $query->andWhere('c.date >= :todayDate');
-            }
+        if ($isFuture) {
+            $query->andWhere('c.date >= :todayDate');
+        }
         // Sinon, on récupère les passées
-            else{
-                $query->andWhere('c.date < :todayDate');
-            }
-            return $query->setParameter('id', $id)
-            ->setParameter('todayDate', $todayDate)
-            ->orderBy('c.date', 'ASC')
-            ->getQuery()
-            ->getResult();
+        else {
+            $query->andWhere('c.date < :todayDate');
+        }
+        return $query->setParameter('id', $id)
+        ->setParameter('todayDate', $todayDate)
+        ->orderBy('c.date', 'ASC')
+        ->getQuery()
+        ->getResult();
     }
 
 
