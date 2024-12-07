@@ -21,6 +21,29 @@ class PatientRepository extends ServiceEntityRepository
         parent::__construct($registry, Patient::class);
     }
 
+    public function findByIdPastOrFuturReservation(int $id, bool $isFuture)
+    {
+        $todayDate = new \DateTime();
+        $query = $this->createQueryBuilder('p')
+            ->innerJoin('p.consultation', 'c')
+            ->addSelect('c')
+            ->where('p.id = :id');
+        // Si time vaut true, alors on récupère les consultations futures
+            if($isFuture){
+                $query->andWhere('c.date >= :todayDate');
+            }
+        // Sinon, on récupère les passées
+            else{
+                $query->andWhere('c.date < :todayDate');
+            }
+            return $query->setParameter('id', $id)
+            ->setParameter('todayDate', $todayDate)
+            ->orderBy('c.date', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
     //    /**
     //     * @return Patient[] Returns an array of Patient objects
     //     */
