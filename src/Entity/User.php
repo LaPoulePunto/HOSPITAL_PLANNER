@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -22,6 +23,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        max: 180,
+        maxMessage: 'Votre email ne peut pas être plus long que {{ limit }} caractères',
+    )]
+    #[Assert\Email(
+        message: 'L\'email {{ value }} n\'est pas valide.',
+    )]
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
@@ -34,9 +43,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        max: 32,
+        maxMessage: 'Votre nom ne peut pas être plus long que {{ limit }} caractères',
+    )]
     #[ORM\Column(length: 32, nullable: true)]
     private ?string $lastname = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        max: 32,
+        maxMessage: 'Votre prénom ne peut pas être plus long que {{ limit }} caractères',
+    )]
     #[ORM\Column(length: 32, nullable: true)]
     private ?string $firstname = null;
 
@@ -49,6 +68,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
+    #[Assert\NotBlank]
+    #[Assert\Range(
+        minMessage: 'Veuillez entrer une date valide.',
+        maxMessage: 'Vous devez avoir au moins 18 ans.',
+        min: '-120 years',
+        max: '-18 years',
+    )]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $birthDate = null;
 
