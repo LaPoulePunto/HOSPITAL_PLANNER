@@ -4,7 +4,6 @@ namespace App\Factory;
 
 use App\Entity\Reservation;
 use App\Repository\ReservationRepository;
-use DateTime;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 use Zenstruck\Foundry\Persistence\Proxy;
 use Zenstruck\Foundry\Persistence\ProxyRepositoryDecorator;
@@ -51,10 +50,11 @@ final class ReservationFactory extends PersistentProxyObjectFactory
      */
     protected function defaults(): array|callable
     {
-        $startTime = new DateTime();
+        $startTime = new \DateTime();
         $startTime->setTime(rand(8, 20), self::faker()->randomElement([0, 15, 30, 45]))
-        ->modify('+' . rand(0, 29) . 'days');
+        ->modify('+'.rand(0, 29).'days');
         $endTime = clone $startTime;
+
         return [
             'startTime' => $startTime,
             'endTime' => $endTime->modify('+30 minutes'),

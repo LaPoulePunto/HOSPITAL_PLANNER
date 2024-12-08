@@ -4,7 +4,6 @@ namespace App\Factory;
 
 use App\Entity\Availability;
 use App\Repository\AvailabilityRepository;
-use DateTime;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 use Zenstruck\Foundry\Persistence\Proxy;
 use Zenstruck\Foundry\Persistence\ProxyRepositoryDecorator;
@@ -51,7 +50,7 @@ final class AvailabilityFactory extends PersistentProxyObjectFactory
      */
     protected function defaults(): array|callable
     {
-        $startTime = new DateTime();
+        $startTime = new \DateTime();
         $startTime->setTime(rand(8, 20), self::faker()->randomElement([0, 15, 30, 45]));
         $endTime = clone $startTime;
 

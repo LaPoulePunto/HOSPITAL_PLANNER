@@ -15,7 +15,7 @@ class MaterialFixtures extends Fixture implements DependentFixtureInterface
         $rooms = $manager->getRepository(Room::class)->findAll();
         foreach ($rooms as $room) {
             $nbMaterial = random_int(0, 4);
-            for ($i = 0; $i < $nbMaterial; $i++) {
+            for ($i = 0; $i < $nbMaterial; ++$i) {
                 MaterialFactory::createOne(['room' => $room]);
             }
         }
