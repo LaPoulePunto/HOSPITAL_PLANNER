@@ -1,0 +1,13 @@
+body {
+    background: url('../images/error_background.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+@media (max-width: 700px) {
+    .display-1{
+        font-size: calc(1rem + 11vw);
+    }
+    .lead{
+        font-size: calc(0.5rem + 5vw);
+    }
+}
