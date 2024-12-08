@@ -51,7 +51,7 @@ final class SpecialityFactory extends PersistentProxyObjectFactory
     protected function defaults(): array|callable
     {
         return [
-            'label' =>  self::faker()->text(25)
+            'label' => self::faker()->text(25),
         ];
     }
 

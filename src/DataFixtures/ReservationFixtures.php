@@ -6,8 +6,8 @@ use App\Entity\HealthProfessional;
 use App\Entity\Material;
 use App\Factory\ReservationFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Persistence\ObjectManager;
 
 class ReservationFixtures extends Fixture implements DependentFixtureInterface
 {

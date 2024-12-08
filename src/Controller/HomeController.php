@@ -13,4 +13,12 @@ class HomeController extends AbstractController
     {
         return $this->render('home/index.html.twig');
     }
+
+    #[Route('/contact-page', name: 'app_contact_page')]
+    public function contact_page(): Response
+    {
+        return $this->render('contact_page/index.html.twig', [
+            'controller_name' => 'ContactPageController',
+        ]);
+    }
 }

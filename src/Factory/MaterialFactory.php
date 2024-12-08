@@ -54,13 +54,14 @@ final class MaterialFactory extends PersistentProxyObjectFactory
             json_decode(
                 file_get_contents(__DIR__.DIRECTORY_SEPARATOR.
                     DIRECTORY_SEPARATOR.'data'.
-                    DIRECTORY_SEPARATOR. 'Material.json'),
+                    DIRECTORY_SEPARATOR.'Material.json'),
                 true
-            )
+            ),
         ];
         $randomIndex = random_int(0, count($material[0]) - 1);
+
         return [
-            'label' => $material[0][$randomIndex]['label']
+            'label' => $material[0][$randomIndex]['label'],
         ];
     }
 
