@@ -17,7 +17,7 @@ class HealthProfessionalFixtures extends Fixture implements DependentFixtureInte
             'lastname' => 'Potter',
             'email' => 'health_professional@example.com',
         ]);
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 10; ++$i) {
             $healthProfessional = HealthProfessionalFactory::createOne()->_real();
             $specialityArray = $manager->getRepository(Speciality::class)->findBy([]);
             $speciality = $specialityArray[array_rand($specialityArray)];
