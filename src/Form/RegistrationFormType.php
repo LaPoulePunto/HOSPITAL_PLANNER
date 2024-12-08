@@ -8,8 +8,8 @@ use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -26,26 +26,37 @@ class RegistrationFormType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => false,
                 'attr' => [
-                    'placeholder' => 'Adresse mail',
+                    'placeholder' => 'Adresse email',
                 ],
             ])
-            ->add('plainPassword', PasswordType::class, [
+            ->add('plainPassword', RepeatedType::class, [
                 'mapped' => false,
-                'attr' => [
-                    'autocomplete' => 'new-password',
-                    'placeholder' => 'Mot de passe',
+                'type' => PasswordType::class,
+                'invalid_message' => 'Les mots de passe doivent correspondre.',
+                'required' => true,
+                'first_options' => [
+                    'attr' => [
+                        'autocomplete' => 'new-password',
+                        'placeholder' => 'Mot de passe',
+                    ],
+                    'constraints' => [
+                        new NotBlank([
+                            'message' => 'Veuillez renseigner votre mot de passe',
+                        ]),
+                        new Length([
+                            'min' => 6,
+                            'minMessage' => 'Votre mot de passe doit contenir au minimum {{ limit }} caractères',
+                            'max' => 4096,
+                        ]),
+                    ],
+                    'label' => false,
                 ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez renseigner votre mot de passe',
-                    ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Votre mot de passe doit contenir au minimum {{ limit }} caractères',
-                        'max' => 4096,
-                    ]),
+                'second_options' => [
+                    'attr' => [
+                        'placeholder' => 'Confirmez le mot de passe',
+                    ],
+                    'label' => false,
                 ],
-                'label' => false,
             ])
             ->add('firstname', TextType::class, [
                 'label' => false,
@@ -69,7 +80,7 @@ class RegistrationFormType extends AbstractType
                     'placeholder' => 'Ville',
                 ],
             ])
-            ->add('postCode', IntegerType::class, [
+            ->add('postCode', TextType::class, [
                 'label' => false,
                 'attr' => [
                     'placeholder' => 'Code postal',
@@ -87,9 +98,6 @@ class RegistrationFormType extends AbstractType
                 'choices' => [
                     'Homme' => 1,
                     'Femme' => 0,
-                ],
-                'attr' => [
-                    'class' => 'form-select mb-4',
                 ],
             ])
             ->add('phone', TelType::class, [
