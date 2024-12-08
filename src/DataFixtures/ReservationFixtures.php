@@ -16,10 +16,11 @@ class ReservationFixtures extends Fixture implements DependentFixtureInterface
         ReservationFactory::createMany(
             10,
             static function () use ($manager) {
-                $healthprofessional = $manager->getRepository(HealthProfessional::class)->find(rand(1, 10));
+                $healthProfessionalArray = $manager->getRepository(HealthProfessional::class)->findAll();
+                $healthProfessional = $healthProfessionalArray[array_rand($healthProfessionalArray)];
                 $material = $manager->getRepository(Material::class)->find(rand(1, 15));
 
-                return ['healthprofessional' => $healthprofessional, 'material' => $material];
+                return ['healthprofessional' => $healthProfessional, 'material' => $material];
             }
         );
     }

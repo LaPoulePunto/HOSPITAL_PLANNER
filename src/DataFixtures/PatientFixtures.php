@@ -10,6 +10,11 @@ class PatientFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
+        PatientFactory::createOne([
+            'firstname' => 'Ron',
+            'lastname' => 'Weasley',
+            'email' => 'patient@example.com',
+        ]);
         PatientFactory::createMany(10);
     }
 }
