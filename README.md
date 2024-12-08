@@ -26,6 +26,16 @@ Il est alors nécessaire de mettre en commentaire la configuration actuelle de l
 DATABASE_URL="mysql://user:mdp@mysql/bd_name?serverVersion=10.2.25-MariaDB&charset=utf8mb4"
 ```
 
+### Se connecter à la base de données
+Une fois la configuration du projet mise en place et les données factices générées, vous pouvez vous connecter soit
+à l'aide des identifiants générés pour cela : 
+- Pour se connecter en tant que Patient :
+  - email : patient@example.com
+  - mot de passe : password
+- Pour se connecter en tant que HealthProfessional :
+  - email : health_professional@example.com
+  - mot de passe : password
+
 ## Scripts
 
 ### Pour maintenir un code propre en PHP et en twig
