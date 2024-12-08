@@ -12,6 +12,11 @@ class HealthProfessionalFixtures extends Fixture implements DependentFixtureInte
 {
     public function load(ObjectManager $manager): void
     {
+        HealthProfessionalFactory::createOne([
+            'firstname' => 'Harry',
+            'lastname' => 'Potter',
+            'email' => 'health_professional@example.com',
+        ]);
         for ($i = 0; $i < 10; $i++) {
             $healthProfessional = HealthProfessionalFactory::createOne()->_real();
             $specialityArray = $manager->getRepository(Speciality::class)->findBy([]);
