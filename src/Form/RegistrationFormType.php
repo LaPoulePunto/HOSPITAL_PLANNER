@@ -26,14 +26,12 @@ class RegistrationFormType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => false,
                 'attr' => [
-                    'class' => $options['inputClass'],
                     'placeholder' => 'Adresse mail',
                 ],
             ])
             ->add('plainPassword', PasswordType::class, [
                 'mapped' => false,
                 'attr' => [
-                    'class' => $options['inputClass'],
                     'autocomplete' => 'new-password',
                     'placeholder' => 'Mot de passe',
                 ],
@@ -52,49 +50,41 @@ class RegistrationFormType extends AbstractType
             ->add('firstname', TextType::class, [
                 'label' => false,
                 'attr' => [
-                    'class' => $options['inputClass'],
                     'placeholder' => 'Prénom',
                 ],
             ])
             ->add('lastname', TextType::class, [
                 'label' => false,
                 'attr' => [
-                    'class' => $options['inputClass'],
                     'placeholder' => 'Nom',
                 ],
             ])
             ->add('birthDate', BirthdayType::class, [
                 'label' => 'Date de naissance :',
-                'attr' => [
-                    'class' => 'mb-4',
-                    'placeholder' => 'Date de naissance',
-                ],
+                'widget' => 'single_text',
             ])
             ->add('city', TextType::class, [
                 'label' => false,
                 'attr' => [
-                    'class' => $options['inputClass'],
                     'placeholder' => 'Ville',
                 ],
             ])
             ->add('postCode', IntegerType::class, [
                 'label' => false,
                 'attr' => [
-                    'class' => $options['inputClass'],
                     'placeholder' => 'Code postal',
                 ],
             ])
             ->add('address', TextType::class, [
                 'label' => false,
                 'attr' => [
-                    'class' => $options['inputClass'],
                     'placeholder' => 'Adresse',
                 ],
             ])
             ->add('gender', ChoiceType::class, [
                 'label' => 'Sexe :',
+                'placeholder' => '--Choisir--',
                 'choices' => [
-                    '--Choisir--' => null,
                     'Homme' => 1,
                     'Femme' => 0,
                 ],
@@ -105,7 +95,6 @@ class RegistrationFormType extends AbstractType
             ->add('phone', TelType::class, [
                 'label' => false,
                 'attr' => [
-                    'class' => $options['inputClass'],
                     'placeholder' => 'Téléphone',
                 ],
             ])
@@ -117,9 +106,6 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
                 'label' => 'J\'accepte les conditions',
-                'attr' => [
-                    'class' => 'checkbox-inline ms-1',
-                ],
             ]);
     }
 
@@ -127,8 +113,6 @@ class RegistrationFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Patient::class,
-            'inputClass' => 'form-control',
         ]);
-        $resolver->setAllowedTypes('inputClass', 'string');
     }
 }

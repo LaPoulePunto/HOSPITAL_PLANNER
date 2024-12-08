@@ -33,9 +33,7 @@ class RegistrationController extends AbstractController
         }
 
         $patient = new Patient();
-        $form = $this->createForm(RegistrationFormType::class, $patient, [
-            'inputClass' => 'form-control mb-4',
-        ]);
+        $form = $this->createForm(RegistrationFormType::class, $patient);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
