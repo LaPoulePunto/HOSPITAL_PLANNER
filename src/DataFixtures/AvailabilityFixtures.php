@@ -18,8 +18,9 @@ class AvailabilityFixtures extends Fixture implements DependentFixtureInterface
         AvailabilityFactory::createMany(
             100,
             static function () use ($manager) {
-                $healthprofessionalId = rand(1, 10);
-                $healthprofessional = $manager->getRepository(HealthProfessional::class)->find($healthprofessionalId);
+                $healthProfessionalArray = $manager->getRepository(HealthProfessional::class)->findAll();
+                $healthProfessional = $healthProfessionalArray[array_rand($healthProfessionalArray)];
+                $healthprofessionalId = $healthProfessional->getId();
                 if (!isset($availabilityDict[$healthprofessionalId])) {
                     $availabilityDict[$healthprofessionalId] = $manager->getRepository(Consultation::class)
                         ->getAllConsultationsByHealthProfessionalId($healthprofessionalId);
@@ -51,7 +52,7 @@ class AvailabilityFixtures extends Fixture implements DependentFixtureInterface
                 }
 
                 return [
-                    'healthprofessional' => $healthprofessional,
+                    'healthprofessional' => $healthProfessional,
                     'date' => $date,
                     'startTime' => $startTime,
                     'endTime' => $endTime
