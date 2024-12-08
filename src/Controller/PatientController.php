@@ -24,8 +24,8 @@ class PatientController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
         $user = $this->getUser();
-        $futurAppointments = $patientRepository->findByIdPastOrFuturReservation($user->getId(), false);
-        $pastAppointments = $patientRepository->findByIdPastOrFuturReservation($user->getId(), true);
+        $futurAppointments = $patientRepository->findByIdPastOrFuturReservation($user->getId(), true);
+        $pastAppointments = $patientRepository->findByIdPastOrFuturReservation($user->getId(), false);
 
         return $this->render('patient/appointment.html.twig', [
             'futurAppointments' => $futurAppointments,
