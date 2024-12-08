@@ -57,6 +57,7 @@ final class HealthProfessionalFactory extends UserFactory
         ];
 
         return array_merge(parent::defaults(), [
+            'roles' => ['ROLE_HEALTH_PROFESSIONAL'],
             'job' => self::faker()->randomElement($medicalJobs),
             'hiringDate' => self::faker()->dateTimeBetween('-10 years', 'now'),
             'departureDate' => self::faker()->optional()->dateTimeBetween('-10years', 'now'),

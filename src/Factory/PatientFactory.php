@@ -49,6 +49,7 @@ final class PatientFactory extends UserFactory
     protected function defaults(): array|callable
     {
         return array_merge(parent::defaults(), [
+            'roles' => ['ROLE_PATIENT'],
             'city' => self::faker()->city(),
             'postCode' => self::faker()->numberBetween(1000, 99999),
             'phone' => self::faker()->phoneNumber(),
