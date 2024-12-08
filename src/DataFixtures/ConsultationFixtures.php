@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\ConsultationType;
+use App\Entity\HealthProfessional;
 use App\Entity\Patient;
 use App\Entity\Room;
 use App\Factory\ConsultationFactory;
@@ -14,16 +15,24 @@ class ConsultationFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        ConsultationFactory::createMany(
-            10,
-            static function () use ($manager) {
-                $room = $manager->getRepository(Room::class)->find(rand(1, 10));
-                $consType = $manager->getRepository(ConsultationType::class)->find(rand(1, 10));
-                $patient = $manager->getRepository(Patient::class)->find(rand(1, 10));
+        for ($i = 0; $i < 100; $i++) {
+            $room = $manager->getRepository(Room::class)->find(rand(1, 10));
+            $consultationType = $manager->getRepository(ConsultationType::class)->find(rand(1, 10));
+            $patient = $manager->getRepository(Patient::class)->find(rand(1, 10));
 
-                return ['room' => $room, 'consultationtype' => $consType, 'patient' => $patient];
-            }
-        );
+            $consultation = ConsultationFactory::createOne([
+                'room' => $room,
+                'consultationtype' => $consultationType,
+                'patient' => $patient
+            ])->_real();
+            $healthProfessionalArray = $manager->getRepository(HealthProfessional::class)->findAll();
+            $healthProfessional = $healthProfessionalArray[array_rand($healthProfessionalArray)];
+
+            $consultation->addHealthProfessional($healthProfessional);
+            $manager->persist($consultation);
+        }
+        $manager->flush();
+
     }
 
     public function getDependencies(): array
@@ -32,6 +41,7 @@ class ConsultationFixtures extends Fixture implements DependentFixtureInterface
             RoomFixtures::class,
             ConsultationTypeFixtures::class,
             PatientFixtures::class,
+            HealthProfessionalFixtures::class,
         ];
     }
 }
