@@ -6,19 +6,36 @@ use App\Repository\PatientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PatientRepository::class)]
 class Patient extends User
 {
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        max: 32,
+        maxMessage: 'Votre ville ne peut pas dépasser {{ limit }} caractères',
+    )]
     #[ORM\Column(length: 32)]
     private ?string $city = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column]
     private ?int $postCode = null;
 
+    #[Assert\Regex(
+        pattern: '/^(?:(?:\+|00)33[\s.-]{0,3}(?:\(0\)[\s.-]{0,3})?|0)[1-9](?:(?:[\s.-]?\d{2}){4})$/',
+        message: 'Format de téléphone invalide'
+    )]
+    #[Assert\NotBlank]
     #[ORM\Column(length: 20)]
     private ?string $phone = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        max: 128,
+        maxMessage: 'Votre adresse ne peut pas dépasser {{ limit }} caractères',
+    )]
     #[ORM\Column(length: 128, nullable: true)]
     private ?string $address = null;
 

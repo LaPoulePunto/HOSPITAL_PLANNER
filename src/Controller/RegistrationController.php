@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Patient;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
+use App\Security\LoginFormAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
@@ -26,8 +28,11 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, UserAuthenticatorInterface $userAuthenticator, LoginFormAuthenticator $authenticator): Response
     {
+        if ($this->isGranted('IS_AUTHENTICATED')) {
+            return $this->redirectToRoute('app_home');
+        }
         $patient = new Patient();
         $form = $this->createForm(RegistrationFormType::class, $patient);
         $form->handleRequest($request);
@@ -61,6 +66,12 @@ class RegistrationController extends AbstractController
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
             // do anything else you need here, like send an email
+
+            $userAuthenticator->authenticateUser(
+                $patient,
+                $authenticator,
+                $request
+            );
 
             return $this->redirectToRoute('app_home');
         }

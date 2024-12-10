@@ -14,6 +14,12 @@ class HomeController extends AbstractController
         return $this->render('home/index.html.twig');
     }
 
+    #[Route('/welcome', name: 'app_home_session')]
+    public function sessionChoice(): Response
+    {
+        return $this->render('home/session.html.twig');
+    }
+
     #[Route('/contact-page', name: 'app_contact_page')]
     public function contact_page(): Response
     {
