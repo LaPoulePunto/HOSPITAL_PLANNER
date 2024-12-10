@@ -28,7 +28,9 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        if ($this->isGranted('IS_AUTHENTICATED')) {
+            return $this->redirectToRoute('app_home');
+        }
         $patient = new Patient();
         $form = $this->createForm(RegistrationFormType::class, $patient);
         $form->handleRequest($request);

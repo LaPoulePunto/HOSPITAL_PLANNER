@@ -70,8 +70,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Assert\NotBlank]
     #[Assert\Range(
-        minMessage: 'Veuillez entrer une date valide.',
-        maxMessage: 'Vous devez avoir au moins 18 ans.',
+        notInRangeMessage: 'Veuillez entrer une date valide.',
         min: '-120 years',
         max: '-18 years',
     )]
