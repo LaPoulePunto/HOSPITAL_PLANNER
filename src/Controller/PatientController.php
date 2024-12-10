@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Patient;
 use App\Repository\ConsultationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,6 +26,31 @@ class PatientController extends AbstractController
         return $this->render('patient/appointment.html.twig', [
             'futurAppointments' => $futurAppointments,
             'pastAppointments' => $pastAppointments,
+        ]);
+    }
+
+    #[Route('/contact/create', name: 'create_contact')]
+    public function createMedicalAppointment(Patient $patient): Response
+    {
+        return $this->render('patient/create_medical_appointment.html.twig', []);
+    }
+
+    #[Route('/patient/{id}/update', name: 'update_medical_appointment', requirements: ['id' => '\d+'])]
+    public function updateMedicalAppointment(Patient $patient): Response
+    {
+        $form = $this->createForm($patient);
+
+        return $this->render('patient/update_medical_appointment.html.twig', [
+            'patient' => $patient,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/patient/{id}/delete', name: 'delete_medical_appointment', requirements: ['id' => '\d+'])]
+    public function deleteMedicalAppointment(Patient $patient): Response
+    {
+        return $this->render('patient/delete_medical_appointment.html.twig', [
+            'patient' => $patient,
         ]);
     }
 }
