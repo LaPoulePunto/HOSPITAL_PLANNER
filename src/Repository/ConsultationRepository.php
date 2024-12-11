@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Consultation;
+use App\Entity\Patient;
 use App\Entity\HealthProfessional;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -48,6 +49,27 @@ class ConsultationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findByPatientPastOrFuturReservation(Patient $patient, bool $isFuture)
+    {
+        $todayDate = new \DateTime();
+        $query = $this->createQueryBuilder('c')
+            ->addSelect('c')
+            ->where('c.patient = :id');
+        // Si time vaut true, alors on récupère les consultations futures
+        if ($isFuture) {
+            $query->andWhere('c.date >= :todayDate');
+        }
+        // Sinon, on récupère les passées
+        else {
+            $query->andWhere('c.date < :todayDate');
+        }
+
+        return $query->setParameter('id', $patient)
+            ->setParameter('todayDate', $todayDate)
+            ->orderBy('c.date', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
     //    /**
     //     * @return ConsultationFixtures[] Returns an array of ConsultationFixtures objects
