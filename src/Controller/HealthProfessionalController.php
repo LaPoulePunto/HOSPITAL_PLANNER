@@ -7,7 +7,9 @@ use App\Repository\HealthProfessionalRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_HEALTH_PROFESSIONAL')]
 class HealthProfessionalController extends AbstractController
 {
     #[Route('/health/professional', name: 'app_health_professional')]

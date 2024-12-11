@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}
+    Page de calendrier
+{% endblock %}
+
 {% block javascripts %}
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
     <script type="module">
@@ -28,8 +32,4 @@
 
 {% block body %}
     <div id='calendar'></div>
-{% endblock %}
-
-{% block title %}
-
 {% endblock %}
