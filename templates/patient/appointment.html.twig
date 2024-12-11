@@ -7,36 +7,10 @@
 {% block body %}
 
     <h1>Mes consultations futures</h1>
-    {% include 'patient/_appointment.html.twig' with {'appointments': futurAppointments[0].consultation ?? null} %}
+    {% include 'patient/_appointment.html.twig' with {'appointments': futurAppointments ?? null} %}
 
     <h1>Mes consultations passées</h1>
-    {% include 'patient/_appointment.html.twig' with {'appointments': pastAppointments[0].consultation ?? null} %}
-
-
-
-    {#    </table> #}
-
-    {#    <h1>Mes consultations futures</h1> #}
-    {#    <table> #}
-    {#        {% for appointment in futurAppointments[0].consultation %} #}
-    {#            <tr> #}
-    {#                <td> #}
-    {#                    {{ appointment.date|date('d/m/Y') }} #}
-    {#                </td> #}
-    {#                <td> #}
-    {#                    {{ appointment.startTime|date('H:i') }} #}
-    {#                </td> #}
-    {#                <td> #}
-    {#                    {{ appointment.endTime|date('H:i') }} #}
-    {#                </td> #}
-    {#                {% for healthprofessional in appointment.healthprofessional %} #}
-    {#                    <td> #}
-    {#                        {{ healthprofessional.job }} {{ healthprofessional.lastname }} {{ healthprofessional.firstname }} #}
-    {#                    </td> #}
-    {#                {% endfor %} #}
-    {#            </tr> #}
-    {#        {% endfor %} #}
-    {#    </table> #}
+    {% include 'patient/_appointment.html.twig' with {'appointments': pastAppointments ?? null} %}
 {% endblock %}
 
 
