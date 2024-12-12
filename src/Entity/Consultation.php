@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ConsultationRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -17,29 +18,29 @@ class Consultation
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $date = null;
+    private ?DateTimeInterface $date = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTimeInterface $startTime = null;
+    private ?DateTimeInterface $startTime = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTimeInterface $endTime = null;
+    private ?DateTimeInterface $endTime = null;
 
     #[ORM\ManyToOne(inversedBy: 'consultation')]
     private ?Room $room = null;
 
     #[ORM\ManyToOne(inversedBy: 'consultation')]
-    private ?ConsultationType $consultationtype = null;
+    private ?ConsultationType $consultationType = null;
 
     #[ORM\ManyToOne(inversedBy: 'consultation')]
     private ?Patient $patient = null;
 
     #[ORM\ManyToMany(targetEntity: HealthProfessional::class, inversedBy: 'consultation')]
-    private Collection $healthprofessional;
+    private Collection $healthProfessional;
 
     public function __construct()
     {
-        $this->healthprofessional = new ArrayCollection();
+        $this->healthProfessional = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -47,36 +48,36 @@ class Consultation
         return $this->id;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getDate(): ?DateTimeInterface
     {
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): static
+    public function setDate(DateTimeInterface $date): static
     {
         $this->date = $date;
 
         return $this;
     }
 
-    public function getStartTime(): ?\DateTimeInterface
+    public function getStartTime(): ?DateTimeInterface
     {
         return $this->startTime;
     }
 
-    public function setStartTime(\DateTimeInterface $startTime): static
+    public function setStartTime(DateTimeInterface $startTime): static
     {
         $this->startTime = $startTime;
 
         return $this;
     }
 
-    public function getEndTime(): ?\DateTimeInterface
+    public function getEndTime(): ?DateTimeInterface
     {
         return $this->endTime;
     }
 
-    public function setEndTime(\DateTimeInterface $endTime): static
+    public function setEndTime(DateTimeInterface $endTime): static
     {
         $this->endTime = $endTime;
 
@@ -119,22 +120,22 @@ class Consultation
         return $this;
     }
 
-    public function getHealthprofessional(): ?HealthProfessional
+    public function getHealthProfessional(): ?HealthProfessional
     {
-        return $this->healthprofessional;
+        return $this->healthProfessional;
     }
 
-    public function setHealthprofessional(?HealthProfessional $healthprofessional): static
+    public function setHealthProfessional(?HealthProfessional $healthProfessional): static
     {
-        $this->healthprofessional = $healthprofessional;
+        $this->healthProfessional = $healthProfessional;
 
         return $this;
     }
 
     public function addHealthprofessional(HealthProfessional $healthprofessional): static
     {
-        if (!$this->healthprofessional->contains($healthprofessional)) {
-            $this->healthprofessional->add($healthprofessional);
+        if (!$this->healthProfessional->contains($healthprofessional)) {
+            $this->healthProfessional->add($healthprofessional);
         }
 
         return $this;
@@ -142,7 +143,7 @@ class Consultation
 
     public function removeHealthprofessional(HealthProfessional $healthprofessional): static
     {
-        $this->healthprofessional->removeElement($healthprofessional);
+        $this->healthProfessional->removeElement($healthprofessional);
 
         return $this;
     }

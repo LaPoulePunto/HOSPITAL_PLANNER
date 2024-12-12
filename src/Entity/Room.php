@@ -22,7 +22,7 @@ class Room
     private ?string $floor = null;
 
     #[ORM\ManyToOne(inversedBy: 'room')]
-    private ?RoomType $roomtype = null;
+    private ?RoomType $roomType = null;
 
     #[ORM\OneToMany(targetEntity: Consultation::class, mappedBy: 'room')]
     private Collection $consultation;
@@ -65,14 +65,14 @@ class Room
         return $this;
     }
 
-    public function getRoomtype(): ?RoomType
+    public function getRoomType(): ?RoomType
     {
-        return $this->roomtype;
+        return $this->roomType;
     }
 
-    public function setRoomtype(?RoomType $roomtype): static
+    public function setRoomType(?RoomType $roomType): static
     {
-        $this->roomtype = $roomtype;
+        $this->roomType = $roomType;
 
         return $this;
     }

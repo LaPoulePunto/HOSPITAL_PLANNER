@@ -24,7 +24,7 @@ class Reservation
     private ?Material $material = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservation')]
-    private ?HealthProfessional $healthprofessional = null;
+    private ?HealthProfessional $healthProfessional = null;
 
     public function getId(): ?int
     {
@@ -67,14 +67,14 @@ class Reservation
         return $this;
     }
 
-    public function getHealthprofessional(): ?HealthProfessional
+    public function getHealthProfessional(): ?HealthProfessional
     {
-        return $this->healthprofessional;
+        return $this->healthProfessional;
     }
 
-    public function setHealthprofessional(?HealthProfessional $healthprofessional): static
+    public function setHealthProfessional(?HealthProfessional $healthProfessional): static
     {
-        $this->healthprofessional = $healthprofessional;
+        $this->healthProfessional = $healthProfessional;
 
         return $this;
     }
