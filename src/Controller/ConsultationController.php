@@ -3,6 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Consultation;
+use App\Entity\ConsultationType;
+use App\Entity\Patient;
+use App\Form\PatientFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Dompdf\Dompdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,6 +22,59 @@ class ConsultationController extends AbstractController
     {
         return $this->render('consultation/index.html.twig', [
             'controller_name' => 'ConsultationController',
+        ]);
+    }
+
+    #[Route('/consultation/appointment/create', name: 'create_medical_appointment', requirements: ['id' => '\d+'])]
+    public function createMedicalAppointment(Request $request, EntityManagerInterface $entityManager, Patient $patient): Response
+    {
+        $patientId = $patient->getId();
+
+        if (!$patientId) {
+            throw $this->createNotFoundException('Aucun patient spécifié.');
+        }
+
+        $patient = $entityManager->getRepository(Patient::class)->find($patientId);
+
+        if (!$patient) {
+            throw $this->createNotFoundException('Le patient demandé n\'existe pas.');
+        }
+        $appointment = new Consultation();
+        $appointment->setPatient($patient);
+
+        $form = $this->createForm(ConsultationType::class, $appointment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($appointment);
+            $entityManager->flush();
+
+
+            return $this->redirectToRoute('appointment_detail', ['id' => $appointment->getId()]);
+        }
+
+        return $this->render('consultation/create_medical_appointment.html.twig', [
+            'form' => $form->createView(),
+            'patient' => $patient,
+        ]);
+    }
+
+    #[Route('/consultation/appointment/{id}/update', name: 'update_medical_appointment', requirements: ['id' => '\d+'])]
+    public function updateMedicalAppointment(Patient $patient): Response
+    {
+        $form = $this->createForm(PatientFormType::class, $patient);
+
+        return $this->render('consultation/update_medical_appointment.html.twig', [
+            'patient' => $patient,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/consultation/appointment/{id}/delete', name: 'delete_medical_appointment', requirements: ['id' => '\d+'])]
+    public function deleteMedicalAppointment(Patient $patient): Response
+    {
+        return $this->render('consultation/delete_medical_appointment.html.twig', [
+            'patient' => $patient,
         ]);
     }
 
