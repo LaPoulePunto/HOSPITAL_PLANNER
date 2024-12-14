@@ -125,13 +125,15 @@ class UserController extends AbstractController
 
                 $this->addFlash('success', 'Utilisateur supprimé avec succès.');
 
+                $request->getSession()->invalidate();
+                $this->container->get('security.token_storage')->setToken(null);
                 return $this->redirectToRoute('app_home');
             }
 
             if ($form->get('cancel')->isClicked()) {
                 $this->addFlash('info', 'Suppression annulée.');
 
-                return $this->redirectToRoute('/', ['id' => $user->getId()]);
+                return $this->redirectToRoute('app_home', []);
             }
         }
 
