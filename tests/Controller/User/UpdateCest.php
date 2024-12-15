@@ -53,22 +53,40 @@ class UpdateCest
         $I->amLoggedInAs($patient->object());
         $I->amOnPage('/user/update');
 
-        // Mettre à jour le mot de passe via le formulaire
         $I->fillField('update_user_form[password]', 'new_password');
         $I->click('Mettre à jour le compte');
 
         $I->seeCurrentRouteIs('app_user_update');
 
-        // Vérifie que le mot de passe a bien été mis à jour
         $updatedUser = $I->grabEntityFromRepository(User::class, [
             'id' => $patient->getId(),
         ]);
         $passwordHasher = $I->grabService(UserPasswordHasherInterface::class);
 
-        // Vérification du hash du mot de passe
         $I->assertTrue(
             $passwordHasher->isPasswordValid($updatedUser, 'new_password'),
             'Le mot de passe haché ne correspond pas au mot de passe attendu.'
         );
+    }
+
+    public function testUpdateName(ControllerTester $I)
+    {
+        $patient = PatientFactory::createOne([
+            'firstName' => 'Jérôme',
+            'lastname' => 'Cutrona',
+        ]);
+        $I->amLoggedInAs($patient->object());
+        $I->amOnPage('/user/update');
+
+        $I->fillField('update_user_form[firstname]', 'Didier');
+        $I->fillField('update_user_form[lastname]', 'Gillard');
+        $I->click('Mettre à jour le compte');
+        dump($patient->getFirstname());
+        $I->seeInRepository(User::class, [
+            'id' => $patient->getId(),
+            'firstname' => 'Didier',
+            'lastname' => 'Gillard',
+        ]);
+
     }
 }
