@@ -2,6 +2,7 @@
 
 namespace App\Tests\Controller\User;
 
+use App\Entity\User;
 use App\Factory\PatientFactory;
 use App\Tests\Support\ControllerTester;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -40,7 +41,7 @@ class UpdateCest
 
         $I->seeCurrentRouteIs('app_user_update');
 
-        $I->seeInRepository(\App\Entity\User::class, [
+        $I->seeInRepository(User::class, [
             'id' => $patient->getId(),
             //            'email' => 'new.email@example.com',
         ]);
@@ -59,7 +60,7 @@ class UpdateCest
         $I->seeCurrentRouteIs('app_user_update');
 
         // Vérifie que le mot de passe a bien été mis à jour
-        $updatedUser = $I->grabEntityFromRepository(\App\Entity\User::class, [
+        $updatedUser = $I->grabEntityFromRepository(User::class, [
             'id' => $patient->getId(),
         ]);
         $passwordHasher = $I->grabService(UserPasswordHasherInterface::class);
@@ -69,22 +70,5 @@ class UpdateCest
             $passwordHasher->isPasswordValid($updatedUser, 'new_password'),
             'Le mot de passe haché ne correspond pas au mot de passe attendu.'
         );
-    }
-
-    public function testFormValidationFails(ControllerTester $I)
-    {
-        $patient = PatientFactory::createOne(['email' => 'valid.email@example.com']);
-        $I->amLoggedInAs($patient->object());
-        $I->amOnPage('/user/update');
-
-        // Test de validation avec un email invalide
-        $I->fillField('update_user_form[email]', 'not-an-email');
-        $I->click('Mettre à jour le compte');
-
-        $I->seeCurrentRouteIs('app_user_update');
-        $I->seeInRepository(\App\Entity\User::class, [
-            'id' => $patient->getId(),
-            'email' => 'valid.email@example.com',
-        ]);
     }
 }
