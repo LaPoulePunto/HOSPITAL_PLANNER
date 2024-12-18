@@ -3,41 +3,43 @@
 {% block title %}Se connecter{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
-
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-        </div>
-    {% endif %}
-
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="card shadow p-4 col-md-6">
                 <h2 class="mb-4 text-center">Connectez-vous</h2>
 
-                <input placeholder="Email" type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control mb-4" autocomplete="email" required autofocus>
+                <form method="post" name="login_form">
 
-                <input placeholder="Mot de passe"
-                        type="password"
-                        name="password"
-                        id="inputPassword"
-                        class="form-control"
-                        autocomplete="current-password"
-                        required>
+                    {% if error %}
+                        <div class="invalid-feedback">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
 
-                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    {% if app.user %}
+                        <div class="mb-3">
+                            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+                        </div>
+                    {% endif %}
 
-                <button class="btn btn-lg btn-danger mt-4" type="submit">
-                    Se connecter
-                </button>
+                    <input placeholder="Email" type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control mb-4" autocomplete="email" required autofocus>
+
+                    <input placeholder="Mot de passe"
+                           type="password"
+                           name="password"
+                           id="inputPassword"
+                           class="form-control"
+                           autocomplete="current-password"
+                           required>
+
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                    <button class="btn btn-lg btn-danger mt-4" type="submit">
+                        Se connecter
+                    </button>
+                </form>
+
                 <a href="{{ path('app_register') }}">Pas encore de compte ?</a>
             </div>
         </div>
     </div>
 
-</form>
 {% endblock %}
