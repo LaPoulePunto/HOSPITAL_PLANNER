@@ -56,6 +56,11 @@ composer test:twigcs
 composer fix:twigcs
 ```
 
+- Lancer les tests
+```shell
+composer fix:twigcs
+```
+
 ### Base de données
 
 - Générer la base de donnée :
