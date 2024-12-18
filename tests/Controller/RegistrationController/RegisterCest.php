@@ -2,16 +2,19 @@
 
 namespace App\Tests\Controller\RegistrationController;
 
+use App\Factory\PatientFactory;
 use App\Tests\Support\ControllerTester;
 
 class RegisterCest
 {
-    public function _before(ControllerTester $I)
+    public function accessIsRestrictedToConnectedUsers(ControllerTester $I): void
     {
-    }
-
-    // tests
-    public function tryToTest(ControllerTester $I)
-    {
+        $user = PatientFactory::createOne([
+            'email' => 'root@example.com',
+        ]);
+        $realUser = $user->_real();
+        $I->amLoggedInAs($realUser);
+        $I->amOnPage('/register');
+        $I->seeCurrentUrlEquals('/');
     }
 }
