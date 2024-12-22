@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\HealthProfessional;
 use App\Entity\Patient;
-use App\Entity\User;
 use App\Form\UpdateUserForm;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -40,32 +39,19 @@ class UserController extends AbstractController
     public function update(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         if ($user = $this->getUser()) {
+//            if ($user instanceof HealthProfessional) {
+//                $this->addFlash('error', 'Votre compte peut seulement être mis à jour par un administrateur.');
+//                return $this->redirectToRoute('app_home');
+//            }
             $form = $this->createForm(UpdateUserForm::class, $user);
             $form->handleRequest($request);
             $user = $this->getUser();
             $originalUser = clone $user;
             if ($form->isSubmitted() && $form->isValid()) {
-                //            $currentPassword = $form->get('currentPassword')->getData() ?? '';
-
-                //            if (!$userPasswordHasher->isPasswordValid($originalUser, $currentPassword)) {
-                //                $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
-                //                $user = $originalUser;
-                //
-                //                return $this->render('user/update.html.twig', [
-                //                    'user' => $user,
-                //                    'form' => $form->createView(),
-                //                    'mdp' => $originalUser->getPassword(),
-                //                    'bool' => ($form->get('password')->getData()) ? 'true' : 'false',
-                //                ]);
-                //            }
-                //            Vérification que le mot de passe passé correspond au mdp de l'utilisateur
                 if ($form->get('password')->getData()) {
                     $user->setPassword(
                         $userPasswordHasher->hashPassword($user, $form->get('password')->getData())
                     );
-                //                $originalUser->setPassword(
-                //                    $userPasswordHasher->hashPassword($user, $form->get('password')->getData())
-                //                );
                 } else {
                     $user->setPassword(
                         $userPasswordHasher->hashPassword($user, $originalUser->getPassword())
@@ -78,15 +64,9 @@ class UserController extends AbstractController
                 $this->addFlash('success', 'Les informations de l\'utilisateur ont été mises à jour.');
             }
 
-            return $this->render('user/update.html.twig', [
-                'user' => $user,
-                'form' => $form->createView(),
-                'mdp' => $originalUser->getPassword(),
-                'bool' => ($form->get('password')->getData()) ? 'true' : 'false',
-            ]);
-            //            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('app_user_update');
         }
-
+        $this->addFlash('error', 'Vous devez vous connecter pour modifier votre compte.');
         return $this->redirectToRoute('app_login');
     }
 
@@ -127,6 +107,7 @@ class UserController extends AbstractController
 
                 $request->getSession()->invalidate();
                 $this->container->get('security.token_storage')->setToken(null);
+
                 return $this->redirectToRoute('app_home');
             }
 
