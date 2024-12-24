@@ -98,12 +98,12 @@ class Consultation
 
     public function getConsultationtype(): ?ConsultationType
     {
-        return $this->consultationtype;
+        return $this->consultationType;
     }
 
     public function setConsultationtype(?ConsultationType $consultationtype): static
     {
-        $this->consultationtype = $consultationtype;
+        $this->consultationType = $consultationtype;
 
         return $this;
     }
