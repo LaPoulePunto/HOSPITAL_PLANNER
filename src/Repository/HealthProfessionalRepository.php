@@ -21,26 +21,6 @@ class HealthProfessionalRepository extends ServiceEntityRepository
         parent::__construct($registry, HealthProfessional::class);
     }
 
-    public function findConsultationByHpId(int $id)
-    {
-        return $this->createQueryBuilder('hp')
-            ->innerJoin('hp.consultation', 'c')
-            ->innerJoin('c.consultationtype', 'ct')
-            ->innerJoin('c.room', 'r')
-            ->innerJoin('r.roomtype', 'rt')
-            ->addSelect('c')
-            ->addSelect('ct')
-            ->addSelect('r')
-            ->addSelect('rt')
-            ->where('hp.id = :id')
-            ->setParameter('id', $id)
-            ->orderBy('c.date', 'ASC')
-            ->addOrderBy('c.startTime', 'ASC')
-            ->getQuery()
-            ->getResult();
-        ;
-    }
-
 
     //    /**
     //     * @return HealthProfessionnal[] Returns an array of HealthProfessionnal objects
