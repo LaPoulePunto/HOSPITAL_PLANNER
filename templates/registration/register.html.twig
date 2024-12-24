@@ -16,10 +16,86 @@
 
                 {{ form_start(registrationForm) }}
 
-                    {{ form_rest(registrationForm) }}
+                    {{ form_row(registrationForm.email, {
+                        label: 'Adresse email',
+                        attr: {
+                            placeholder: 'Entrez votre adresse email'
+                        }
+                    }) }}
+
+                    {{ form_row(registrationForm.plainPassword.first, {
+                        label: 'Mot de passe',
+                        attr: {
+                            placeholder: 'Choisissez un mot de passe'
+                        }
+                    }) }}
+
+                    {{ form_row(registrationForm.plainPassword.second, {
+                        label: false,
+                        attr: {
+                            placeholder: 'Confirmez votre mot de passe'
+                        }
+                    }) }}
+
+                    {{ form_row(registrationForm.firstname, {
+                        label: 'Nom',
+                        attr: {
+                            placeholder: 'Entrez votre prénom'
+                        }
+                    }) }}
+
+                    {{ form_row(registrationForm.lastname, {
+                        label: false,
+                        attr: {
+                            placeholder: 'Entrez votre nom de famille'
+                        }
+                    }) }}
+
+                    {{ form_row(registrationForm.birthDate, {
+                        label: 'Date de naissance'
+                    }) }}
+
+                    {{ form_row(registrationForm.city, {
+                        label: 'Ville',
+                        attr: {
+                            placeholder: 'Entrez votre ville'
+                        }
+                    }) }}
+
+                    {{ form_row(registrationForm.postCode, {
+                        label: 'Code postal',
+                        attr: {
+                            placeholder: 'Entrez votre code postal'
+                        }
+                    }) }}
+
+                    {{ form_row(registrationForm.address, {
+                        label: 'Rue',
+                        attr: {
+                            placeholder: 'Entrez votre rue'
+                        }
+                    }) }}
+
+                    {{ form_row(registrationForm.gender, {
+                        label: 'Sexe',
+                        placeholder: '--Choisir--'
+                    }) }}
+
+                    {{ form_row(registrationForm.phone, {
+                        label: 'Téléphone',
+                        attr: {
+                            placeholder: 'Entrez votre numéro de téléphone'
+                        }
+                    }) }}
+
+                    {{ form_row(registrationForm.agreeTerms, {
+                        label: 'J\'accepte les conditions générales'
+                    }) }}
+
                     <button type="submit" class="btn btn-lg btn-danger mt-4">Créer le compte</button>
 
                 {{ form_end(registrationForm) }}
+
             </div>
         </div>
     </div>
