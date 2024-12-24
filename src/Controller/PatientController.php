@@ -15,16 +15,15 @@ class PatientController extends AbstractController
         return $this->render('patient/index.html.twig');
     }
 
-    #[Route('/user/appointment', name: 'app_user_show')]
+    #[Route('/patient/appointment', name: 'app_user_appointments')]
     public function appointment(ConsultationRepository $consultationRepository): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
         $user = $this->getUser();
-        $futurAppointments = $consultationRepository->findByPatientPastOrFuturReservation($user, true);
-        $pastAppointments = $consultationRepository->findByPatientPastOrFuturReservation($user, false);
-
+        $futurAppointments = $consultationRepository->findConsultationByPatientPastOrFuturReservation($user, true);
+        $pastAppointments = $consultationRepository->findConsultationByPatientPastOrFuturReservation($user, false);
         return $this->render('patient/appointment.html.twig', [
             'futurAppointments' => $futurAppointments,
             'pastAppointments' => $pastAppointments,

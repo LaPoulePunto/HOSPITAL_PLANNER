@@ -7,10 +7,8 @@
 {% block body %}
 
     <h1>Mes consultations futures</h1>
-    {% include 'patient/_appointment.html.twig' with {'appointments': futurAppointments ?? null} %}
+    {{ include('patient/_appointment.html.twig', {appointments: futurAppointments}) }}
 
     <h1>Mes consultations passées</h1>
-    {% include 'patient/_appointment.html.twig' with {'appointments': pastAppointments ?? null} %}
+    {{ include('patient/_appointment.html.twig', {appointments: pastAppointments}) }}
 {% endblock %}
-
-

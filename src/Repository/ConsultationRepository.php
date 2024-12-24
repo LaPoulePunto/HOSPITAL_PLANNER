@@ -49,7 +49,7 @@ class ConsultationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByPatientPastOrFuturReservation(Patient $patient, bool $isFuture)
+    public function findConsultationByPatientPastOrFuturReservation(Patient $patient, bool $isFuture)
     {
         $todayDate = new \DateTime();
         $query = $this->createQueryBuilder('c')
