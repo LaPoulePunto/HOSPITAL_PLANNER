@@ -37,16 +37,16 @@ class HealthProfessionalController extends AbstractController
     }
 
     #[Route('/health-professional/calendar', name: 'app_health_professional_calendar')]
-    public function showCalendar(HealthProfessionalRepository $healthProfessionalRepository): Response
+    public function showCalendar(ConsultationRepository $consultationRepository): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
 
-        $healthProfessionals = $this->getUser();
-        $appointments = $healthProfessionalRepository->findConsultationByHpId($healthProfessionals->getId());
+        $healthProfessional = $this->getUser();
+        $appointments = $consultationRepository->getAllConsultationsByHealthProfessional($healthProfessional);
         return $this->render('health_professional/calendar.html.twig', [
-            'appointments' => $appointments[0] ?? null,
+            'appointments' => $appointments ?? null,
         ]);
     }
 }

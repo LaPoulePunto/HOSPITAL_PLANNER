@@ -13,7 +13,7 @@
 
             addEventSource([
                 {% if appointments is not null %}
-                    {% for consultation in appointments.consultation %}
+                    {% for consultation in appointments %}
                     {
                         id: '{{ consultation.id }}',
                         title: 'PATIENT : {{ consultation.patient.lastname|upper }} {{ consultation.patient.firstname

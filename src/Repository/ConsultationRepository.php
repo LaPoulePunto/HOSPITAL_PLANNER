@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Consultation;
+use App\Entity\HealthProfessional;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -31,13 +32,13 @@ class ConsultationRepository extends ServiceEntityRepository
         ;
     }
 
-    public function getAllConsultationsByHealthProfessionalId(int $healthProfessionalId)
+    public function getAllConsultationsByHealthProfessional(HealthProfessional $healthProfessional)
     {
+        $id = $healthProfessional->getId();
         return $this->createQueryBuilder('c')
-            ->select('c.date', 'c.startTime', 'c.endTime')
-            ->innerJoin('c.healthprofessional', 'hp')
-            ->where('hp.id = :healthProfessionalId')
-            ->setParameter('healthProfessionalId', $healthProfessionalId)
+            ->innerJoin('c.healthProfessional', 'hp')
+            ->where('hp.id = :id')
+            ->setParameter('id', $id)
             ->getQuery()
             ->getResult();
     }
