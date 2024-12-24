@@ -23,12 +23,7 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email', EmailType::class, [
-                'label' => false,
-                'attr' => [
-                    'placeholder' => 'Adresse email',
-                ],
-            ])
+            ->add('email', EmailType::class)
             ->add('plainPassword', RepeatedType::class, [
                 'mapped' => false,
                 'type' => PasswordType::class,
@@ -37,7 +32,6 @@ class RegistrationFormType extends AbstractType
                 'first_options' => [
                     'attr' => [
                         'autocomplete' => 'new-password',
-                        'placeholder' => 'Mot de passe',
                     ],
                     'constraints' => [
                         new NotBlank([
@@ -49,63 +43,23 @@ class RegistrationFormType extends AbstractType
                             'max' => 4096,
                         ]),
                     ],
-                    'label' => false,
-                ],
-                'second_options' => [
-                    'attr' => [
-                        'placeholder' => 'Confirmez le mot de passe',
-                    ],
-                    'label' => false,
                 ],
             ])
-            ->add('firstname', TextType::class, [
-                'label' => false,
-                'attr' => [
-                    'placeholder' => 'Prénom',
-                ],
-            ])
-            ->add('lastname', TextType::class, [
-                'label' => false,
-                'attr' => [
-                    'placeholder' => 'Nom',
-                ],
-            ])
+            ->add('firstname', TextType::class)
+            ->add('lastname', TextType::class)
             ->add('birthDate', BirthdayType::class, [
-                'label' => 'Date de naissance :',
                 'widget' => 'single_text',
             ])
-            ->add('city', TextType::class, [
-                'label' => false,
-                'attr' => [
-                    'placeholder' => 'Ville',
-                ],
-            ])
-            ->add('postCode', TextType::class, [
-                'label' => false,
-                'attr' => [
-                    'placeholder' => 'Code postal',
-                ],
-            ])
-            ->add('address', TextType::class, [
-                'label' => false,
-                'attr' => [
-                    'placeholder' => 'Adresse',
-                ],
-            ])
+            ->add('city', TextType::class)
+            ->add('postCode', TextType::class)
+            ->add('address', TextType::class)
             ->add('gender', ChoiceType::class, [
-                'label' => 'Sexe :',
-                'placeholder' => '--Choisir--',
                 'choices' => [
                     'Homme' => 1,
                     'Femme' => 0,
                 ],
             ])
-            ->add('phone', TelType::class, [
-                'label' => false,
-                'attr' => [
-                    'placeholder' => 'Téléphone',
-                ],
-            ])
+            ->add('phone', TelType::class)
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
@@ -113,7 +67,6 @@ class RegistrationFormType extends AbstractType
                         'message' => 'Vous devez accepter les conditions.',
                     ]),
                 ],
-                'label' => 'J\'accepte les conditions',
             ]);
     }
 
