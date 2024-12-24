@@ -37,11 +37,17 @@ class ConsultationRepository extends ServiceEntityRepository
         $id = $healthProfessional->getId();
         return $this->createQueryBuilder('c')
             ->innerJoin('c.healthProfessional', 'hp')
+            ->innerJoin('c.patient', 'p')
+            ->innerJoin('c.consultationType', 'ct')
+            ->innerJoin('c.room', 'r')
+            ->innerJoin('r.roomType', 'rt')
+            ->addSelect('hp', 'p', 'ct', 'r', 'rt')
             ->where('hp.id = :id')
             ->setParameter('id', $id)
             ->getQuery()
             ->getResult();
     }
+
 
     //    /**
     //     * @return ConsultationFixtures[] Returns an array of ConsultationFixtures objects
