@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Controller\RegistrationController;
+namespace App\Tests\Controller\Registration;
 
 use App\Factory\PatientFactory;
 use App\Tests\Support\ControllerTester;

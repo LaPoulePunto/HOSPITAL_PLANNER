@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Controller\SecurityController;
+namespace App\Tests\Controller\Security;
 
 use App\Factory\PatientFactory;
 use App\Tests\Support\ControllerTester;

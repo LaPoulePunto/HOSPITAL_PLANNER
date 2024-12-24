@@ -58,7 +58,7 @@ composer fix:twigcs
 
 - Lancer les tests
 ```shell
-composer fix:twigcs
+composer test:codeception
 ```
 
 ### Base de données
