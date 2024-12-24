@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_HEALTH_PROFESSIONAL')]
+#[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
 class HealthProfessionalController extends AbstractController
 {
     #[Route('/health/professional', name: 'app_health_professional')]
@@ -39,9 +40,7 @@ class HealthProfessionalController extends AbstractController
     #[Route('/health-professional/calendar', name: 'app_health_professional_calendar')]
     public function showCalendar(ConsultationRepository $consultationRepository): Response
     {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
+
 
         $healthProfessional = $this->getUser();
         $appointments = $consultationRepository->getAllConsultationsByHealthProfessional($healthProfessional);
