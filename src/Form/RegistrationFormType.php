@@ -52,7 +52,7 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('city', TextType::class)
             ->add('postCode', TextType::class)
-            ->add('address', TextType::class)
+            ->add('street', TextType::class)
             ->add('gender', ChoiceType::class, [
                 'choices' => [
                     'Homme' => 1,
