@@ -6,6 +6,7 @@ use App\Entity\Availability;
 use App\Form\AvailabilityType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -66,12 +67,21 @@ class AvailabilityController extends AbstractController
     }
 
     #[Route('/availability/{id}/delete', name: 'app_availability_delete')]
-    public function delete(): Response
+    public function delete(Availability $availability, EntityManagerInterface $entityManager, Request $request): Response
     {
-
-
+        $form = $this->createFormBuilder()
+            ->add('delete', SubmitType::class)
+            ->add('cancel', SubmitType::class)
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->get('delete')->isClicked()) {
+                $entityManager->remove($availability);
+                $entityManager->flush();
+            }
+        }
         return $this->render('availability/delete.html.twig', [
-//            'form' => $form,
+            'form' => $form,
         ]);
 
     }
