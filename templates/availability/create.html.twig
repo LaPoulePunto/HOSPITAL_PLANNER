@@ -1,9 +1,3 @@
-{% extends 'base.html.twig' %}
+{% set titlePage = "Création d'une disponibilité" %}
 
-{% block body %}
-
-{% endblock %}
-
-{% block title %}
-
-{% endblock %}
+ {{ include(('availability/_form.html.twig'), {submit_label: 'Création', form: form, titlePage: titlePage}, with_context = false) }}
