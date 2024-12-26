@@ -6,6 +6,7 @@ use App\Repository\AvailabilityRepository;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AvailabilityRepository::class)]
 class Availability
@@ -15,15 +16,19 @@ class Availability
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?DateTimeInterface $date = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?DateTimeInterface $startTime = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?DateTimeInterface $endTime = null;
 
+    #[Assert\NotBlank]
     #[ORM\ManyToOne(inversedBy: 'availability')]
     private ?HealthProfessional $healthProfessional = null;
 
