@@ -3,8 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Availability;
-use App\Entity\HealthProfessional;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
