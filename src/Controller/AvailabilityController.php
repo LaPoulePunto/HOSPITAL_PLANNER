@@ -68,6 +68,11 @@ class AvailabilityController extends AbstractController
     #[Route('/availability/{id}/delete', name: 'app_availability_delete')]
     public function delete(): Response
     {
-        return $this->render('delete/index.html.twig');
+
+
+        return $this->render('availability/delete.html.twig', [
+//            'form' => $form,
+        ]);
+
     }
 }
