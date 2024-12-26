@@ -8,9 +8,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_HEALTH_PROFESSIONAL')]
+#[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
 class AvailabilityController extends AbstractController
 {
     #[Route('/availability', name: 'app_availability')]
@@ -43,6 +46,10 @@ class AvailabilityController extends AbstractController
     #[Route('/availability/{id}/update', name: 'app_availability_update')]
     public function update(Availability $availability, Request $request, EntityManagerInterface $entityManager): Response
     {
+        if ($availability->getHealthprofessional() !== $this->getUser()) {
+            throw new AccessDeniedHttpException('Ces disponibilités ne sont pas les vôtres');
+        }
+
         $form = $this->createForm(AvailabilityType::class, $availability);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
