@@ -5,12 +5,18 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ titlePage }}</h1>
-    {{ form_start(form) }}
-        {{ form_row(form.date, {label: 'Date de disponibilité'}) }}
-        {{ form_row(form.startTime, {label: 'Heure de début'}) }}
-        {{ form_row(form.endTime, {label: 'Heure de fin'}) }}
-        <input type="submit" value="{{ submit_label }}"
-               class="btn btn-primary"/>
-    {{ form_end(form) }}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="card shadow p-4 col-md-6 mb-4">
+            <h1>{{ titlePage }}</h1>
+                {{ form_start(form) }}
+                    {{ form_row(form.date, {label: 'Date de disponibilité'}) }}
+                    {{ form_row(form.startTime, {label: 'Heure de début'}) }}
+                    {{ form_row(form.endTime, {label: 'Heure de fin'}) }}
+                    <input type="submit" value="{{ submit_label }}"
+                           class="btn btn-primary"/>
+                {{ form_end(form) }}
+        </div>
+    </div>
+</div>
 {% endblock %}
