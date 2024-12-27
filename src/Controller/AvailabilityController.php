@@ -35,8 +35,7 @@ class AvailabilityController extends AbstractController
             try {
                 if ($availability->getRecurrenceType() !== null) {
                     $availability->setIsRecurring(true);
-                }
-                else {
+                } else {
                     $availability->setIsRecurring(false);
                 }
                 $entityManager->persist($availability);
@@ -65,8 +64,7 @@ class AvailabilityController extends AbstractController
             try {
                 if ($availability->getRecurrenceType() !== null) {
                     $availability->setIsRecurring(true);
-                }
-                else {
+                } else {
                     $availability->setIsRecurring(false);
                 }
                 if ($availability->getRecurrenceType() !== null) {
