@@ -22,11 +22,26 @@ class AvailabilityRepository extends ServiceEntityRepository
         parent::__construct($registry, Availability::class);
     }
 
-    public function getAvailabilitiesByHealthProfessional(HealthProfessional $hp)
+    public function getRecurringAvailabilitiesByHealthProfessional(HealthProfessional $hp)
     {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.healthprofessional = :hp')
+            ->Where('a.healthprofessional = :hp')
+            ->andWhere('a.isRecurring = true')
             ->setParameter('hp', $hp)
+            ->orderBy('a.date', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getFuturNoneRecurringAvailabilitiesByHealthProfessional(HealthProfessional $hp)
+    {
+        $today = new \DateTime();
+        return $this->createQueryBuilder('a')
+            ->Where('a.healthprofessional = :hp')
+            ->andWhere('a.isRecurring = false')
+            ->andWhere('a.date >= :today')
+            ->setParameter('hp', $hp)
+            ->setParameter('today', $today)
             ->orderBy('a.date', 'ASC')
             ->getQuery()
             ->getResult();
