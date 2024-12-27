@@ -1,0 +1,42 @@
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Heure de Début</th>
+        <th>Heure de Fin</th>
+        {% if availabilities is not empty and availabilities|first.recurrenceType == 1 %}
+            <th>Type de Disponibilité</th>
+        {% endif %}
+    </tr>
+    </thead>
+    <tbody>
+    {% if availabilities is not empty %}
+        {% for availability in availabilities %}
+            <tr>
+                <td>{{ availability.date|format_datetime(locale = 'fr', pattern = 'EEEE dd MMMM YYYY') }}</td>
+                <td>{{ availability.startTime|date('H:i') }}</td>
+                <td>{{ availability.endTime|date('H:i') }}</td>
+                {% if availability.isRecurring %}
+                    <td>
+                            {% if availability.recurrenceType == 1 %}
+                                Tous les jours ouvrables
+                            {% elseif availability.recurrenceType == 2 %}
+                                Toutes les semaines
+                            {% elseif availability.recurrenceType == 3 %}
+                                Tous les mois
+                            {% elseif availability.recurrenceType == 4 %}
+                                Tous les ans
+                            {% else %}
+                                Non spécifié
+                            {% endif %}
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="4" class="text-center">Aucune disponibilité trouvée</td>
+        </tr>
+    {% endif %}
+    </tbody>
+</table>
