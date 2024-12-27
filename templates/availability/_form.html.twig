@@ -13,8 +13,9 @@
                     {{ form_row(form.date, {label: 'Date de disponibilité'}) }}
                     {{ form_row(form.startTime, {label: 'Heure de début'}) }}
                     {{ form_row(form.endTime, {label: 'Heure de fin'}) }}
+                    {{ form_row(form.recurrenceType, {label: 'Ajouter une récurrence', value: recurrenceType}) }}
                     <input type="submit" value="{{ submit_label }}"
-                           class="btn btn-primary"/>
+                                   class="btn btn-primary"/>
                 {{ form_end(form) }}
         </div>
     </div>

@@ -1,3 +1,8 @@
 {% set titlePage = "Édition d'une disponibilité" %}
 
- {{ include(('availability/_form.html.twig'), {submit_label: 'Modifier', form: form, titlePage: titlePage}, with_context = false) }}
+ {{ include(('availability/_form.html.twig'), {
+  submit_label: 'Modifier',
+  form: form,
+  titlePage: titlePage,
+  recurrenceType : recurrenceType,
+ }, with_context = false) }}

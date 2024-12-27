@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Availability;
 use App\Form\AvailabilityType;
+use App\Repository\AvailabilityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -32,6 +33,12 @@ class AvailabilityController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             try {
+                if ($availability->getRecurrenceType() !== null) {
+                    $availability->setIsRecurring(true);
+                }
+                else {
+                    $availability->setIsRecurring(false);
+                }
                 $entityManager->persist($availability);
                 $entityManager->flush();
 
@@ -41,6 +48,7 @@ class AvailabilityController extends AbstractController
         }
         return $this->render('availability/create.html.twig', [
             'form' => $form,
+            'recurrenceType' => $availability->getRecurrenceType(),
         ]);
     }
 
@@ -55,6 +63,15 @@ class AvailabilityController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             try {
+                if ($availability->getRecurrenceType() !== null) {
+                    $availability->setIsRecurring(true);
+                }
+                else {
+                    $availability->setIsRecurring(false);
+                }
+                if ($availability->getRecurrenceType() !== null) {
+                    $availability->setIsRecurring(true);
+                }
                 $entityManager->flush();
             } catch (\Exception) {
                 echo 'Erreur de modification de la disponibilité';
@@ -63,6 +80,7 @@ class AvailabilityController extends AbstractController
 
         return $this->render('availability/update.html.twig', [
             'form' => $form,
+            'recurrenceType' => $availability->getRecurrenceType(),
         ]);
     }
 
