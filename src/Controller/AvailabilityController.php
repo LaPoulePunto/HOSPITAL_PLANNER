@@ -6,6 +6,7 @@ use App\Entity\Availability;
 use App\Form\AvailabilityType;
 use App\Repository\AvailabilityRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,7 +53,9 @@ class AvailabilityController extends AbstractController
                 $entityManager->persist($availability);
                 $entityManager->flush();
 
-            } catch (\Exception) {
+                return $this->redirectToRoute('app_availability_show', ['id' => $availability->getId()]);
+
+            } catch (Exception) {
                 echo 'Erreur de création de la disponibilité';
             }
         }
@@ -78,11 +81,10 @@ class AvailabilityController extends AbstractController
                 } else {
                     $availability->setIsRecurring(false);
                 }
-                if ($availability->getRecurrenceType() !== null) {
-                    $availability->setIsRecurring(true);
-                }
                 $entityManager->flush();
-            } catch (\Exception) {
+                return $this->redirectToRoute('app_availability_show', ['id' => $availability->getId()]);
+
+            } catch (Exception) {
                 echo 'Erreur de modification de la disponibilité';
             }
         }
@@ -106,6 +108,7 @@ class AvailabilityController extends AbstractController
                 $entityManager->remove($availability);
                 $entityManager->flush();
             }
+            return $this->redirectToRoute('app_availability_show', ['id' => $availability->getId()]);
         }
         return $this->render('availability/delete.html.twig', [
             'form' => $form,
