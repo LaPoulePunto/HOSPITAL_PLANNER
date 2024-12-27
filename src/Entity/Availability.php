@@ -16,19 +16,24 @@ class Availability
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Assert\NotBlank]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank]
     private ?DateTimeInterface $date = null;
 
-    #[Assert\NotBlank]
     #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[Assert\NotBlank]
     private ?DateTimeInterface $startTime = null;
 
-    #[Assert\NotBlank]
     #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[Assert\NotBlank]
     private ?DateTimeInterface $endTime = null;
 
-    #[Assert\NotBlank]
+    #[ORM\Column(type: 'boolean')]
+    private ?bool $isRecurring = false;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?string $recurrenceType = null; //1=>touts les jours ouvrables, 2=>toutes les semaines, 3=>touts les mois, 4=> touts les ans
+
     #[ORM\ManyToOne(inversedBy: 'availability')]
     private ?HealthProfessional $healthProfessional = null;
 
@@ -70,6 +75,28 @@ class Availability
     {
         $this->endTime = $endTime;
 
+        return $this;
+    }
+
+    public function getIsRecurring(): ?bool
+    {
+        return $this->isRecurring;
+    }
+
+    public function setIsRecurring(?bool $isRecurring): static
+    {
+        $this->isRecurring = $isRecurring;
+        return $this;
+    }
+
+    public function getRecurrenceType(): ?string
+    {
+        return $this->recurrenceType;
+    }
+
+    public function setRecurrenceType(?int $recurrenceType): static
+    {
+        $this->recurrenceType = $recurrenceType;
         return $this;
     }
 
