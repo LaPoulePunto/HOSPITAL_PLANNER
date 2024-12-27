@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Availability;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -27,6 +28,16 @@ class AvailabilityType extends AbstractType
             ])
             ->add('endTime', TimeType::class, [
                 'widget' => 'single_text',
+                'required' => true,
+            ])
+            ->add('recurrenceType', ChoiceType::class, [
+                'choices' => [
+                    'Aucune' => null,
+                    'Tous les jours ouvrables' => 1,
+                    'Toutes les semaines' => 2,
+                    'Touts les mois' => 3,
+                    'Tous les ans' => 4,
+                ],
                 'required' => true,
             ]);
     }
