@@ -23,12 +23,18 @@ class AvailabilityType extends AbstractType
                 ]
             ])
             ->add('startTime', TimeType::class, [
-                'widget' => 'single_text',
-                'required' => true,
+                'widget' => 'choice',
+                'input' => 'datetime',
+                'hours' => range(0, 23),
+                'minutes' => [0, 30],
+                'attr' => ['class' => 'timepicker'],
             ])
             ->add('endTime', TimeType::class, [
-                'widget' => 'single_text',
-                'required' => true,
+                'widget' => 'choice',
+                'input' => 'datetime',
+                'hours' => range(0, 23),
+                'minutes' => [0, 30],
+                'attr' => ['class' => 'timepicker'],
             ])
             ->add('recurrenceType', ChoiceType::class, [
                 'choices' => [
