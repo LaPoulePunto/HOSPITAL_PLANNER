@@ -5,21 +5,24 @@
 {% endblock %}
 
 {% block body %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card shadow p-4 mb-4">
-                <h2>Mes Disponibilités récurrentes</h2>
-                {{ include('availability/_showAll.html.twig', {availabilities: recurringAvailabilities ?? null}) }}
-            </div>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-end mb-4">
+            <a href="{{ path('app_availability_create') }}" class="btn btn-primary">Créer une disponibilité</a>
         </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card shadow p-4 mb-4">
+                    <h2>Mes Disponibilités récurrentes</h2>
+                    {{ include('availability/_showAll.html.twig', {availabilities: recurringAvailabilities ?? null}) }}
+                </div>
+            </div>
 
-        <div class="col-md-6">
-            <div class="card shadow p-4 mb-4">
-                <h2>Mes Disponibilités exceptionnelles</h2>
-                {{ include('availability/_showAll.html.twig', {availabilities: exceptionalAvailabilities ?? null}) }}
+            <div class="col-md-6">
+                <div class="card shadow p-4 mb-4">
+                    <h2>Mes Disponibilités exceptionnelles</h2>
+                    {{ include('availability/_showAll.html.twig', {availabilities: exceptionalAvailabilities ?? null}) }}
+                </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}

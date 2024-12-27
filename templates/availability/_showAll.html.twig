@@ -31,6 +31,16 @@
                             {% endif %}
                     </td>
                 {% endif %}
+                <td>
+                    <a href="{{ path('app_availability_update', {id: availability.id}) }}">
+                        <span class="material-symbols-outlined text-warning">edit</span>
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path('app_availability_delete', {id: availability.id}) }}">
+                        <span class="material-symbols-outlined text-danger">delete</span>
+                    </a>
+                </td>
             </tr>
         {% endfor %}
     {% else %}
