@@ -24,6 +24,17 @@ class AvailabilityController extends AbstractController
         return $this->render('availability/index.html.twig');
     }
 
+    #[Route('/availability/show', name: 'app_availability_show')]
+    public function show(AvailabilityRepository $availabilityRepository): Response
+    {
+        $recurringAvailabilities = $availabilityRepository->getRecurringAvailabilitiesByHealthProfessional($this->getUser());
+        $exceptionalAvailabilities = $availabilityRepository->getFuturNoneRecurringAvailabilitiesByHealthProfessional($this->getUser());
+        return $this->render('availability/showAll.html.twig', [
+            'recurringAvailabilities' => $recurringAvailabilities,
+            'exceptionalAvailabilities' => $exceptionalAvailabilities,
+        ]);
+    }
+
     #[Route('/availability/create', name: 'app_availability_create')]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
