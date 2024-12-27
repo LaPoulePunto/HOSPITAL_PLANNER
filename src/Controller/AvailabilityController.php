@@ -46,13 +46,12 @@ class AvailabilityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 if ($availability->getRecurrenceType() !== null) {
-                    $availability->setIsRecurring(true);
+                    $this->createAvailabilitySlots($availability, $entityManager);
                 } else {
                     $availability->setIsRecurring(false);
+                    $entityManager->persist($availability);
                 }
-                $entityManager->persist($availability);
                 $entityManager->flush();
-
                 return $this->redirectToRoute('app_availability_show', ['id' => $availability->getId()]);
 
             } catch (Exception) {
@@ -77,9 +76,10 @@ class AvailabilityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 if ($availability->getRecurrenceType() !== null) {
-                    $availability->setIsRecurring(true);
+                    $this->createAvailabilitySlots($availability, $entityManager);
                 } else {
                     $availability->setIsRecurring(false);
+                    $entityManager->persist($availability);
                 }
                 $entityManager->flush();
                 return $this->redirectToRoute('app_availability_show', ['id' => $availability->getId()]);
@@ -113,6 +113,28 @@ class AvailabilityController extends AbstractController
         return $this->render('availability/delete.html.twig', [
             'form' => $form,
         ]);
-
     }
+
+    private function createAvailabilitySlots(Availability $availability, EntityManagerInterface $entityManager): void
+    {
+        $startTime = $availability->getStartTime();
+        $endTime = $availability->getEndTime();
+        $healthProfessional = $availability->getHealthprofessional();
+        $recurringType = $availability->getRecurrenceType();
+        $date = $availability->getDate();
+        while ($startTime < $endTime) {
+            $nextStartTime = (clone $startTime)->modify('+30 minute');
+
+            $newAvailability = new Availability();
+            $newAvailability->setHealthprofessional($healthProfessional)
+                            ->setDate($date)
+                            ->setStartTime($nextStartTime)
+                            ->setEndTime($nextStartTime)
+                            ->setIsRecurring(true)
+                            ->setRecurrenceType($recurringType);
+            $entityManager->persist($newAvailability);
+            $startTime = $nextStartTime;
+        }
+    }
+
 }
