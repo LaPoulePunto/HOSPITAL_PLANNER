@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Availability;
+use App\Entity\AvailabilitySplitSlots;
 use App\Form\AvailabilityType;
 use App\Repository\AvailabilityRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -50,7 +51,7 @@ class AvailabilityController extends AbstractController
                     return $this->redirectToRoute('app_availability_create');
                 }
                 if ($availability->getRecurrenceType() !== null) {
-                    $this->createAvailabilitySlots($availability, $entityManager);
+                    $this->createAvailabilitySplitSlots($availability, $entityManager);
                 } else {
                     $availability->setIsRecurring(false);
                     $entityManager->persist($availability);
@@ -84,7 +85,7 @@ class AvailabilityController extends AbstractController
                     return $this->redirectToRoute('app_availability_update');
                 }
                 if ($availability->getRecurrenceType() !== null) {
-                    $this->createAvailabilitySlots($availability, $entityManager);
+                    $this->createAvailabilitySplitSlots($availability, $entityManager);
                 } else {
                     $availability->setIsRecurring(false);
                     $entityManager->persist($availability);
@@ -122,26 +123,22 @@ class AvailabilityController extends AbstractController
         ]);
     }
 
-    private function createAvailabilitySlots(Availability $availability, EntityManagerInterface $entityManager): void
+    private function createAvailabilitySplitSlots(Availability $availability, EntityManagerInterface $entityManager): void
     {
+        $entityManager->persist($availability);
         $startTime = $availability->getStartTime();
         $endTime = $availability->getEndTime();
-        $healthProfessional = $availability->getHealthprofessional();
-        $recurringType = $availability->getRecurrenceType();
         $date = $availability->getDate();
         while ($startTime < $endTime) {
             $nextStartTime = (clone $startTime)->modify('+30 minute');
-
-            $newAvailability = new Availability();
-            $newAvailability->setHealthprofessional($healthProfessional)
-                            ->setDate($date)
-                            ->setStartTime($startTime)
-                            ->setEndTime($nextStartTime)
-                            ->setIsRecurring(true)
-                            ->setRecurrenceType($recurringType);
+            $newAvailability = new AvailabilitySplitSlots();
+            $newAvailability->setAvailability($availability)
+                ->setDate($date)
+                ->setStartTime($startTime)
+                ->setEndTime($nextStartTime);
+            dump($newAvailability);
             $entityManager->persist($newAvailability);
             $startTime = $nextStartTime;
         }
     }
-
 }
