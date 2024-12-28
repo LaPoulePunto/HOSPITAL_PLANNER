@@ -30,23 +30,48 @@
                                 Non spécifié
                             {% endif %}
                     </td>
+                    <td>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal-{{ availability.id }}">
+                            Aperçu
+                        </button>
+                    </td>
                 {% endif %}
+
                 <td>
                     <a href="{{ path('app_availability_update', {id: availability.id}) }}">
                         <span class="material-symbols-outlined text-warning">edit</span>
                     </a>
                 </td>
                 <td>
-                    <a href="{{ path('app_availability_delete', {id: availability.id}) }}">
+                    <a href="{{ path('app_availability_delete', {id: availability.id, type: 0}) }}">
                         <span class="material-symbols-outlined text-danger">delete</span>
                     </a>
                 </td>
+                <td>
+                    <div class="modal fade" id="modal-{{ availability.id }}" tabindex="-1" aria-labelledby="modalLabel-{{ availability.id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="fs-5" id="modalLabel-{{ availability.id }}">Aperçu</h2>
+                                </div>
+                                <div class="modal-body">
+                                    <ul>
+                                        {% for slot in availability.availabilitySplitSlots %}
+                                            <li>
+                                                {{ slot.startTime|date('H:i') }} - {{ slot.endTime|date('H:i') }}
+                                                <a href="{{ path('app_availability_delete', {id: slot.id, type: 1}) }}">
+                                                    <span class="material-symbols-outlined text-danger">delete</span>
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
             </tr>
         {% endfor %}
-    {% else %}
-        <tr>
-            <td colspan="4" class="text-center">Aucune disponibilité trouvée</td>
-        </tr>
     {% endif %}
     </tbody>
 </table>
