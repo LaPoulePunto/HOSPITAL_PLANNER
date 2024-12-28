@@ -125,6 +125,7 @@ class AvailabilityController extends AbstractController
 
     private function createAvailabilitySplitSlots(Availability $availability, EntityManagerInterface $entityManager): void
     {
+        $availability->setIsRecurring(true);
         $entityManager->persist($availability);
         $startTime = $availability->getStartTime();
         $endTime = $availability->getEndTime();
@@ -136,7 +137,6 @@ class AvailabilityController extends AbstractController
                 ->setDate($date)
                 ->setStartTime($startTime)
                 ->setEndTime($nextStartTime);
-            dump($newAvailability);
             $entityManager->persist($newAvailability);
             $startTime = $nextStartTime;
         }
