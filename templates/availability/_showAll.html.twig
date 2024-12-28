@@ -12,22 +12,18 @@
     <tbody>
     {% if availabilities is not empty %}
         {% for availability in availabilities %}
-            <tr>
+            <tr class="rowAvailability">
                 <td>{{ availability.date|format_datetime(locale = 'fr', pattern = 'EEEE dd MMMM YYYY') }}</td>
                 <td>{{ availability.startTime|date('H:i') }}</td>
                 <td>{{ availability.endTime|date('H:i') }}</td>
                 {% if availability.isRecurring %}
                     <td>
                             {% if availability.recurrenceType == 1 %}
-                                Tous les jours ouvrables
-                            {% elseif availability.recurrenceType == 2 %}
                                 Toutes les semaines
-                            {% elseif availability.recurrenceType == 3 %}
+                            {% elseif availability.recurrenceType == 2 %}
                                 Tous les mois
-                            {% elseif availability.recurrenceType == 4 %}
+                            {% elseif availability.recurrenceType == 3 %}
                                 Tous les ans
-                            {% else %}
-                                Non spécifié
                             {% endif %}
                     </td>
                     <td>
@@ -57,7 +53,7 @@
                                 <div class="modal-body">
                                     <ul>
                                         {% for slot in availability.availabilitySplitSlots %}
-                                            <li>
+                                            <li class="elementAvailabilitySplitSlots">
                                                 {{ slot.startTime|date('H:i') }} - {{ slot.endTime|date('H:i') }}
                                                 <a href="{{ path('app_availability_delete', {id: slot.id, type: 1}) }}">
                                                     <span class="material-symbols-outlined text-danger">delete</span>
