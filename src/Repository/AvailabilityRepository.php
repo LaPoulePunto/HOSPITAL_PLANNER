@@ -43,6 +43,7 @@ class AvailabilityRepository extends ServiceEntityRepository
             ->setParameter('hp', $hp)
             ->setParameter('today', $today)
             ->orderBy('a.date', 'ASC')
+            ->addOrderBy('a.startTime', 'ASC')
             ->getQuery()
             ->getResult();
     }

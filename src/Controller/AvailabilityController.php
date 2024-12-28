@@ -45,6 +45,10 @@ class AvailabilityController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             try {
+                if ($availability->getEndTime() <= $availability->getStartTime()) {
+                    $this->addFlash('error', 'L\'heure de fin ne peut pas être avant ou égale à l\'heure de début.');
+                    return $this->redirectToRoute('app_availability_create');
+                }
                 if ($availability->getRecurrenceType() !== null) {
                     $this->createAvailabilitySlots($availability, $entityManager);
                 } else {
@@ -52,7 +56,7 @@ class AvailabilityController extends AbstractController
                     $entityManager->persist($availability);
                 }
                 $entityManager->flush();
-                return $this->redirectToRoute('app_availability_show', ['id' => $availability->getId()]);
+                return $this->redirectToRoute('app_availability_show');
 
             } catch (Exception) {
                 echo 'Erreur de création de la disponibilité';
@@ -75,6 +79,10 @@ class AvailabilityController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             try {
+                if ($availability->getEndTime() <= $availability->getStartTime()) {
+                    $this->addFlash('error', 'L\'heure de fin ne peut pas être avant ou égale à l\'heure de début.');
+                    return $this->redirectToRoute('app_availability_update');
+                }
                 if ($availability->getRecurrenceType() !== null) {
                     $this->createAvailabilitySlots($availability, $entityManager);
                 } else {
@@ -82,8 +90,7 @@ class AvailabilityController extends AbstractController
                     $entityManager->persist($availability);
                 }
                 $entityManager->flush();
-                return $this->redirectToRoute('app_availability_show', ['id' => $availability->getId()]);
-
+                return $this->redirectToRoute('app_availability_show');
             } catch (Exception) {
                 echo 'Erreur de modification de la disponibilité';
             }
@@ -128,7 +135,7 @@ class AvailabilityController extends AbstractController
             $newAvailability = new Availability();
             $newAvailability->setHealthprofessional($healthProfessional)
                             ->setDate($date)
-                            ->setStartTime($nextStartTime)
+                            ->setStartTime($startTime)
                             ->setEndTime($nextStartTime)
                             ->setIsRecurring(true)
                             ->setRecurrenceType($recurringType);
