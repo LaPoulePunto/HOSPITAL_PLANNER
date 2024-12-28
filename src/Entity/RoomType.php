@@ -55,7 +55,7 @@ class RoomType
     {
         if (!$this->room->contains($room)) {
             $this->room->add($room);
-            $room->setRoomtype($this);
+            $room->setRoomType($this);
         }
 
         return $this;
@@ -65,8 +65,8 @@ class RoomType
     {
         if ($this->room->removeElement($room)) {
             // set the owning side to null (unless already changed)
-            if ($room->getRoomtype() === $this) {
-                $room->setRoomtype(null);
+            if ($room->getRoomType() === $this) {
+                $room->setRoomType(null);
             }
         }
 

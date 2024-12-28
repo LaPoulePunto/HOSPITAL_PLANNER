@@ -88,7 +88,7 @@ class HealthProfessional extends User
     {
         if (!$this->consultation->contains($consultation)) {
             $this->consultation->add($consultation);
-            $consultation->setHealthprofessional($this);
+            $consultation->setHealthProfessional($this);
         }
 
         return $this;
@@ -98,8 +98,8 @@ class HealthProfessional extends User
     {
         if ($this->consultation->removeElement($consultation)) {
             // set the owning side to null (unless already changed)
-            if ($consultation->getHealthprofessional() === $this) {
-                $consultation->setHealthprofessional(null);
+            if ($consultation->getHealthProfessional() === $this) {
+                $consultation->setHealthProfessional(null);
             }
         }
 
@@ -118,7 +118,7 @@ class HealthProfessional extends User
     {
         if (!$this->reservation->contains($reservation)) {
             $this->reservation->add($reservation);
-            $reservation->setHealthprofessional($this);
+            $reservation->setHealthProfessional($this);
         }
 
         return $this;
@@ -128,8 +128,8 @@ class HealthProfessional extends User
     {
         if ($this->reservation->removeElement($reservation)) {
             // set the owning side to null (unless already changed)
-            if ($reservation->getHealthprofessional() === $this) {
-                $reservation->setHealthprofessional(null);
+            if ($reservation->getHealthProfessional() === $this) {
+                $reservation->setHealthProfessional(null);
             }
         }
 
@@ -148,7 +148,7 @@ class HealthProfessional extends User
     {
         if (!$this->availability->contains($availability)) {
             $this->availability->add($availability);
-            $availability->setHealthprofessional($this);
+            $availability->setHealthProfessional($this);
         }
 
         return $this;
@@ -158,8 +158,8 @@ class HealthProfessional extends User
     {
         if ($this->availability->removeElement($availability)) {
             // set the owning side to null (unless already changed)
-            if ($availability->getHealthprofessional() === $this) {
-                $availability->setHealthprofessional(null);
+            if ($availability->getHealthProfessional() === $this) {
+                $availability->setHealthProfessional(null);
             }
         }
 

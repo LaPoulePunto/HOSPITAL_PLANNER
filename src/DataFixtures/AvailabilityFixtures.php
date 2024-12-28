@@ -22,7 +22,7 @@ class AvailabilityFixtures extends Fixture implements DependentFixtureInterface
                 $healthprofessionalId = $healthProfessional->getId();
                 if (!isset($availabilityDict[$healthprofessionalId])) {
                     $availabilityDict[$healthprofessionalId] = $manager->getRepository(Consultation::class)
-                        ->getAllConsultationsByHealthProfessionalId($healthprofessionalId);
+                        ->getAllConsultationsByHealthProfessional($healthProfessional);
                 }
                 $date = null;
                 while (null === $date) {

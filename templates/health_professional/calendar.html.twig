@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Page de calendrier
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+    <script type="module">
+        import {calendar} from "/js/calendarConfig.js";
+        import { addEventSource } from "/js/calendarConfig.js";
+        document.addEventListener('DOMContentLoaded', function () {
+
+            addEventSource([
+                {% if appointments is not null %}
+                    {% for consultation in appointments %}
+                    {
+                        id: '{{ consultation.id }}',
+                        title: 'PATIENT : {{ consultation.patient.lastname|upper }} {{ consultation.patient.firstname
+                        }} | TYPE : {{ consultation.consultationtype.label }} | SALLE : {{ consultation.room.num
+                        }} | ÉTAGE : {{ consultation.room.floor }} | TYPE DE SALLE : {{ consultation.room.roomtype.label }}',
+                        start: '{{ consultation.date|date('Y-m-d') }}T{{ consultation.startTime|date('H:i:s') }}',
+                        end: '{{ consultation.date|date('Y-m-d') }}T{{ consultation.endTime|date('H:i:s') }}',
+                    },
+                    {% endfor %}
+                {% endif %}
+            ]);
+            calendar.render();
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+    <div id='calendar'></div>
+{% endblock %}

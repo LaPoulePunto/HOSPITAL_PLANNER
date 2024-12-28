@@ -21,6 +21,7 @@ class HealthProfessionalRepository extends ServiceEntityRepository
         parent::__construct($registry, HealthProfessional::class);
     }
 
+
     //    /**
     //     * @return HealthProfessionnal[] Returns an array of HealthProfessionnal objects
     //     */
