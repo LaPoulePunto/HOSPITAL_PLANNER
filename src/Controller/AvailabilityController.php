@@ -6,6 +6,7 @@ use App\Entity\Availability;
 use App\Entity\AvailabilitySplitSlots;
 use App\Form\AvailabilityType;
 use App\Repository\AvailabilityRepository;
+use App\Repository\AvailabilitySplitSlotsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -103,9 +104,21 @@ class AvailabilityController extends AbstractController
         ]);
     }
 
-    #[Route('/availability/{id}/delete', name: 'app_availability_delete')]
-    public function delete(Availability $availability, EntityManagerInterface $entityManager, Request $request): Response
-    {
+    #[Route('/availability/{id}/delete/{type}', name: 'app_availability_delete', requirements: ['id' => '\d+', 'type' => '\d+'])]
+    public function delete(
+        int $type,
+        int $id,
+        EntityManagerInterface $entityManager,
+        Request $request,
+        AvailabilityRepository $availabilityRepository,
+        AvailabilitySplitSlotsRepository $availabilitySplitSlotsRepository
+    ): Response {
+        // Si type vaut 0, c'est une Availability, sinon c'est une Avai labilitySplitSlots
+        if (!$type) {
+            $entity = $availabilityRepository->findOneBy(['id' => $id]);
+        } else {
+            $entity = $availabilitySplitSlotsRepository->findOneBy(['id' => $id]);
+        }
         $form = $this->createFormBuilder()
             ->add('delete', SubmitType::class)
             ->add('cancel', SubmitType::class)
@@ -113,10 +126,10 @@ class AvailabilityController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->get('delete')->isClicked()) {
-                $entityManager->remove($availability);
+                $entityManager->remove($entity);
                 $entityManager->flush();
             }
-            return $this->redirectToRoute('app_availability_show', ['id' => $availability->getId()]);
+            return $this->redirectToRoute('app_availability_show', ['id' => $entity->getId()]);
         }
         return $this->render('availability/delete.html.twig', [
             'form' => $form,
