@@ -52,12 +52,21 @@ final class AvailabilityFactory extends PersistentProxyObjectFactory
     {
         $startTime = new \DateTime();
         $startTime->setTime(rand(8, 20), self::faker()->randomElement([0, 15, 30, 45]));
-        $endTime = clone $startTime;
+        $endTimeAdd = ['+2 hours', '+3 hours', '+4 hours'];
+        $endTime = (clone $startTime)->modify($endTimeAdd[array_rand($endTimeAdd)]);
+        $isRecurring = (bool) rand(0, 1);
+        $recurrenceType = null;
+        if ($isRecurring) {
+            $recurrenceTypes = [1, 2, 3];
+            $recurrenceType = $recurrenceTypes[array_rand($recurrenceTypes)];
+        }
 
         return [
             'date' => self::faker()->dateTimeBetween('now', '+1 month'),
             'startTime' => $startTime,
-            'endTime' => $endTime->modify('+30 minutes'),
+            'endTime' => $endTime,
+            'isRecurring' => $isRecurring,
+            'recurrenceType' => $recurrenceType,
         ];
     }
 
