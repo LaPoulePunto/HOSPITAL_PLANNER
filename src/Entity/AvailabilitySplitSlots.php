@@ -29,11 +29,6 @@ class AvailabilitySplitSlots
     #[ORM\JoinColumn(nullable: false)]
     private ?Availability $availability = null;
 
-    public function __construct()
-    {
-        $this->availability = new ArrayCollection();
-    }
-
     public function getId(): ?int
     {
         return $this->id;
