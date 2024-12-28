@@ -39,10 +39,9 @@ class AvailabilityType extends AbstractType
             ->add('recurrenceType', ChoiceType::class, [
                 'choices' => [
                     'Aucune' => null,
-                    'Tous les jours ouvrables' => 1,
-                    'Toutes les semaines' => 2,
-                    'Touts les mois' => 3,
-                    'Tous les ans' => 4,
+                    'Toutes les semaines' => 1,
+                    'Touts les mois' => 2,
+                    'Tous les ans' => 3,
                 ],
                 'required' => true,
             ]);
