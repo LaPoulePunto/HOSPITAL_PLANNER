@@ -26,7 +26,7 @@ class AvailabilitySplitSlots
     private ?\DateTimeInterface $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'availabilitySplitSlots')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Availability $availability = null;
 
     public function getId(): ?int
