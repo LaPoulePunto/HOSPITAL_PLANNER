@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AvailabilityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,10 +34,25 @@ class Availability
     private ?bool $isRecurring = false;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    private ?string $recurrenceType = null; //1=>touts les jours ouvrables, 2=>toutes les semaines, 3=>touts les mois, 4=> touts les ans
+    private ?string $recurrenceType = null;
+    /*
+        'Aucune' => null,
+        'Toutes les semaines' => 1,
+        'Touts les mois' => 2,
+        'Tous les ans' => 3,
+    */
 
     #[ORM\ManyToOne(inversedBy: 'availability')]
+    #[Assert\NotBlank]
     private ?HealthProfessional $healthProfessional = null;
+
+    #[ORM\OneToMany(targetEntity: AvailabilitySplitSlots::class, mappedBy: 'availability')]
+    private Collection $availabilitySplitSlots;
+
+    public function __construct()
+    {
+        $this->availabilitySplitSlots = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -108,6 +125,36 @@ class Availability
     public function setHealthProfessional(?HealthProfessional $healthProfessional): static
     {
         $this->healthProfessional = $healthProfessional;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AvailabilitySplitSlots>
+     */
+    public function getAvailabilitySplitSlots(): Collection
+    {
+        return $this->availabilitySplitSlots;
+    }
+
+    public function addAvailabilitySplitSlot(AvailabilitySplitSlots $availabilitySplitSlot): static
+    {
+        if (!$this->availabilitySplitSlots->contains($availabilitySplitSlot)) {
+            $this->availabilitySplitSlots->add($availabilitySplitSlot);
+            $availabilitySplitSlot->setAvailability($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAvailabilitySplitSlot(AvailabilitySplitSlots $availabilitySplitSlot): static
+    {
+        if ($this->availabilitySplitSlots->removeElement($availabilitySplitSlot)) {
+            // set the owning side to null (unless already changed)
+            if ($availabilitySplitSlot->getAvailability() === $this) {
+                $availabilitySplitSlot->setAvailability(null);
+            }
+        }
 
         return $this;
     }
