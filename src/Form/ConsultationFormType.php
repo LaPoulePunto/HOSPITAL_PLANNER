@@ -3,6 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Consultation;
+use App\Entity\ConsultationType;
+use App\Entity\HealthProfessional;
+use App\Entity\Patient;
+use App\Entity\Room;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
@@ -14,16 +19,26 @@ class ConsultationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('date', DateType::class, [
-                'widget' => 'single_text',
+            ->add('date')
+            ->add('startTime')
+            ->add('endTime')
+            ->add('room', EntityType::class, [
+                'class' => Room::class,
+                'choice_label' => 'id',
             ])
-            ->add('startTime', TimeType::class, [
-                'widget' => 'single_text',
+            ->add('consultationType', EntityType::class, [
+                'class' => ConsultationType::class,
+                'choice_label' => 'id',
             ])
-            ->add('endTime', TimeType::class, [
-                'widget' => 'single_text',
+            ->add('patient', EntityType::class, [
+                'class' => Patient::class,
+                'choice_label' => 'id',
             ])
-
+            ->add('healthProfessional', EntityType::class, [
+                'class' => HealthProfessional::class,
+                'choice_label' => 'id',
+                'multiple' => true,
+            ])
         ;
     }
 
