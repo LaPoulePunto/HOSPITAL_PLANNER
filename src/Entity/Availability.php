@@ -150,7 +150,6 @@ class Availability
     public function removeAvailabilitySplitSlot(AvailabilitySplitSlots $availabilitySplitSlot): static
     {
         if ($this->availabilitySplitSlots->removeElement($availabilitySplitSlot)) {
-            // set the owning side to null (unless already changed)
             if ($availabilitySplitSlot->getAvailability() === $this) {
                 $availabilitySplitSlot->setAvailability(null);
             }
