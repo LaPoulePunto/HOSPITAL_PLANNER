@@ -53,7 +53,7 @@ final class PatientFactory extends UserFactory
             'city' => self::faker()->city(),
             'postCode' => self::faker()->numberBetween(1000, 99999),
             'phone' => self::faker()->phoneNumber(),
-            'address' => self::faker()->numberBetween(1, 999).' '.self::faker()->streetName(),
+            'street' => self::faker()->numberBetween(1, 999).' '.self::faker()->streetName(),
             'bloodGroup' => self::faker()->randomElement(['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-']),
             'allergies' => self::faker()->optional()->sentence(),
             'comments' => self::faker()->optional()->sentence(),

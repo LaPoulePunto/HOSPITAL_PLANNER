@@ -37,7 +37,7 @@ class Patient extends User
         maxMessage: 'Votre adresse ne peut pas dépasser {{ limit }} caractères',
     )]
     #[ORM\Column(length: 128, nullable: true)]
-    private ?string $address = null;
+    private ?string $street = null;
 
     #[ORM\Column(length: 3, nullable: true)]
     private ?string $bloodGroup = null;
@@ -95,14 +95,14 @@ class Patient extends User
         return $this;
     }
 
-    public function getAddress(): ?string
+    public function getStreet(): ?string
     {
-        return $this->address;
+        return $this->street;
     }
 
-    public function setAddress(?string $address): static
+    public function setStreet(?string $street): static
     {
-        $this->address = $address;
+        $this->street = $street;
 
         return $this;
     }

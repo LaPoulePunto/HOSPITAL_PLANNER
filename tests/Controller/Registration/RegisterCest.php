@@ -35,7 +35,7 @@ class RegisterCest
         $I->fillField('registration_form[birthDate]', '2000-01-01');
         $I->fillField('registration_form[city]', 'Reims');
         $I->fillField('registration_form[postCode]', '51100');
-        $I->fillField('registration_form[address]', '2 chemin des Rouliers');
+        $I->fillField('registration_form[street]', '2 chemin des Rouliers');
         $I->fillField('registration_form[phone]', '0601020304');
 
         $I->selectOption('registration_form[gender]', '1');
@@ -60,7 +60,7 @@ class RegisterCest
         $I->fillField('registration_form[birthDate]', '9999-01-01');
         $I->fillField('registration_form[city]', 'Reims');
         $I->fillField('registration_form[postCode]', '51100');
-        $I->fillField('registration_form[address]', '2 chemin des Rouliers');
+        $I->fillField('registration_form[street]', '2 chemin des Rouliers');
         $I->fillField('registration_form[phone]', '00777');
 
         $I->selectOption('registration_form[gender]', '1');
