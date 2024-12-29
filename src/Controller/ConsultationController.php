@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Consultation;
 use App\Entity\ConsultationType;
 use App\Entity\Patient;
-use App\Form\PatientFormType;
+use App\Form\ConsultationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Dompdf\Dompdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -62,7 +62,7 @@ class ConsultationController extends AbstractController
     #[Route('/consultation/appointment/{id}/update', name: 'update_medical_appointment', requirements: ['id' => '\d+'])]
     public function updateMedicalAppointment(Patient $patient): Response
     {
-        $form = $this->createForm(PatientFormType::class, $patient);
+        $form = $this->createForm(ConsultationFormType::class, $patient);
 
         return $this->render('consultation/update_medical_appointment.html.twig', [
             'patient' => $patient,
