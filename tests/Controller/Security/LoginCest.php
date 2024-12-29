@@ -24,7 +24,7 @@ class LoginCest
             'password' => 'password',
         ]);
 
-        $I->seeInCurrentUrl('/');
+        $I->seeCurrentRouteIs('app_home_user');
         $I->seeResponseCodeIsSuccessful();
     }
 
