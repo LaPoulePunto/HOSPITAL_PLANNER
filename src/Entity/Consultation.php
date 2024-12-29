@@ -125,13 +125,6 @@ class Consultation
         return $this->healthProfessional;
     }
 
-    public function setHealthProfessional(?HealthProfessional $healthProfessional): static
-    {
-        $this->healthProfessional = $healthProfessional;
-
-        return $this;
-    }
-
     public function addHealthprofessional(HealthProfessional $healthprofessional): static
     {
         if (!$this->healthProfessional->contains($healthprofessional)) {
