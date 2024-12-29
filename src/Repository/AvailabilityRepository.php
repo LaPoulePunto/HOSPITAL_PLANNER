@@ -25,6 +25,8 @@ class AvailabilityRepository extends ServiceEntityRepository
     public function getRecurringAvailabilitiesByHealthProfessional(HealthProfessional $hp)
     {
         return $this->createQueryBuilder('a')
+            ->innerJoin('a.availabilitySplitSlots', 'slots')
+            ->addSelect('slots')
             ->Where('a.healthprofessional = :hp')
             ->andWhere('a.isRecurring = true')
             ->setParameter('hp', $hp)

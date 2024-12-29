@@ -31,6 +31,30 @@
                             Aperçu
                         </button>
                     </td>
+
+                    <td>
+                        <div class="modal fade" id="modal-{{ availability.id }}" tabindex="-1" aria-labelledby="modalLabel-{{ availability.id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h2 class="fs-5" id="modalLabel-{{ availability.id }}">Aperçu</h2>
+                                    </div>
+                                    <div class="modal-body">
+                                        <ul>
+                                            {% for slot in availability.availabilitySplitSlots %}
+                                                <li class="elementAvailabilitySplitSlots">
+                                                    {{ slot.startTime|date('H:i') }} - {{ slot.endTime|date('H:i') }}
+                                                    <a href="{{ path('app_availability_delete', {id: slot.id, type: 1}) }}">
+                                                        <span class="material-symbols-outlined text-danger">delete</span>
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
                 {% endif %}
 
                 <td>
@@ -42,29 +66,6 @@
                     <a href="{{ path('app_availability_delete', {id: availability.id, type: 0}) }}">
                         <span class="material-symbols-outlined text-danger">delete</span>
                     </a>
-                </td>
-                <td>
-                    <div class="modal fade" id="modal-{{ availability.id }}" tabindex="-1" aria-labelledby="modalLabel-{{ availability.id }}" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h2 class="fs-5" id="modalLabel-{{ availability.id }}">Aperçu</h2>
-                                </div>
-                                <div class="modal-body">
-                                    <ul>
-                                        {% for slot in availability.availabilitySplitSlots %}
-                                            <li class="elementAvailabilitySplitSlots">
-                                                {{ slot.startTime|date('H:i') }} - {{ slot.endTime|date('H:i') }}
-                                                <a href="{{ path('app_availability_delete', {id: slot.id, type: 1}) }}">
-                                                    <span class="material-symbols-outlined text-danger">delete</span>
-                                                </a>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </td>
             </tr>
         {% endfor %}
