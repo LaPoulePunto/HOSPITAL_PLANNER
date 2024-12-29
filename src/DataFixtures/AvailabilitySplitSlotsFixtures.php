@@ -12,7 +12,7 @@ class AvailabilitySplitSlotsFixtures extends Fixture implements DependentFixture
 {
     public function load(ObjectManager $manager): void
     {
-        $availabilities = $manager->getRepository(Availability::class)->findBy(['isRecurring' => 1]);
+        $availabilities = $manager->getRepository(Availability::class)->findAll();
         foreach ($availabilities as $availability) {
             $this->createAvailabilitySplitSlots($availability, $manager);
         }

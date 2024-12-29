@@ -58,9 +58,9 @@ final class AvailabilitySplitSlotsFactory extends PersistentProxyObjectFactory
 
         return [
             'availability' => $availability,
-            'date' => fn (array $attributes) => $attributes['availability']->getDate(),
+            'date' => $date,
             'startTime' => $startTime,
-            'endTime' => (clone $startTime)->modify('+30 minutes'),
+            'endTime' => $endTime,
         ];
     }
 
