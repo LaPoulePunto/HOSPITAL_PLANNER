@@ -39,6 +39,8 @@ class AvailabilityRepository extends ServiceEntityRepository
     {
         $today = new \DateTime();
         return $this->createQueryBuilder('a')
+            ->innerJoin('a.availabilitySplitSlots', 'slots')
+            ->addSelect('slots')
             ->Where('a.healthprofessional = :hp')
             ->andWhere('a.isRecurring = false')
             ->andWhere('a.date >= :today')
