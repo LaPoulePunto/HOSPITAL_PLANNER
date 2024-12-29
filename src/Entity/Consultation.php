@@ -120,16 +120,9 @@ class Consultation
         return $this;
     }
 
-    public function getHealthProfessional(): ?HealthProfessional
+    public function getHealthprofessional(): Collection
     {
         return $this->healthProfessional;
-    }
-
-    public function setHealthProfessional(?HealthProfessional $healthProfessional): static
-    {
-        $this->healthProfessional = $healthProfessional;
-
-        return $this;
     }
 
     public function addHealthprofessional(HealthProfessional $healthprofessional): static

@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Mes Rendez-vous
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-6 col-12 mb-4">
+                <div class="card shadow p-4">
+                    <h2>Mes consultations futures</h2>
+                    <div class="table-responsive">
+                        {{ include('patient/_appointment.html.twig', {appointments: futurAppointments}) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-12 mb-4">
+                <div class="card shadow p-4">
+                    <h2>Mes consultations passées</h2>
+                    <div class="table-responsive">
+                        {{ include('patient/_appointment.html.twig', {appointments: pastAppointments}) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

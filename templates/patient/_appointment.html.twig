@@ -1,0 +1,36 @@
+<table class="table table-striped">
+    <tr>
+        <th>Date</th>
+        <th>Heure de Début</th>
+        <th>Heure de Fin</th>
+        <th>Praticien</th>
+    </tr>
+    {% if appointments is not empty %}
+        {% for appointment in appointments %}
+            <tr>
+                <td>
+                    {{ appointment.date|date('d/m/Y') }}
+                </td>
+                <td>
+                    {{ appointment.startTime|date('H:i') }}
+                </td>
+                <td>
+                    {{ appointment.endTime|date('H:i') }}
+                </td>
+                <td>
+                    {% set healthprofessionalArray = [] %}
+                    {% for healthprofessional in appointment.healthprofessional %}
+                        {% set healthprofessionalArray = healthprofessionalArray|merge([
+                            healthprofessional.job ~ ' ' ~ healthprofessional.lastname ~ ' ' ~ healthprofessional.firstname
+                        ]) %}
+                    {% endfor %}
+                    {{ healthprofessionalArray|join(', ') }}
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="4" class="text-center">Aucun rendez-vous</td>
+        </tr>
+    {% endif %}
+</table>
