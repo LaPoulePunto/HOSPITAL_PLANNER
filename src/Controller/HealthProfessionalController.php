@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Repository\ConsultationRepository;
-use App\Repository\HealthProfessionalRepository;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_HEALTH_PROFESSIONAL')]
@@ -38,12 +40,14 @@ class HealthProfessionalController extends AbstractController
     }
 
     #[Route('/health-professional/calendar', name: 'app_health_professional_calendar')]
-    public function showCalendar(ConsultationRepository $consultationRepository): Response
+    public function showCalendar(
+        ConsultationRepository $consultationRepository,
+        #[CurrentUser]
+        #[MapEntity(disabled: true)]
+        User $healthProfessional,
+    ): Response
     {
-
-
-        $healthProfessional = $this->getUser();
-        $appointments = $consultationRepository->getAllConsultationsByHealthProfessional($healthProfessional);
+        $appointments = $consultationRepository->getAllConsultationsByUser($healthProfessional);
         return $this->render('health_professional/calendar.html.twig', [
             'appointments' => $appointments ?? null,
         ]);
