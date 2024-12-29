@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class HomeController extends AbstractController
 {
@@ -12,6 +15,17 @@ class HomeController extends AbstractController
     public function index(): Response
     {
         return $this->render('home/index.html.twig');
+    }
+
+    #[Route('/home', name: 'app_home_user')]
+    public function homePatient(
+        #[CurrentUser]
+        #[MapEntity(disabled: true)]
+        User $user,
+    ): Response {
+        return $this->render('home/user_home.html.twig', [
+            'user' => $user,
+        ]);
     }
 
     #[Route('/welcome', name: 'app_home_session')]
