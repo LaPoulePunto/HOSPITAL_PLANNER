@@ -16,10 +16,11 @@ class ShowCest
     {
         $this->healthProfessional = HealthProfessionalFactory::createOne()->_real();
         $entityManager = $I->grabService('doctrine.orm.entity_manager');
+
         $availabilityExceptional = AvailabilityFactory::createOne([
             'date' => new \DateTime('2034-12-29'),
-            'startTime' => new \DateTime('2034-12-29 10:00'),
-            'endTime' => new \DateTime('2034-12-29 13:00'),
+            'startTime' => new \DateTime('2034-12-29 12:00'),
+            'endTime' => new \DateTime('2034-12-29 12:30'),
             'isRecurring' => false,
             'recurrenceType' => null,
         ])->_real();
@@ -46,8 +47,16 @@ class ShowCest
             'availability' => $availabilityRecurring,
         ])->_real();
 
+        $availabilitySplitSlots3 = AvailabilitySplitSlotsFactory::createOne([
+            'date' => new \DateTime('2034-12-29'),
+            'startTime' => new \DateTime('2034-12-29 12:00'),
+            'endTime' => new \DateTime('2034-12-29 12:30'),
+            'availability' => $availabilityExceptional,
+        ])->_real();
+
         $availabilityRecurring->addAvailabilitySplitSlot($availabilitySplitSlots1);
         $availabilityRecurring->addAvailabilitySplitSlot($availabilitySplitSlots2);
+        $availabilityExceptional->addAvailabilitySplitSlot($availabilitySplitSlots3);
         $this->healthProfessional->addAvailability($availabilityRecurring);
         $this->healthProfessional->addAvailability($availabilityExceptional);
 
@@ -55,6 +64,7 @@ class ShowCest
         $entityManager->persist($availabilityExceptional);
         $entityManager->persist($availabilitySplitSlots1);
         $entityManager->persist($availabilitySplitSlots2);
+        $entityManager->persist($availabilitySplitSlots3);
         $entityManager->persist($this->healthProfessional);
         $entityManager->flush();
     }
@@ -91,7 +101,7 @@ class ShowCest
     {
         $I->amLoggedInAs($this->healthProfessional);
         $I->amOnPage('/availability/show');
-        $I->seeNumberOfElements('ul>li.elementAvailabilitySplitSlots', 2);
+        $I->seeNumberOfElements('ul>li.elementAvailabilitySplitSlots', 3);
     }
 
     public function seeElementAreGood(ControllerTester $I)
@@ -102,12 +112,12 @@ class ShowCest
         $I->see('vendredi 17 décembre 2027', '.rowAvailability');
         $I->see('10:00', '.rowAvailability');
         $I->see('11:00', '.rowAvailability');
-
-        $I->see('vendredi 29 décembre 2034', '.rowAvailability');
-        $I->see('10:00', '.rowAvailability');
-        $I->see('13:00', '.rowAvailability');
-
         $I->see('10:00 - 10:30', 'ul>li.elementAvailabilitySplitSlots');
         $I->see('10:30 - 11:00', 'ul>li.elementAvailabilitySplitSlots');
+
+        $I->see('vendredi 29 décembre 2034', '.rowAvailability');
+        $I->see('12:00 - 12:30', 'ul>li.elementAvailabilitySplitSlots');
+        $I->see('12:00', '.rowAvailability');
+        $I->see('12:30', '.rowAvailability');
     }
 }

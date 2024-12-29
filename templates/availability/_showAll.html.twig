@@ -4,7 +4,7 @@
         <th>Date</th>
         <th>Heure de Début</th>
         <th>Heure de Fin</th>
-        {% if availabilities is not empty and availabilities|first.recurrenceType == 1 %}
+        {% if availabilities is not empty and availabilities|first.recurrenceType is not null %}
             <th>Type de Disponibilité</th>
         {% endif %}
     </tr>
@@ -26,36 +26,36 @@
                                 Tous les ans
                             {% endif %}
                     </td>
-                    <td>
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal-{{ availability.id }}">
-                            Aperçu
-                        </button>
-                    </td>
+                {% endif %}
+                <td>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal-{{ availability.id }}">
+                        Aperçu
+                    </button>
+                </td>
 
-                    <td>
-                        <div class="modal fade" id="modal-{{ availability.id }}" tabindex="-1" aria-labelledby="modalLabel-{{ availability.id }}" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h2 class="fs-5" id="modalLabel-{{ availability.id }}">Aperçu</h2>
-                                    </div>
-                                    <div class="modal-body">
-                                        <ul>
-                                            {% for slot in availability.availabilitySplitSlots %}
-                                                <li class="elementAvailabilitySplitSlots">
-                                                    {{ slot.startTime|date('H:i') }} - {{ slot.endTime|date('H:i') }}
-                                                    <a href="{{ path('app_availability_delete', {id: slot.id, type: 1}) }}">
-                                                        <span class="material-symbols-outlined text-danger">delete</span>
-                                                    </a>
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                    </div>
+                <td>
+                    <div class="modal fade" id="modal-{{ availability.id }}" tabindex="-1" aria-labelledby="modalLabel-{{ availability.id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="fs-5" id="modalLabel-{{ availability.id }}">Aperçu</h2>
+                                </div>
+                                <div class="modal-body">
+                                    <ul>
+                                        {% for slot in availability.availabilitySplitSlots %}
+                                            <li class="elementAvailabilitySplitSlots">
+                                                {{ slot.startTime|date('H:i') }} - {{ slot.endTime|date('H:i') }}
+                                                <a href="{{ path('app_availability_delete', {id: slot.id, type: 1}) }}">
+                                                    <span class="material-symbols-outlined text-danger">delete</span>
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
                                 </div>
                             </div>
                         </div>
-                    </td>
-                {% endif %}
+                    </div>
+                </td>
 
                 <td>
                     <a href="{{ path('app_availability_update', {id: availability.id}) }}">

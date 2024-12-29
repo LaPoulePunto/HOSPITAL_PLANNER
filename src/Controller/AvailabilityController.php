@@ -51,15 +51,9 @@ class AvailabilityController extends AbstractController
                     $this->addFlash('error', 'L\'heure de fin ne peut pas être avant ou égale à l\'heure de début.');
                     return $this->redirectToRoute('app_availability_create');
                 }
-                if ($availability->getRecurrenceType() !== null) {
-                    $this->createAvailabilitySplitSlots($availability, $entityManager);
-                } else {
-                    $availability->setIsRecurring(false);
-                    $entityManager->persist($availability);
-                }
+                $this->createAvailabilitySplitSlots($availability, $entityManager);
                 $entityManager->flush();
                 return $this->redirectToRoute('app_availability_show');
-
             } catch (Exception) {
                 echo 'Erreur de création de la disponibilité';
             }
@@ -87,9 +81,6 @@ class AvailabilityController extends AbstractController
                 }
                 if ($availability->getRecurrenceType() !== null) {
                     $this->createAvailabilitySplitSlots($availability, $entityManager);
-                } else {
-                    $availability->setIsRecurring(false);
-                    $entityManager->persist($availability);
                 }
                 $entityManager->flush();
                 return $this->redirectToRoute('app_availability_show');
@@ -138,7 +129,7 @@ class AvailabilityController extends AbstractController
 
     private function createAvailabilitySplitSlots(Availability $availability, EntityManagerInterface $entityManager): void
     {
-        $availability->setIsRecurring(true);
+        $availability->setIsRecurring((bool)$availability->getRecurrenceType());
         $entityManager->persist($availability);
         $startTime = $availability->getStartTime();
         $endTime = $availability->getEndTime();
@@ -150,6 +141,7 @@ class AvailabilityController extends AbstractController
                 ->setDate($date)
                 ->setStartTime($startTime)
                 ->setEndTime($nextStartTime);
+            dump($newAvailability);
             $entityManager->persist($newAvailability);
             $startTime = $nextStartTime;
         }
