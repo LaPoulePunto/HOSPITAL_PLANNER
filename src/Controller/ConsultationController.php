@@ -25,7 +25,7 @@ class ConsultationController extends AbstractController
         ]);
     }
 
-    #[Route('/consultation/appointment/create', name: 'create_medical_appointment', requirements: ['id' => '\d+'])]
+    #[Route('/appointment/create', name: 'create_medical_appointment', requirements: ['id' => '\d+'])]
     #[IsGranted('ROLE_PATIENT')]
     public function createMedicalAppointment(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -54,9 +54,9 @@ class ConsultationController extends AbstractController
         ]);
     }
 
-    #[Route('/consultation/appointment/update', name: 'update_medical_appointment')]
+    #[Route('/appointment/{id}/update', name: 'update_medical_appointment')]
     #[IsGranted('ROLE_PATIENT')]
-    public function updateMedicalAppointment(Request $request, EntityManagerInterface $entityManager): Response
+    public function updateMedicalAppointment(Request $request, EntityManagerInterface $entityManager, Consultation $consultation): Response
     {
         $patient = $this->getUser();
 
@@ -89,7 +89,7 @@ class ConsultationController extends AbstractController
     }
 
 
-    #[Route('/consultation/appointment/{id}/delete', name: 'delete_medical_appointment', requirements: ['id' => '\d+'])]
+    #[Route('/appointment/delete', name: 'delete_medical_appointment', requirements: ['id' => '\d+'])]
     public function deleteMedicalAppointment(Patient $patient): Response
     {
         return $this->render('consultation/delete_medical_appointment.html.twig', [
