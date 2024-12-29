@@ -14,4 +14,11 @@
 
     <h1>{{ title }} {{ patient.lastname }} {{ patient.firstname }}</h1>
 
+    {{ form_start(form) }}
+    {{ form_row(form.date) }}
+    {{ form_row(form.startTime) }}
+    {{ form_row(form.endTime) }}
+    <button type="submit">Mettre à jour la consultation</button>
+    {{ form_end(form) }}
+
 {% endblock %}

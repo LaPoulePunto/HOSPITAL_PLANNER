@@ -26,15 +26,10 @@ class ConsultationController extends AbstractController
     }
 
     #[Route('/consultation/appointment/create', name: 'create_medical_appointment', requirements: ['id' => '\d+'])]
-    public function createMedicalAppointment(Request $request, EntityManagerInterface $entityManager, Patient $patient): Response
+    #[IsGranted('ROLE_PATIENT')]
+    public function createMedicalAppointment(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $patientId = $patient->getId();
-
-        if (!$patientId) {
-            throw $this->createNotFoundException('Aucun patient spécifié.');
-        }
-
-        $patient = $entityManager->getRepository(Patient::class)->find($patientId);
+        $patient = $this->getUser();
 
         if (!$patient) {
             throw $this->createNotFoundException('Le patient demandé n\'existe pas.');
@@ -42,7 +37,7 @@ class ConsultationController extends AbstractController
         $appointment = new Consultation();
         $appointment->setPatient($patient);
 
-        $form = $this->createForm(ConsultationType::class, $appointment);
+        $form = $this->createForm(ConsultationFormType::class, $appointment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -50,7 +45,7 @@ class ConsultationController extends AbstractController
             $entityManager->flush();
 
 
-            return $this->redirectToRoute('appointment_detail', ['id' => $appointment->getId()]);
+            return $this->redirectToRoute('app_user_appointments');
         }
 
         return $this->render('consultation/create_medical_appointment.html.twig', [
@@ -59,16 +54,40 @@ class ConsultationController extends AbstractController
         ]);
     }
 
-    #[Route('/consultation/appointment/{id}/update', name: 'update_medical_appointment', requirements: ['id' => '\d+'])]
-    public function updateMedicalAppointment(Patient $patient): Response
+    #[Route('/consultation/appointment/update', name: 'update_medical_appointment')]
+    #[IsGranted('ROLE_PATIENT')]
+    public function updateMedicalAppointment(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(ConsultationFormType::class, $patient);
+        $patient = $this->getUser();
+
+        if (!$patient instanceof Patient) {
+            throw $this->createAccessDeniedException('Vous devez être un patient pour modifier une consultation.');
+        }
+
+        $consultation = $entityManager->getRepository(Consultation::class)->findOneBy([
+            'patient' => $patient,
+        ]);
+
+        if (!$consultation) {
+            throw $this->createNotFoundException('Aucune consultation à modifier trouvée pour ce patient.');
+        }
+
+        $form = $this->createForm(ConsultationFormType::class, $consultation);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $this->addFlash('success', 'La consultation a été mise à jour avec succès.');
+            return $this->redirectToRoute('app_user_appointments');
+        }
 
         return $this->render('consultation/update_medical_appointment.html.twig', [
+            'form' => $form->createView(),
             'patient' => $patient,
-            'form' => $form,
         ]);
     }
+
 
     #[Route('/consultation/appointment/{id}/delete', name: 'delete_medical_appointment', requirements: ['id' => '\d+'])]
     public function deleteMedicalAppointment(Patient $patient): Response
