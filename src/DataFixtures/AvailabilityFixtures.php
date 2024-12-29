@@ -61,7 +61,6 @@ class AvailabilityFixtures extends Fixture implements DependentFixtureInterface
                     'date' => $date,
                     'startTime' => $startTime,
                     'endTime' => $endTime,
-                    'isRecurring' => $isRecurring,
                     'recurrenceType' => $recurrenceType,
                 ];
             }

@@ -24,7 +24,6 @@ class ShowCest
             'date' => new DateTime('2034-12-29'),
             'startTime' => new DateTime('2034-12-29 12:00'),
             'endTime' => new DateTime('2034-12-29 12:30'),
-            'isRecurring' => false,
             'recurrenceType' => null,
         ])->_real();
 
@@ -32,7 +31,6 @@ class ShowCest
             'date' => new DateTime('2027-12-17'),
             'startTime' => new DateTime('2027-12-17 10:00'),
             'endTime' => new DateTime('2027-12-17 11:00'),
-            'isRecurring' => true,
             'recurrenceType' => 1,
         ])->_real();
 

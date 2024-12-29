@@ -30,9 +30,6 @@ class Availability
     #[Assert\NotBlank]
     private ?DateTimeInterface $endTime = null;
 
-    #[ORM\Column(type: 'boolean')]
-    private ?bool $isRecurring = false;
-
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?string $recurrenceType = null;
     /*
@@ -92,17 +89,6 @@ class Availability
     {
         $this->endTime = $endTime;
 
-        return $this;
-    }
-
-    public function getIsRecurring(): ?bool
-    {
-        return $this->isRecurring;
-    }
-
-    public function setIsRecurring(?bool $isRecurring): static
-    {
-        $this->isRecurring = $isRecurring;
         return $this;
     }
 

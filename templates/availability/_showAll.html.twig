@@ -16,7 +16,7 @@
                 <td>{{ availability.date|format_datetime(locale = 'fr', pattern = 'EEEE dd MMMM YYYY') }}</td>
                 <td>{{ availability.startTime|date('H:i') }}</td>
                 <td>{{ availability.endTime|date('H:i') }}</td>
-                {% if availability.isRecurring %}
+                {% if availability.recurrenceType is not null %}
                     <td>
                             {% if availability.recurrenceType == 1 %}
                                 Toutes les semaines

@@ -65,7 +65,6 @@ final class AvailabilityFactory extends PersistentProxyObjectFactory
             'date' => self::faker()->dateTimeBetween('now', '+1 month'),
             'startTime' => $startTime,
             'endTime' => $endTime,
-            'isRecurring' => $isRecurring,
             'recurrenceType' => $recurrenceType,
         ];
     }
