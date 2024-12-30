@@ -3,6 +3,7 @@
 namespace App\Tests\Controller\User;
 
 use App\Entity\User;
+use App\Factory\HealthProfessionalFactory;
 use App\Factory\PatientFactory;
 use App\Tests\Support\ControllerTester;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -43,7 +44,7 @@ class UpdateCest
 
         $I->seeInRepository(User::class, [
             'id' => $patient->getId(),
-            //            'email' => 'new.email@example.com',
+            'email' => 'new.email@example.com',
         ]);
     }
 
@@ -81,12 +82,18 @@ class UpdateCest
         $I->fillField('update_user_form[firstname]', 'Didier');
         $I->fillField('update_user_form[lastname]', 'Gillard');
         $I->click('Mettre à jour le compte');
-        dump($patient->getFirstname());
         $I->seeInRepository(User::class, [
             'id' => $patient->getId(),
             'firstname' => 'Didier',
             'lastname' => 'Gillard',
         ]);
-
     }
+    public function testHealthProfessionalCannotUpdateAccount(ControllerTester $I): void
+    {
+        $healthProfessional = HealthProfessionalFactory::createOne(['email' => 'health.pro@example.com']);
+        $I->amLoggedInAs($healthProfessional->object());
+        $I->amOnPage('/user/update');
+        $I->seeCurrentRouteIs('app_home');
+    }
+
 }
