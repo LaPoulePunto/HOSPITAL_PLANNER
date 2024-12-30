@@ -3,11 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Consultation;
-use App\Entity\ConsultationType;
+use App\Entity\HealthProfessional;
 use App\Entity\Patient;
-use App\Entity\User;
 use App\Form\ConsultationFormType;
-use App\Form\ConsultationStepOneType;
 use Doctrine\ORM\EntityManagerInterface;
 use Dompdf\Dompdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -60,20 +58,47 @@ class ConsultationController extends AbstractController
 
     #[Route('/appointment/{id}/update', name: 'update_medical_appointment')]
     #[IsGranted('ROLE_USER')]
-    public function updateMedicalAppointment(Request $request, EntityManagerInterface $entityManager, Consultation $consultation): Response
+    public function updateMedicalAppointment(Request $request, EntityManagerInterface $entityManager, int $id): Response
     {
-        $patient = $this->getUser();
+        $user = $this->getUser();
 
-        if (!$patient instanceof Patient) {
-            throw $this->createAccessDeniedException('Vous devez être un patient pour modifier une consultation.');
+//        if ($user instanceof Patient) {
+//            $consultation = $entityManager->getRepository(Consultation::class)->findOneBy([
+//                'id' => $id,
+//                'patient' => $user,
+//            ]);
+//        } elseif ($user instanceof HealthProfessional) {
+//            $consultation = $entityManager->getRepository(Consultation::class)->findOneBy([
+//                'id' => $id,
+//                'healthProfessional' => $user,
+//            ]);
+//        } else {
+//            throw $this->createAccessDeniedException('Accès refusé.');
+//        }
+
+        $repository = $entityManager->getRepository(Consultation::class);
+
+        if ($user instanceof Patient) {
+            $consultation = $repository->find($id);
+
+        } elseif ($user instanceof HealthProfessional) {
+            $consultation = $entityManager->getRepository(Consultation::class)
+                ->createQueryBuilder('c')
+                // Jointure avec la table de jointure consultation_health_professional
+                ->innerJoin('App\Entity\ConsultationHealthProfessional', 'chp', 'WITH', 'chp.consultation = c AND chp.healthProfessional = :userId')
+                // Vérification de l'ID de la consultation
+                ->where('c.id = :id')
+                ->setParameter('id', $id)
+                // Paramètre pour l'ID du professionnel de santé
+                ->setParameter('userId', $user->getId())
+                ->getQuery()
+                ->getOneOrNullResult();
+        } else {
+            throw $this->createAccessDeniedException('Accès refusé.');
         }
 
-        $consultation = $entityManager->getRepository(Consultation::class)->findOneBy([
-            'patient' => $patient,
-        ]);
-
         if (!$consultation) {
-            throw $this->createNotFoundException('Aucune consultation à modifier trouvée pour ce patient.');
+            throw $this->createNotFoundException('Aucune consultation trouvée pour cet ID et cet utilisateur.');
         }
 
         $form = $this->createForm(ConsultationFormType::class, $consultation);
@@ -83,12 +108,13 @@ class ConsultationController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'La consultation a été mise à jour avec succès.');
+
             return $this->redirectToRoute('app_user_appointments');
         }
 
         return $this->render('consultation/update_medical_appointment.html.twig', [
             'form' => $form,
-            'patient' => $patient,
+            'patient' => $user,
         ]);
     }
 
