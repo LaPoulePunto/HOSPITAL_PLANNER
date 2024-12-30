@@ -1,15 +1,6 @@
-{% extends 'base.html.twig' %}
-
 {% set title = "Création d'un nouveau rendez-vous" %}
 
-{% block title %}
+{% set titlePage = "Création d'une consultation" %}
 
-    {{ title }}
-
-{% endblock %}
-
-{% block body %}
-
-    <h1>{{ title }}</h1>
-
-{% endblock %}
+ {{ include(('consultation/_form.html.twig'), {submit_label: 'Création',
+     form: form, titlePage: titlePage, isPatient}, with_context = false) }}

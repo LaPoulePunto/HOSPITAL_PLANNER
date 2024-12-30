@@ -1,21 +1,6 @@
-{% extends 'base.html.twig' %}
+{% set title = "Création d'un nouveau rendez-vous" %}
 
-{% set title = 'Édition du rendez vous de ' %}
+{% set titlePage = "Modification d'une consultation" %}
 
-{% block title %}
-
-    {{ title }} {{ patient.lastname }} {{ patient.firstname }}
-
-{% endblock %}
-
-{% block body %}
-
-    <h1>{{ title }} {{ patient.lastname }} {{ patient.firstname }}</h1>
-
-    {{ form_start(form) }}
-    {{ form_row(form.date) }}
-    {{ form_row(form.startTime) }}
-    {{ form_row(form.endTime) }}
-    <button type="submit">Mettre à jour la consultation</button>
-
-{% endblock %}
+ {{ include(('consultation/_form.html.twig'), {submit_label: 'Modification',
+     form: form, titlePage: titlePage}, with_context = false) }}
