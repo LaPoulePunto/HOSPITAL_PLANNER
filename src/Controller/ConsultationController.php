@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Consultation;
 use App\Entity\ConsultationType;
 use App\Entity\Patient;
+use App\Entity\User;
 use App\Form\ConsultationFormType;
+use App\Form\ConsultationStepOneType;
 use Doctrine\ORM\EntityManagerInterface;
 use Dompdf\Dompdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,13 +31,15 @@ class ConsultationController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function createMedicalAppointment(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $patient = $this->getUser();
-
-        if (!$patient) {
-            throw $this->createNotFoundException('Le patient demandé n\'existe pas.');
-        }
+        $user = $this->getUser();
+        $isPatient = false;
         $appointment = new Consultation();
-        $appointment->setPatient($patient);
+        if ($user instanceof Patient) {
+            $appointment->setPatient($user);
+            $isPatient = true;
+        } else {
+            $appointment->addHealthprofessional($user);
+        }
 
         $form = $this->createForm(ConsultationFormType::class, $appointment);
         $form->handleRequest($request);
@@ -44,13 +48,13 @@ class ConsultationController extends AbstractController
             $entityManager->persist($appointment);
             $entityManager->flush();
 
-
             return $this->redirectToRoute('app_user_appointments');
         }
 
         return $this->render('consultation/create_medical_appointment.html.twig', [
-            'form' => $form->createView(),
-            'patient' => $patient,
+            'form' => $form,
+            'user' => $user,
+            'isPatient' => $isPatient,
         ]);
     }
 
@@ -83,11 +87,10 @@ class ConsultationController extends AbstractController
         }
 
         return $this->render('consultation/update_medical_appointment.html.twig', [
-            'form' => $form->createView(),
+            'form' => $form,
             'patient' => $patient,
         ]);
     }
-
 
     #[Route('/appointment/delete', name: 'delete_medical_appointment', requirements: ['id' => '\d+'])]
     #[IsGranted('ROLE_USER')]
