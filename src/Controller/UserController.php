@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\HealthProfessional;
 use App\Entity\Patient;
-use App\Entity\User;
 use App\Form\UpdateUserForm;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,64 +35,51 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/user/{id}/update', name: 'app_user_update', requirements: ['id' => '\d+'])]
-    public function update(Request $request, User $user, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    #[Route('/user/update', name: 'app_user_update')]
+    public function update(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
-        $originalUser = clone $user;
-
-        $form = $this->createForm(UpdateUserForm::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $currentPassword = $form->get('currentPassword')->getData() ?? '';
-
-            if ($userPasswordHasher->isPasswordValid($originalUser, $currentPassword)) {
-                $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
-                $user = $originalUser;
-
-                return $this->render('user/update.html.twig', [
-                    'user' => $user,
-                    'form' => $form->createView(),
-                    'mdp' => $currentPassword,
-                    'bool' => ($form->get('password')->getData()) ? 'true' : 'false',
-                ]);
+        if ($user = $this->getUser()) {
+            $originalUser = clone $user;
+            if ($user instanceof HealthProfessional) {
+                $this->addFlash('error', 'Votre compte peut seulement être mis à jour par un administrateur.');
+                return $this->redirectToRoute('app_home');
             }
-            if ($form->get('password')->getData()) {
-                $user->setPassword(
-                    $userPasswordHasher->hashPassword($user, $form->get('password')->getData())
-                );
-                $originalUser->setPassword(
-                    $userPasswordHasher->hashPassword($user, $form->get('password')->getData())
-                );
-            } else {
-                $user->setPassword(
-                    $userPasswordHasher->hashPassword($user, $originalUser->getPassword())
-                );
+            $form = $this->createForm(UpdateUserForm::class, $user);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                if ($form->get('password')->getData()) {
+                    $user->setPassword(
+                        $userPasswordHasher->hashPassword($user, $form->get('password')->getData())
+                    );
+                } else {
+                    $user->setPassword(
+                        $userPasswordHasher->hashPassword($user, $originalUser->getPassword())
+                    );
+                }
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Les informations de l\'utilisateur ont été mises à jour.');
+
+                return $this->redirectToRoute('app_user_update');
             }
-
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Les informations de l\'utilisateur ont été mises à jour.');
 
             return $this->render('user/update.html.twig', [
                 'user' => $user,
                 'form' => $form->createView(),
-                'mdp' => $originalUser->getPassword(),
-                'bool' => ($form->get('password')->getData()) ? 'true' : 'false',
             ]);
-            //            return $this->redirectToRoute('app_home');
         }
+        $this->addFlash('error', 'Vous devez vous connecter pour modifier votre compte.');
 
-        return $this->render('user/update.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
-        ]);
+        return $this->redirectToRoute('app_login');
     }
 
-    #[Route('/user/{id}/delete', name: 'app_user_delete', requirements: ['id' => '\d+'])]
-    public function delete(User $user, Request $request, EntityManagerInterface $entityManager)
+    #[Route('/user/delete', name: 'app_user_delete', requirements: ['id' => '\d+'])]
+    public function delete(Request $request, EntityManagerInterface $entityManager)
     {
+        if (!$user = $this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
         $form = $this->createFormBuilder()
             ->add('delete', SubmitType::class, [
                 'label' => 'Supprimer',
@@ -123,13 +109,16 @@ class UserController extends AbstractController
 
                 $this->addFlash('success', 'Utilisateur supprimé avec succès.');
 
+                $request->getSession()->invalidate();
+                $this->container->get('security.token_storage')->setToken(null);
+
                 return $this->redirectToRoute('app_home');
             }
 
             if ($form->get('cancel')->isClicked()) {
                 $this->addFlash('info', 'Suppression annulée.');
 
-                return $this->redirectToRoute('/', ['id' => $user->getId()]);
+                return $this->redirectToRoute('app_home', []);
             }
         }
 
