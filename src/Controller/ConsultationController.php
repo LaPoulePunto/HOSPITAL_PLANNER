@@ -66,7 +66,6 @@ class ConsultationController extends AbstractController
 
         if ($user instanceof Patient) {
             $consultation = $repository->find($id);
-
         } elseif ($user instanceof HealthProfessional) {
             $query = $repository->createQueryBuilder('c')
                 ->innerJoin('c.healthProfessional', 'hp')
@@ -101,13 +100,30 @@ class ConsultationController extends AbstractController
         ]);
     }
 
-    #[Route('/appointment/delete', name: 'delete_medical_appointment', requirements: ['id' => '\d+'])]
+    #[Route('/appointment/{id}/delete', name: 'delete_medical_appointment', requirements: ['id' => '\d+'])]
     #[IsGranted('ROLE_USER')]
-    public function deleteMedicalAppointment(Patient $patient): Response
+    public function deleteMedicalAppointment(int $id, EntityManagerInterface $entityManager): Response
     {
-        return $this->render('consultation/delete_medical_appointment.html.twig', [
-            'patient' => $patient,
-        ]);
+        $user = $this->getUser();
+
+        $consultationRepository = $entityManager->getRepository(Consultation::class);
+
+        $consultation = $consultationRepository->find($id);
+
+        if (!$consultation) {
+            throw $this->createNotFoundException('Rendez-vous non trouvé.');
+        }
+
+        if ($consultation->getPatient() !== $user) {
+            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à supprimer ce rendez-vous.');
+        }
+
+        $entityManager->remove($consultation);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Le rendez-vous a été supprimé avec succès.');
+
+        return $this->redirectToRoute('app_user_appointments');
     }
 
     #[IsGranted('ROLE_HEALTH_PROFESSIONAL')]
