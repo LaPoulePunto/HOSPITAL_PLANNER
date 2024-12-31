@@ -29,7 +29,7 @@
             calendar.render();
             calendar.on('eventClick', function(info) {
                 const consultationDetails = `
-            <strong>Patient :</strong> ${info.event.title}<br>
+            ${info.event.title}<br>
             <strong>Date :</strong> ${info.event.start.toLocaleString()}
         `;
 
