@@ -21,11 +21,32 @@
                         }} | ÉTAGE : {{ consultation.room.floor }} | TYPE DE SALLE : {{ consultation.room.roomtype.label }}',
                         start: '{{ consultation.date|date('Y-m-d') }}T{{ consultation.startTime|date('H:i:s') }}',
                         end: '{{ consultation.date|date('Y-m-d') }}T{{ consultation.endTime|date('H:i:s') }}',
+                        button: 'modifier'
                     },
                     {% endfor %}
                 {% endif %}
             ]);
             calendar.render();
+            calendar.on('eventClick', function(info) {
+                const consultationDetails = `
+            <strong>Patient :</strong> ${info.event.title}<br>
+            <strong>Date :</strong> ${info.event.start.toLocaleString()}
+        `;
+
+                Swal.fire({
+                    title: 'Détail de la consultation',
+                    html: consultationDetails,
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonText: 'OK',
+                    cancelButtonText: 'Modifier',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isDismissed) {
+                        window.location.href = '{{ path('update_medical_appointment', {'id': 'consultation_id'}) }}'.replace('consultation_id', info.event.id);
+                    }
+                });
+            });
         });
     </script>
 {% endblock %}
