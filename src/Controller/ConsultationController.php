@@ -62,37 +62,20 @@ class ConsultationController extends AbstractController
     {
         $user = $this->getUser();
 
-//        if ($user instanceof Patient) {
-//            $consultation = $entityManager->getRepository(Consultation::class)->findOneBy([
-//                'id' => $id,
-//                'patient' => $user,
-//            ]);
-//        } elseif ($user instanceof HealthProfessional) {
-//            $consultation = $entityManager->getRepository(Consultation::class)->findOneBy([
-//                'id' => $id,
-//                'healthProfessional' => $user,
-//            ]);
-//        } else {
-//            throw $this->createAccessDeniedException('Accès refusé.');
-//        }
-
         $repository = $entityManager->getRepository(Consultation::class);
 
         if ($user instanceof Patient) {
             $consultation = $repository->find($id);
 
         } elseif ($user instanceof HealthProfessional) {
-            $consultation = $entityManager->getRepository(Consultation::class)
-                ->createQueryBuilder('c')
-                // Jointure avec la table de jointure consultation_health_professional
-                ->innerJoin('App\Entity\ConsultationHealthProfessional', 'chp', 'WITH', 'chp.consultation = c AND chp.healthProfessional = :userId')
-                // Vérification de l'ID de la consultation
+            $query = $repository->createQueryBuilder('c')
+                ->innerJoin('c.healthProfessional', 'hp')
                 ->where('c.id = :id')
+                ->andWhere('hp.id = :userId')
                 ->setParameter('id', $id)
-                // Paramètre pour l'ID du professionnel de santé
                 ->setParameter('userId', $user->getId())
-                ->getQuery()
-                ->getOneOrNullResult();
+                ->getQuery();
+            $consultation = $query->getOneOrNullResult();
         } else {
             throw $this->createAccessDeniedException('Accès refusé.');
         }

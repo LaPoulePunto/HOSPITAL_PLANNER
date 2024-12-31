@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Patient;
 use App\Repository\ConsultationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,5 +27,4 @@ class PatientController extends AbstractController
             'pastAppointments' => $pastAppointments,
         ]);
     }
-
 }

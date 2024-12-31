@@ -40,7 +40,7 @@ class ConsultationFormType extends AbstractType
                     'choice_label' => function (Patient $p) {
                         return $p->getLastname().' '.$p->getFirstname();
                     },
-                    'multiple' => true,
+                    'multiple' => false,
                 ])
                 ->add('room', EntityType::class, [
                     'class' => Room::class,
