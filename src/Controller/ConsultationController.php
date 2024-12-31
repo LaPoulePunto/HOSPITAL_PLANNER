@@ -121,8 +121,6 @@ class ConsultationController extends AbstractController
         $entityManager->remove($consultation);
         $entityManager->flush();
 
-        $this->addFlash('success', 'Le rendez-vous a été supprimé avec succès.');
-
         return $this->redirectToRoute('app_user_appointments');
     }
 
