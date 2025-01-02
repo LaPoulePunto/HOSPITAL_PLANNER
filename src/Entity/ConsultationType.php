@@ -21,6 +21,14 @@ class ConsultationType
     #[ORM\OneToMany(targetEntity: Consultation::class, mappedBy: 'consultationtype')]
     private Collection $consultation;
 
+    #[ORM\ManyToOne(inversedBy: 'consultationTypes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Speciality $speciality = null;
+
+    #[ORM\ManyToOne(inversedBy: 'consultationTypes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?RoomType $roomType = null;
+
     public function __construct()
     {
         $this->consultation = new ArrayCollection();
@@ -69,6 +77,30 @@ class ConsultationType
                 $consultation->setConsultationtype(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSpeciality(): ?Speciality
+    {
+        return $this->speciality;
+    }
+
+    public function setSpeciality(?Speciality $speciality): static
+    {
+        $this->speciality = $speciality;
+
+        return $this;
+    }
+
+    public function getRoomType(): ?RoomType
+    {
+        return $this->roomType;
+    }
+
+    public function setRoomType(?RoomType $roomType): static
+    {
+        $this->roomType = $roomType;
 
         return $this;
     }
