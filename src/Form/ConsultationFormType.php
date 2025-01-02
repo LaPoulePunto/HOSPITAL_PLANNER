@@ -7,6 +7,7 @@ use App\Entity\ConsultationType;
 use App\Entity\HealthProfessional;
 use App\Entity\Patient;
 use App\Entity\Room;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
@@ -16,10 +17,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class ConsultationFormType extends AbstractType
 {
     private $security;
+    private $entityManager;
 
-    public function __construct(Security $security)
+    public function __construct(Security $security, EntityManagerInterface $entityManager)
     {
         $this->security = $security;
+        $this->entityManager = $entityManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -47,9 +50,11 @@ class ConsultationFormType extends AbstractType
                     'choice_label' => 'id',
                 ]);
         } elseif (in_array('ROLE_PATIENT', $user->getRoles())) {
+            $healthProfessionals = $this->entityManager->getRepository(HealthProfessional::class)->findBy(['departureDate' => null]);
             $builder
                 ->add('healthProfessional', EntityType::class, [
                     'class' => HealthProfessional::class,
+                    'choices' => $healthProfessionals,
                     'choice_label' => function (HealthProfessional $hp) {
                         return $hp->getLastname().' '.$hp->getFirstname();
                     },
