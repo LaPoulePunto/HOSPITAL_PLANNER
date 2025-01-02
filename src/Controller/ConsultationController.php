@@ -100,7 +100,7 @@ class ConsultationController extends AbstractController
         ]);
     }
 
-    #[Route('/appointment/{id}/delete', name: 'delete_medical_appointment', requirements: ['id' => '\d+'])]
+    #[Route('/appointment/{id}/delete', name: 'delete_medical_appointment')]
     #[IsGranted('ROLE_USER')]
     public function deleteMedicalAppointment(int $id, EntityManagerInterface $entityManager): Response
     {
@@ -114,14 +114,13 @@ class ConsultationController extends AbstractController
             throw $this->createNotFoundException('Rendez-vous non trouvé.');
         }
 
-        if ($consultation->getPatient() !== $user) {
-            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à supprimer ce rendez-vous.');
-        }
-
         $entityManager->remove($consultation);
         $entityManager->flush();
-
-        return $this->redirectToRoute('app_user_appointments');
+        if ($user instanceof Patient) {
+            return $this->redirectToRoute('app_user_appointments');
+        } else {
+            return $this->redirectToRoute('app_health_professional_calendar');
+        }
     }
 
     #[IsGranted('ROLE_HEALTH_PROFESSIONAL')]

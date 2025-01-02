@@ -38,29 +38,31 @@
                     html: consultationDetails,
                     icon: 'info',
                     showCancelButton: true,
+                    showDenyButton: true,
                     confirmButtonText: 'OK',
                     cancelButtonText: 'Modifier',
+                    denyButtonText: 'Supprimer',
                     reverseButtons: true
                 }).then((result) => {
                     if (result.isDismissed) {
                         window.location.href = '{{ path('update_medical_appointment', {'id': 'consultation_id'}) }}'.replace('consultation_id', info.event.id);
+                    } else if (result.isDenied) {
+                        Swal.fire({
+                            title: 'Êtes-vous sûr ?',
+                            text: "Cette action est irréversible !",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#3085d6',
+                            confirmButtonText: 'Oui, supprimer',
+                            cancelButtonText: 'Annuler'
+                        }).then((deleteResult) => {
+                            if (deleteResult.isConfirmed) {
+                                window.location.href = '{{ path('delete_medical_appointment', {'id': 'consultation_id'}) }}'.replace('consultation_id', info.event.id);
+                            }
+                        });
                     }
                 });
-                document.getElementById('delete-btn')?.addEventListener('click', function() {
-                    Swal.fire({
-                        title: 'Êtes-vous sûr de vouloir supprimer ce rendez-vous ?',
-                        text: 'Cette action est irréversible.',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Oui, supprimer',
-                        cancelButtonText: 'Annuler'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Utilisation de l'ID dans l'URL de suppression
-                            window.location.href = '{{ path('delete_medical_appointment', {'id': info.event.id}) }}';
-                        }
-                    });
-                })
             });
         });
     </script>
