@@ -36,7 +36,7 @@ class ConsultationFormType extends AbstractType
                 'class' => ConsultationType::class,
                 'choice_label' => 'label',
             ]);
-        if (in_array('ROLE_HEALTH_PROFESSIONAL', $user->getRoles())) {
+        if ($this->security->isGranted('ROLE_HEALTH_PROFESSIONAL')) {
             $builder
                 ->add('patient', EntityType::class, [
                     'class' => Patient::class,
@@ -49,8 +49,8 @@ class ConsultationFormType extends AbstractType
                     'class' => Room::class,
                     'choice_label' => 'id',
                 ]);
-        } elseif (in_array('ROLE_PATIENT', $user->getRoles())) {
-            $healthProfessionals = $this->entityManager->getRepository(HealthProfessional::class)->findBy(['departureDate' => null]);
+        } elseif ($this->security->isGranted('ROLE_PATIENT')) {
+            $healthProfessionals = $this->entityManager->getRepository(HealthProfessional::class)->getAllActiveHealthProfessional();
             $builder
                 ->add('healthProfessional', EntityType::class, [
                     'class' => HealthProfessional::class,

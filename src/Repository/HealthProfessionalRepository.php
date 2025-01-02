@@ -21,28 +21,11 @@ class HealthProfessionalRepository extends ServiceEntityRepository
         parent::__construct($registry, HealthProfessional::class);
     }
 
-    //    /**
-    //     * @return HealthProfessionnal[] Returns an array of HealthProfessionnal objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('h')
-    //            ->andWhere('h.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('h.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?HealthProfessionnal
-    //    {
-    //        return $this->createQueryBuilder('h')
-    //            ->andWhere('h.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function getAllActiveHealthProfessional()
+    {
+        return $this->createQueryBuilder('hp')
+            ->where('hp.departureDate IS NULL')
+            ->getQuery()
+            ->getResult();
+    }
 }
