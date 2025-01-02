@@ -28,12 +28,8 @@
                     {{ healthprofessionalArray|join(', ') }}
                 </td>
                 <td>
-                    <a href="{{ path('update_medical_appointment', {'id': appointment.id}) }}" class="text-primary" title="Modifier">
-                        <span class="material-symbols-outlined">edit</span>
-                    </a>
-                    <a href="{{ path('delete_medical_appointment', {'id': appointment.id}) }}" class="text-danger" title="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette consultation ?')">
-                        <span class="material-symbols-outlined">delete</span>
-                    </a>
+                    <a href="{{ path('update_medical_appointment', {'id': appointment.id}) }}" class="text-primary" title="Modifier"><span class="material-symbols-outlined">edit</span></a>
+                    <a href="{{ path('delete_medical_appointment', {'id': appointment.id}) }}" class="text-danger" title="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette consultation ?')"><span class="material-symbols-outlined">delete</span></a>
                 </td>
             </tr>
         {% endfor %}

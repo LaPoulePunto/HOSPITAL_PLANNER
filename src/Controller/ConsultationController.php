@@ -89,8 +89,6 @@ class ConsultationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            $this->addFlash('success', 'La consultation a été mise à jour avec succès.');
-
             return $this->redirectToRoute('app_user_appointments');
         }
 
