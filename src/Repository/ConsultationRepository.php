@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Consultation;
 use App\Entity\Patient;
 use App\Entity\HealthProfessional;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -33,20 +34,26 @@ class ConsultationRepository extends ServiceEntityRepository
         ;
     }
 
-    public function getAllConsultationsByHealthProfessional(HealthProfessional $healthProfessional)
+    public function getAllConsultationsByUser(User|Patient|HealthProfessional $user)
     {
-        $id = $healthProfessional->getId();
-        return $this->createQueryBuilder('c')
+        $qb = $this->createQueryBuilder('c')
             ->innerJoin('c.healthProfessional', 'hp')
             ->innerJoin('c.patient', 'p')
             ->innerJoin('c.consultationType', 'ct')
             ->innerJoin('c.room', 'r')
             ->innerJoin('r.roomType', 'rt')
-            ->addSelect('hp', 'p', 'ct', 'r', 'rt')
-            ->where('hp.id = :id')
-            ->setParameter('id', $id)
-            ->getQuery()
-            ->getResult();
+            ->addSelect('hp', 'p', 'ct', 'r', 'rt');
+
+        if (in_array('ROLE_HEALTH_PROFESSIONAL', $user->getRoles())) {
+            $qb->where('hp.id = :id');
+        }
+        if (in_array('ROLE_PATIENT', $user->getRoles())) {
+            $qb->where('p.id = :id');
+        }
+
+        return $qb->setParameter('id', $user->getId())
+        ->getQuery()
+        ->getResult();
     }
 
     public function findConsultationByPatientPastOrFuturReservation(Patient $patient, bool $isFuture)
@@ -70,29 +77,4 @@ class ConsultationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
-    //    /**
-    //     * @return ConsultationFixtures[] Returns an array of ConsultationFixtures objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?ConsultationFixtures
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

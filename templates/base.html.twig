@@ -26,18 +26,32 @@
             ><img src="{{ asset('images/logo_alternatif.png') }}" class="me-3 mb-1" width="50" alt="logo hospitime"
                 >HOSPITIME
                 </a>
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0" >
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     {% block nav_item %}
-                        {% if is_granted('ROLE_HEALTH_PROFESSIONAL') %}
-                        <h5>
+                        {% if is_granted('ROLE_PATIENT') %}
                             <li>
-                                <a class="btn btn-light navbarButton" role="button" href="{{ path('app_availability_show', {id: app.user.id}) }}">MES DISPONIBILITÉS</a>
+                                <a class="nav-link active btn btn-outline-light me-5 ms-5" aria-current="page" href="{{ path('app_user_appointments') }}">Mes rendez-vous</a>
                             </li>
-                        </h5>
+                            <li>
+                                <a class="nav-link active btn btn-outline-light me-5" aria-current="page" href="#">Prendre un rendez-vous</a>
+                            </li>
+                            <li>
+                                <a class="nav-link active btn btn-outline-light me-5" aria-current="page" href="{{ path('app_faq') }}">Voir la FAQ</a>
+                            </li>
+                        {% elseif is_granted('ROLE_HEALTH_PROFESSIONAL') %}
+                            <li>
+                                <a class="nav-link active btn btn-outline-light me-5 ms-5" aria-current="page" href="{{ path('app_health_professional_calendar') }}">Mes consultations</a>
+                            </li>
+                            <li>
+                                <a class="nav-link active btn btn-outline-light me-5" aria-current="page" href="{{ path('app_availability_show', {id: app.user.id}) }}">Voir mes disponibilités</a>
+                            </li>
+                            <li>
+                                <a class="nav-link active btn btn-outline-light me-5" aria-current="page" href="">Réserver matériel</a>
+                            </li>
                         {% endif %}
                     {% endblock %}
                 </ul>
-        </div>
+            </div>
     </nav>
 
     {% block body %}{% endblock %}
