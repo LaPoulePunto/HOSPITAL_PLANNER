@@ -5,14 +5,40 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Vos patients :</h1>
-    <ul class="patients">
-        {% for patient in patients %}
-            {% set consultation = patient.consultation|last %}
-            <li><a href="{{ path('app_display_patient_file', {consultationId: consultation.id}) }}">
-                   <span class="lastname"
-                    >{{ patient.lastname }}</span>, <span class="firstname"
-                    >{{ patient.firstname }}</span></a></li>
-        {% endfor %}
-    </ul>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="display-4 text-center mb-4">Liste de vos patients</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            {% if patients|length > 0 %}
+                <div class="col-12">
+                    <div class="list-group">
+                        {% for patient in patients %}
+                            {% set consultation = patient.consultation|last %}
+                            <a href="{{ path('app_display_patient_file', {consultationId: consultation.id}) }}"
+                               class="list-group-item list-group-item-action
+                               d-md-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong class="text-primary">{{ patient.lastname }}</strong
+                                    >, {{ patient.firstname }}
+                                </div>
+                                <small class="text-secondary">
+                                    Dernière consultation :
+                                    {{ consultation ? consultation.date|date('d/m/Y') : 'Aucune' }}
+                                </small>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <p class="text-muted text-center">Aucun patient trouvé.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
 {% endblock %}
