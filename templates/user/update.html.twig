@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% set titre = 'Édition du compte de ' ~ user.lastName ~ ', ' ~ user.firstName %}
+
+{% block title %}
+    {{ titre }}
+{% endblock %}
+{% block body %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="card shadow p-4 col-md-6">
+                <h1>{{ titre }}</h1>
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                {{ form_errors(form) }}
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <button type="submit" class="btn btn-lg btn-danger mt-4">Mettre à jour le compte</button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
