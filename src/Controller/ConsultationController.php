@@ -32,20 +32,20 @@ class ConsultationController extends AbstractController
     {
         $user = $this->getUser();
         $isPatient = false;
-        $appointment = new Consultation();
+        $consultation = new Consultation();
 
-        if ($user instanceof Patient) {
-            $appointment->setPatient($user);
+        if ($this->isGranted("ROLE_PATIENT")) {
+            $consultation->setPatient($user);
             $isPatient = true;
         } else {
-            $appointment->addHealthprofessional($user);
+            $consultation->addHealthprofessional($user);
         }
 
-        $form = $this->createForm(ConsultationFormType::class, $appointment);
+        $form = $this->createForm(ConsultationFormType::class, $consultation);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($appointment);
+            $entityManager->persist($consultation);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_user_appointments');
