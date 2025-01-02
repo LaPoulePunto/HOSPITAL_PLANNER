@@ -6,6 +6,7 @@ use App\Entity\Consultation;
 use App\Entity\HealthProfessional;
 use App\Entity\Patient;
 use App\Form\ConsultationFormType;
+use App\Repository\ConsultationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Dompdf\Dompdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,7 +26,7 @@ class ConsultationController extends AbstractController
         ]);
     }
 
-    #[Route('/appointment/create', name: 'create_medical_appointment', requirements: ['id' => '\d+'])]
+    #[Route('/appointment/create', name: 'create_medical_appointment')]
     #[IsGranted('ROLE_USER')]
     public function createMedicalAppointment(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -119,6 +120,23 @@ class ConsultationController extends AbstractController
         } else {
             return $this->redirectToRoute('app_health_professional_calendar');
         }
+    }
+
+    public function isAppointmentConflict(Consultation $consultation): bool{
+        $appointments = ConsultationRepository::class->findBy([
+                        'date'=>$consultation->getDate()->format('Y-m-d'),
+                        'room'=>$consultation->getRoom(),
+        ]);
+
+        $existingStart = $consultation->getStartTime();
+        $existingEnd = $appointments->getEndTime();
+
+        foreach ($appointments as $appointment){
+            if(($appointment->getStartTime() > $existingStart) && ($appointment->getEndTime() < $existingEnd)){
+                return true;
+            }
+        }
+        return false;
     }
 
     #[IsGranted('ROLE_HEALTH_PROFESSIONAL')]
