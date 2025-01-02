@@ -38,6 +38,9 @@ class Consultation
     #[ORM\ManyToMany(targetEntity: HealthProfessional::class, inversedBy: 'consultation')]
     private Collection $healthProfessional;
 
+    #[ORM\Column(type: Types::BLOB, nullable: true)]
+    private $prescription = null;
+
     public function __construct()
     {
         $this->healthProfessional = new ArrayCollection();
@@ -137,6 +140,18 @@ class Consultation
     public function removeHealthprofessional(HealthProfessional $healthprofessional): static
     {
         $this->healthProfessional->removeElement($healthprofessional);
+
+        return $this;
+    }
+
+    public function getPrescription()
+    {
+        return $this->prescription;
+    }
+
+    public function setPrescription($prescription): static
+    {
+        $this->prescription = $prescription;
 
         return $this;
     }
