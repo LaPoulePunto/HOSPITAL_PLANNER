@@ -47,7 +47,7 @@ class ConsultationFormType extends AbstractType
                 ])
                 ->add('room', EntityType::class, [
                     'class' => Room::class,
-                    'choice_label' => 'id',
+                    'choice_label' => 'num',
                 ]);
         } elseif ($this->security->isGranted('ROLE_PATIENT')) {
             $healthProfessionals = $this->entityManager->getRepository(HealthProfessional::class)->getAllActiveHealthProfessional();
