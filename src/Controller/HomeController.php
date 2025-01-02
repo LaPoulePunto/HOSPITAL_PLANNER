@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\ConsultationRepository;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,9 +23,11 @@ class HomeController extends AbstractController
         #[CurrentUser]
         #[MapEntity(disabled: true)]
         User $user,
+        ConsultationRepository $consultationRepository,
     ): Response {
         return $this->render('home/user_home.html.twig', [
             'user' => $user,
+            'consultations' => $consultationRepository->getAllConsultationsByUser($user),
         ]);
     }
 
