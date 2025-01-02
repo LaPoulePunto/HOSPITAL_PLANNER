@@ -43,7 +43,7 @@
                                 <a class="nav-link active btn btn-outline-light me-5 ms-5" aria-current="page" href="{{ path('app_health_professional_calendar') }}">Mes consultations</a>
                             </li>
                             <li>
-                                <a class="nav-link active btn btn-outline-light me-5" aria-current="page" href="">Voir mes disponibilités</a>
+                                <a class="nav-link active btn btn-outline-light me-5" aria-current="page" href="{{ path('app_availability_show', {id: app.user.id}) }}">Voir mes disponibilités</a>
                             </li>
                             <li>
                                 <a class="nav-link active btn btn-outline-light me-5" aria-current="page" href="">Réserver matériel</a>
