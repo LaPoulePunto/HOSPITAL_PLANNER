@@ -19,11 +19,11 @@ class Speciality
     private ?string $label = null;
 
     #[ORM\ManyToMany(targetEntity: HealthProfessional::class, inversedBy: 'speciality')]
-    private Collection $healthprofessional;
+    private Collection $healthProfessional;
 
     public function __construct()
     {
-        $this->healthprofessional = new ArrayCollection();
+        $this->healthProfessional = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -46,15 +46,15 @@ class Speciality
     /**
      * @return Collection<int, HealthProfessional>
      */
-    public function getHealthprofessional(): Collection
+    public function getHealthProfessional(): Collection
     {
-        return $this->healthprofessional;
+        return $this->healthProfessional;
     }
 
     public function addHealthprofessional(HealthProfessional $healthprofessional): static
     {
-        if (!$this->healthprofessional->contains($healthprofessional)) {
-            $this->healthprofessional->add($healthprofessional);
+        if (!$this->healthProfessional->contains($healthprofessional)) {
+            $this->healthProfessional->add($healthprofessional);
         }
 
         return $this;
@@ -62,7 +62,7 @@ class Speciality
 
     public function removeHealthprofessional(HealthProfessional $healthprofessional): static
     {
-        $this->healthprofessional->removeElement($healthprofessional);
+        $this->healthProfessional->removeElement($healthprofessional);
 
         return $this;
     }

@@ -1,0 +1,6 @@
+{% set titlePage = "Création d'une disponibilité" %}
+
+ {{ include(('availability/_form.html.twig'), {submit_label: 'Création',
+  form: form, titlePage: titlePage,
+  recurrenceType: recurrenceType,
+ }, with_context = false) }},

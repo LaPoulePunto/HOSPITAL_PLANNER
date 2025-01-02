@@ -29,10 +29,11 @@ class AvailabilityFixtures extends Fixture implements DependentFixtureInterface
                     $date = new \DateTime();
                     $date->modify('+'.rand(0, 29).' days')->format('Y-m-d');
                     $startTime = new \DateTime();
-                    $minutes = [0, 15, 30, 45];
-                    $startTime->setTime(rand(8, 20), $minutes[array_rand($minutes)]);
+                    $minutes = [0, 30];
+                    $startTime->setTime(rand(8, 16), $minutes[array_rand($minutes)]);
                     $endTime = clone $startTime;
-                    $endTime->modify('+30 minutes');
+                    $endTimeAdd = ['+2 hours', '+3 hours', '+4 hours'];
+                    $endTime->modify($endTimeAdd[array_rand($endTimeAdd)]);
                     // On vérifie à chaque itération qu'il n'y ait pas de chevauchements
                     foreach ($availabilityDict[$healthprofessionalId] as $dateTaken) {
                         // Vérification qu'il n'y a pas de chevauchements
@@ -47,11 +48,20 @@ class AvailabilityFixtures extends Fixture implements DependentFixtureInterface
                     }
                 }
 
+                $isRecurring = (bool)rand(0, 1);
+                $recurrenceType = null;
+
+                if ($isRecurring) {
+                    $recurrenceTypes = [1, 2, 3];
+                    $recurrenceType = $recurrenceTypes[array_rand($recurrenceTypes)];
+                }
+
                 return [
                     'healthprofessional' => $healthProfessional,
                     'date' => $date,
                     'startTime' => $startTime,
                     'endTime' => $endTime,
+                    'recurrenceType' => $recurrenceType,
                 ];
             }
         );

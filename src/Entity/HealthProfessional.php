@@ -20,16 +20,16 @@ class HealthProfessional extends User
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $departureDate = null;
 
-    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'healthprofessional')]
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'healthProfessional')]
     private Collection $reservation;
 
-    #[ORM\OneToMany(targetEntity: Availability::class, mappedBy: 'healthprofessional')]
+    #[ORM\OneToMany(targetEntity: Availability::class, mappedBy: 'healthProfessional')]
     private Collection $availability;
 
-    #[ORM\ManyToMany(targetEntity: Speciality::class, mappedBy: 'healthprofessional')]
+    #[ORM\ManyToMany(targetEntity: Speciality::class, mappedBy: 'healthProfessional')]
     private Collection $speciality;
 
-    #[ORM\ManyToMany(targetEntity: Consultation::class, mappedBy: 'healthprofessional')]
+    #[ORM\ManyToMany(targetEntity: Consultation::class, mappedBy: 'healthProfessional')]
     private Collection $consultation;
 
     public function __construct()
@@ -178,7 +178,7 @@ class HealthProfessional extends User
     {
         if (!$this->speciality->contains($speciality)) {
             $this->speciality->add($speciality);
-            $speciality->addHealthprofessional($this);
+            $speciality->addHealthProfessional($this);
         }
 
         return $this;
@@ -187,7 +187,7 @@ class HealthProfessional extends User
     public function removeSpeciality(Speciality $speciality): static
     {
         if ($this->speciality->removeElement($speciality)) {
-            $speciality->removeHealthprofessional($this);
+            $speciality->removeHealthProfessional($this);
         }
 
         return $this;

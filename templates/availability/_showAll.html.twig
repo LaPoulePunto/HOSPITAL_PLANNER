@@ -1,0 +1,74 @@
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Heure de Début</th>
+        <th>Heure de Fin</th>
+        {% if availabilities is not empty and availabilities|first.recurrenceType is not null %}
+            <th>Type de Disponibilité</th>
+        {% endif %}
+    </tr>
+    </thead>
+    <tbody>
+    {% if availabilities is not empty %}
+        {% for availability in availabilities %}
+            <tr class="rowAvailability">
+                <td>{{ availability.date|format_datetime(locale = 'fr', pattern = 'EEEE dd MMMM YYYY') }}</td>
+                <td>{{ availability.startTime|date('H:i') }}</td>
+                <td>{{ availability.endTime|date('H:i') }}</td>
+                {% if availability.recurrenceType is not null %}
+                    <td>
+                            {% if availability.recurrenceType == 1 %}
+                                Toutes les semaines
+                            {% elseif availability.recurrenceType == 2 %}
+                                Tous les mois
+                            {% elseif availability.recurrenceType == 3 %}
+                                Tous les ans
+                            {% endif %}
+                    </td>
+                {% endif %}
+                <td>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal-{{ availability.id }}">
+                        Créneaux
+                    </button>
+                </td>
+
+                <td>
+                    <div class="modal fade" id="modal-{{ availability.id }}" tabindex="-1" aria-labelledby="modalLabel-{{ availability.id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="fs-5" id="modalLabel-{{ availability.id }}">Aperçu</h2>
+                                </div>
+                                <div class="modal-body">
+                                    <ul>
+                                        {% for slot in availability.availabilitySplitSlots %}
+                                            <li class="elementAvailabilitySplitSlots">
+                                                {{ slot.startTime|date('H:i') }} - {{ slot.endTime|date('H:i') }}
+                                                <a href="{{ path('app_availability_delete', {id: slot.id, type: 1}) }}">
+                                                    <span class="material-symbols-outlined text-danger">delete</span>
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+
+                <td>
+                    <a href="{{ path('app_availability_update', {id: availability.id}) }}">
+                        <span class="material-symbols-outlined text-warning">edit</span>
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path('app_availability_delete', {id: availability.id, type: 0}) }}">
+                        <span class="material-symbols-outlined text-danger">delete</span>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+    </tbody>
+</table>

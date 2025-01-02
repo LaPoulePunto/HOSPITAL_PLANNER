@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% set titlePage = "Suppression d'une disponibilitée" %}
+
+{% block title %}
+    {{ titlePage }}
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="card shadow p-4 col-md-6 mb-4">
+            <h1>{{ titlePage }}</h1>
+            {{ form_start(form, {attr: {class: 'd-flex justify-content-between'}}) }}
+                {{ form_row(form.delete, {
+                    label: 'Supprimer',
+                    attr: {class: 'btn btn-primary'}
+                }) }}
+                {{ form_row(form.cancel, {
+                    label: 'Annuler',
+                    attr: {class: 'btn btn-secondary'}
+                }) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

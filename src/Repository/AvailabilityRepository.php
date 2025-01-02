@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Availability;
+use App\Entity\HealthProfessional;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,6 +20,36 @@ class AvailabilityRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Availability::class);
+    }
+
+    public function getRecurringAvailabilitiesByHealthProfessional(HealthProfessional $hp)
+    {
+        return $this->createQueryBuilder('a')
+            ->innerJoin('a.availabilitySplitSlots', 'slots')
+            ->addSelect('slots')
+            ->Where('a.healthProfessional = :hp')
+            ->andWhere('a.recurrenceType is not null')
+            ->setParameter('hp', $hp)
+            ->orderBy('a.date', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getFuturNoneRecurringAvailabilitiesByHealthProfessional(HealthProfessional $hp)
+    {
+        $today = new \DateTime();
+        return $this->createQueryBuilder('a')
+            ->innerJoin('a.availabilitySplitSlots', 'slots')
+            ->addSelect('slots')
+            ->Where('a.healthProfessional = :hp')
+            ->andWhere('a.recurrenceType is null')
+            ->andWhere('a.date >= :today')
+            ->setParameter('hp', $hp)
+            ->setParameter('today', $today)
+            ->orderBy('a.date', 'ASC')
+            ->addOrderBy('a.startTime', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
     //    /**
