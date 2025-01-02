@@ -33,6 +33,7 @@ class ConsultationController extends AbstractController
         $user = $this->getUser();
         $isPatient = false;
         $appointment = new Consultation();
+
         if ($user instanceof Patient) {
             $appointment->setPatient($user);
             $isPatient = true;
@@ -122,20 +123,22 @@ class ConsultationController extends AbstractController
         }
     }
 
-    public function isAppointmentConflict(Consultation $consultation): bool{
+    public function isAppointmentConflict(Consultation $consultation): bool
+    {
         $appointments = ConsultationRepository::class->findBy([
-                        'date'=>$consultation->getDate()->format('Y-m-d'),
-                        'room'=>$consultation->getRoom(),
+            'date' => $consultation->getDate()->format('Y-m-d'),
+            'room' => $consultation->getRoom(),
         ]);
 
         $existingStart = $consultation->getStartTime();
         $existingEnd = $appointments->getEndTime();
 
-        foreach ($appointments as $appointment){
-            if(($appointment->getStartTime() > $existingStart) && ($appointment->getEndTime() < $existingEnd)){
+        foreach ($appointments as $appointment) {
+            if (($appointment->getStartTime() > $existingStart) && ($appointment->getEndTime() < $existingEnd)) {
                 return true;
             }
         }
+
         return false;
     }
 
