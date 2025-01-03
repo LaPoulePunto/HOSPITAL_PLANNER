@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une ordonnance{% endblock %}
+
+{% block body %}
+    <h1>Ajouter une ordonnance pour la consultation</h1>
+    {{ form_start(form) }}
+        {{ form_row(form.texte) }}
+        <button class="btn btn-primary">Enregistrer l'ordonnance</button>
+    {{ form_end(form) }}
+{% endblock %}
