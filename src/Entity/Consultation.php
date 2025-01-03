@@ -38,8 +38,8 @@ class Consultation
     #[ORM\ManyToMany(targetEntity: HealthProfessional::class, inversedBy: 'consultation')]
     private Collection $healthProfessional;
 
-    #[ORM\Column(type: Types::BLOB, nullable: true)]
-    private $prescription = null;
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $prescription = null;
 
     public function __construct()
     {
@@ -144,12 +144,12 @@ class Consultation
         return $this;
     }
 
-    public function getPrescription()
+    public function getPrescription(): ?string
     {
         return $this->prescription;
     }
 
-    public function setPrescription($prescription): static
+    public function setPrescription(?string $prescription): static
     {
         $this->prescription = $prescription;
 
