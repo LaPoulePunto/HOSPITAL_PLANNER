@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ConsultationController extends AbstractController
@@ -49,6 +50,25 @@ class ConsultationController extends AbstractController
         return $this->render('consultation/prescription.html.twig', [
             'form' => $form,
             'consultation' => $consultation,
+        ]);
+    }
+
+    public function HTMLToPDF(Consultation $consultation): Response
+    {
+        $date = new \DateTime();
+        $html = $this->renderView('consultation/prescription_pdf.html.twig', [
+            'date' => $date,
+            'consultation' => $consultation,
+        ]);
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+        $pdfContent = $dompdf->output();
+        return new Response($pdfContent, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="ordonnance.pdf"',
         ]);
     }
 }
