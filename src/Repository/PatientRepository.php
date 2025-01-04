@@ -25,7 +25,7 @@ class PatientRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('p')
             ->join('p.consultation', 'c')
-            ->join('c.healthprofessional', 'hp')
+            ->join('c.healthProfessional', 'hp')
             ->where('hp.id = :healthProfessionalId')
             ->setParameter('healthProfessionalId', $healthProfessionalId)
             ->getQuery()
