@@ -19,7 +19,7 @@ class HomeController extends AbstractController
     }
 
     #[Route('/home', name: 'app_home_user')]
-    public function homePatient(
+    public function homeUser(
         #[CurrentUser]
         #[MapEntity(disabled: true)]
         User $user,
