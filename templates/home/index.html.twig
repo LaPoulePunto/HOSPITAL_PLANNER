@@ -1,7 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Bienvenue sur Hospitime !{% endblock %}
 
 {% block body %}
-
+<div class="container" style="margin-top: 150px;">
+    <div class="row text-center">
+        <div class="col-lg-6 mb-5 mt-lg-5">
+            <div class="card h-100 border-0">
+                <img src="{{ asset('images/logo-planning.jpg') }}" alt="logo planning" class="card-img-top d-block mx-auto" style="height: 150px; object-fit: contain;">
+                <div class="card-body">
+                    <h5 class="card-title text-danger display-6">Voir vos rendez-vous</h5>
+                    <p class="card-text">Réserver des consultations, les déplacer et les annuler en un clic.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-5 mt-5">
+            <div class="card h-100 border-0">
+                <img src="{{ asset('images/logo-messages.jpg') }}" alt="logo FAQ" class="card-img-top d-block mx-auto" style="height: 150px; object-fit: contain;">
+                <div class="card-body">
+                    <h5 class="card-title text-danger display-6">Des questions ?</h5>
+                    <p class="card-text">N'hésitez pas à consulter notre FAQ !</p>
+                    <a href="{{ path('app_faq') }}" class="btn btn-outline-danger">Voir les questions fréquentes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
