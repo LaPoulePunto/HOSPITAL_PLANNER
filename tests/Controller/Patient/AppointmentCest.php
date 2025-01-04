@@ -31,7 +31,7 @@ class AppointmentCest
 
     public function testRequiresAuthentication(ControllerTester $I)
     {
-        $I->amOnPage('/patient/appointment');
+        $I->amOnPage('/patient/consultation');
         $I->seeCurrentRouteIs('app_login');
     }
 
@@ -39,14 +39,14 @@ class AppointmentCest
     {
         $healthProfessional = HealthProfessionalFactory::createOne()->_real();
         $I->amLoggedInAs($healthProfessional);
-        $I->amOnPage('/patient/appointment');
+        $I->amOnPage('/patient/consultation');
         $I->seeResponseCodeIs(403);
     }
 
     public function testDisplaysFutureConsultations(ControllerTester $I)
     {
         $I->amLoggedInAs($this->patient);
-        $I->amOnPage('/patient/appointment');
+        $I->amOnPage('/patient/consultation');
         $I->see('01/12/2124');
         $I->see('02/12/2124');
         $I->see('03/12/2124');
@@ -57,7 +57,7 @@ class AppointmentCest
     public function testDisplaysPastConsultations(ControllerTester $I)
     {
         $I->amLoggedInAs($this->patient);
-        $I->amOnPage('/patient/appointment');
+        $I->amOnPage('/patient/consultation');
         $I->see('01/12/1924');
         $I->see('02/12/1924');
         $I->see('03/12/1924');

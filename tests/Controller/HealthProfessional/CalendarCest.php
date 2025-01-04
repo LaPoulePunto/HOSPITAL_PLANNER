@@ -69,7 +69,7 @@ class HealthProfessionalCalendarCest
         $I->see('Page de calendrier');
     }
 
-    public function CalendarDisplaysAppointments(ControllerTester $I): void
+    public function CalendarDisplaysConsultations(ControllerTester $I): void
     {
         $I->amOnPage('/health-professional/calendar');
         $I->seeInSource("title: 'PATIENT : MARTIN Thibault | TYPE : Kinésithérapie | SALLE : 10 | ÉTAGE : 0 | TYPE DE SALLE : Salle de Radiologie'");

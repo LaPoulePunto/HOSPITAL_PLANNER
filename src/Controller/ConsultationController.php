@@ -26,7 +26,7 @@ class ConsultationController extends AbstractController
         ]);
     }
 
-    #[Route('/appointment/create', name: 'create_medical_appointment')]
+    #[Route('/consultation/create', name: 'app_consultation_create')]
     #[IsGranted('ROLE_USER')]
     public function createMedicalAppointment(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -48,17 +48,17 @@ class ConsultationController extends AbstractController
             $entityManager->persist($consultation);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_user_appointments');
+            return $this->redirectToRoute('app_user_consultations');
         }
 
-        return $this->render('consultation/create_medical_appointment.html.twig', [
+        return $this->render('consultation/create.html.twig', [
             'form' => $form,
             'user' => $user,
             'isPatient' => $isPatient,
         ]);
     }
 
-    #[Route('/appointment/{id}/update', name: 'update_medical_appointment')]
+    #[Route('/consultation/{id}/update', name: 'app_consultation_update')]
     #[IsGranted('ROLE_USER')]
     public function updateMedicalAppointment(Request $request, EntityManagerInterface $entityManager, int $id): Response
     {
@@ -91,16 +91,16 @@ class ConsultationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_user_appointments');
+            return $this->redirectToRoute('app_user_consultations');
         }
 
-        return $this->render('consultation/update_medical_appointment.html.twig', [
+        return $this->render('consultation/update.html.twig', [
             'form' => $form,
             'patient' => $user,
         ]);
     }
 
-    #[Route('/appointment/{id}/delete', name: 'delete_medical_appointment')]
+    #[Route('/consultation/{id}/delete', name: 'app_consultation_delete')]
     #[IsGranted('ROLE_USER')]
     public function deleteMedicalAppointment(int $id, EntityManagerInterface $entityManager): Response
     {
@@ -117,7 +117,7 @@ class ConsultationController extends AbstractController
         $entityManager->remove($consultation);
         $entityManager->flush();
         if ($user instanceof Patient) {
-            return $this->redirectToRoute('app_user_appointments');
+            return $this->redirectToRoute('app_user_consultations');
         } else {
             return $this->redirectToRoute('app_health_professional_calendar');
         }

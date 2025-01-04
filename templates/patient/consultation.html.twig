@@ -11,7 +11,7 @@
                 <div class="card shadow p-4">
                     <h2>Mes consultations futures</h2>
                     <div class="table-responsive">
-                        {{ include('patient/_appointment.html.twig', {appointments: futurAppointments}) }}
+                        {{ include('patient/_consultation.html.twig', {appointments: futurConsultations}) }}
                     </div>
                 </div>
             </div>
@@ -20,7 +20,7 @@
                 <div class="card shadow p-4">
                     <h2>Mes consultations passées</h2>
                     <div class="table-responsive">
-                        {{ include('patient/_appointment.html.twig', {appointments: pastAppointments}) }}
+                        {{ include('patient/_consultation.html.twig', {appointments: pastConsultations}) }}
                     </div>
                 </div>
             </div>

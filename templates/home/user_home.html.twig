@@ -5,7 +5,7 @@
 {% block body %}
 
     {% if is_granted('ROLE_PATIENT') %}
-        {% set show_cons_btn_redirection = path('app_user_appointments') %}
+        {% set show_cons_btn_redirection = path('app_user_consultations') %}
     {% elseif is_granted('ROLE_HEALTH_PROFESSIONAL') %}
         {% set show_cons_btn_redirection = path('app_health_professional_calendar') %}
     {% endif %}

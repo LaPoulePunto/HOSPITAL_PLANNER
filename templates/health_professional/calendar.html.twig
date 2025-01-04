@@ -12,8 +12,8 @@
         document.addEventListener('DOMContentLoaded', function () {
 
             addEventSource([
-                {% if appointments is not null %}
-                    {% for consultation in appointments %}
+                {% if consultations is not null %}
+                    {% for consultation in consultations %}
                     {
                         id: '{{ consultation.id }}',
                         title: 'PATIENT : {{ consultation.patient.lastname|upper }} {{ consultation.patient.firstname
@@ -45,7 +45,7 @@
                     reverseButtons: true
                 }).then((result) => {
                     if (result.isDismissed) {
-                        window.location.href = '{{ path('update_medical_appointment', {id: 'consultation_id'}) }}'.replace('consultation_id', info.event.id);
+                        window.location.href = '{{ path('app_consultation_update', {id: 'consultation_id'}) }}'.replace('consultation_id', info.event.id);
                     } else if (result.isDenied) {
                         Swal.fire({
                             title: 'Êtes-vous sûr ?',
@@ -58,7 +58,7 @@
                             cancelButtonText: 'Annuler'
                         }).then((deleteResult) => {
                             if (deleteResult.isConfirmed) {
-                                window.location.href = '{{ path('delete_medical_appointment', {id: 'consultation_id'}) }}'.replace('consultation_id', info.event.id);
+                                window.location.href = '{{ path('app_consultation_delete', {id: 'consultation_id'}) }}'.replace('consultation_id', info.event.id);
                             }
                         });
                     }
