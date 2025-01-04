@@ -50,16 +50,10 @@ class HealthProfessionalController extends AbstractController
     {
         $user = $this->getUser();
 
-        if (!$user || !$this->isGranted('ROLE_HEALTH_PROFESSIONAL')) {
-            throw $this->createAccessDeniedException('Accès refusé. Vous devez être un professionnel de santé.');
-        }
-
         $patients = $patientRepository->findPatientsByHealthProfessional($user->getId());
-
 
         return $this->render('health_professional/list_patients.html.twig', [
             'patients' => $patients,
         ]);
     }
-
 }
