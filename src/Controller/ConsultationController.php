@@ -3,14 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Consultation;
-use App\Repository\ConsultationRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Dompdf\Dompdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ConsultationController extends AbstractController
@@ -25,7 +24,6 @@ class ConsultationController extends AbstractController
 
     #[Route('/consultation/prescription/{id}', name: 'app_consultation_prescription', requirements: ['id' => '\d+'])]
     public function prescription(
-        ConsultationRepository $consultationRepository,
         Consultation $consultation,
         Request $request,
         EntityManagerInterface $entityManager
@@ -41,9 +39,12 @@ class ConsultationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $texte = $form->get('texte')->getData();
+            $signature = $request->get('signature');
+            $consultation->setSignature($signature);
             $consultation->setPrescription($texte);
             $entityManager->persist($consultation);
             $entityManager->flush();
+
             return $this->redirectToRoute('app_health_professional_calendar');
         }
 
@@ -55,7 +56,7 @@ class ConsultationController extends AbstractController
 
     public function HTMLToPDF(Consultation $consultation): Response
     {
-        $date = new \DateTime();
+        $date = new DateTime();
         $html = $this->renderView('consultation/prescription_pdf.html.twig', [
             'date' => $date,
             'consultation' => $consultation,
