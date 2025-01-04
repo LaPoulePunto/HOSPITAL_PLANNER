@@ -64,7 +64,7 @@ class ConsultationController extends AbstractController
 
         $dompdf = new Dompdf();
         $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->setPaper('A4');
         $dompdf->render();
         $pdfContent = $dompdf->output();
         return new Response($pdfContent, 200, [
