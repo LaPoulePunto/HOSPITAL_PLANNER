@@ -48,6 +48,8 @@ final class ConsultationTypeFactory extends PersistentProxyObjectFactory
     {
         return [
             'label' => self::faker()->text(32),
+            'speciality' => SpecialityFactory::new(),
+            'roomType' => RoomTypeFactory::new(),
         ];
     }
 

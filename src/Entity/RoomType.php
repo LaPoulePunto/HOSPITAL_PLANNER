@@ -21,9 +21,13 @@ class RoomType
     #[ORM\OneToMany(targetEntity: Room::class, mappedBy: 'roomtype')]
     private Collection $room;
 
+    #[ORM\OneToMany(targetEntity: ConsultationType::class, mappedBy: 'roomType')]
+    private Collection $consultationTypes;
+
     public function __construct()
     {
         $this->room = new ArrayCollection();
+        $this->consultationTypes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -67,6 +71,36 @@ class RoomType
             // set the owning side to null (unless already changed)
             if ($room->getRoomType() === $this) {
                 $room->setRoomType(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ConsultationType>
+     */
+    public function getConsultationTypes(): Collection
+    {
+        return $this->consultationTypes;
+    }
+
+    public function addConsultationType(ConsultationType $consultationType): static
+    {
+        if (!$this->consultationTypes->contains($consultationType)) {
+            $this->consultationTypes->add($consultationType);
+            $consultationType->setRoomType($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConsultationType(ConsultationType $consultationType): static
+    {
+        if ($this->consultationTypes->removeElement($consultationType)) {
+            // set the owning side to null (unless already changed)
+            if ($consultationType->getRoomType() === $this) {
+                $consultationType->setRoomType(null);
             }
         }
 
