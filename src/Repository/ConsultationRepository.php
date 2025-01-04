@@ -34,7 +34,7 @@ class ConsultationRepository extends ServiceEntityRepository
         ;
     }
 
-    public function getAllConsultationsByHealthProfessional(HealthProfessional $healthProfessional)
+    public function getAllConsultationsByUser(User $user): array
     {
         $qb = $this->createQueryBuilder('c')
             ->innerJoin('c.healthProfessional', 'hp')
