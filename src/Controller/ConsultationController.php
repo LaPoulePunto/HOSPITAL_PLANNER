@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ConsultationController extends AbstractController
 {
@@ -22,14 +23,19 @@ class ConsultationController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_HEALTH_PROFESSIONAL')]
+    #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
     #[Route('/consultation/prescription/{id}', name: 'app_consultation_prescription', requirements: ['id' => '\d+'])]
     public function prescription(
         Consultation $consultation,
         Request $request,
         EntityManagerInterface $entityManager
     ): Response {
+        if (!in_array($this->getUser(), $consultation->getHealthprofessional()->toArray())) {
+            throw $this->createAccessDeniedException('Ces consultations ne sont pas les vôtres');
+        }
         $form = $this->createFormBuilder()
-            ->add('texte', TextareaType::class, [
+            ->add('prescription', TextareaType::class, [
                 'label' => 'Texte de l\'ordonnance',
                 'attr' => ['rows' => 10],
             ])
@@ -38,16 +44,15 @@ class ConsultationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $texte = $form->get('texte')->getData();
+            $prescription = $form->get('prescription')->getData();
             $signature = $request->get('signature');
             $consultation->setSignature($signature);
-            $consultation->setPrescription($texte);
+            $consultation->setPrescription($prescription);
             $entityManager->persist($consultation);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_health_professional_calendar');
         }
-
         return $this->render('consultation/prescription.html.twig', [
             'form' => $form,
             'consultation' => $consultation,
