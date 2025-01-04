@@ -31,12 +31,10 @@ class ConsultationController extends AbstractController
     public function createMedicalAppointment(Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
-        $isPatient = false;
         $consultation = new Consultation();
 
         if ($this->isGranted("ROLE_PATIENT")) {
             $consultation->setPatient($user);
-            $isPatient = true;
         } else {
             $consultation->addHealthprofessional($user);
         }
@@ -54,7 +52,6 @@ class ConsultationController extends AbstractController
         return $this->render('consultation/create.html.twig', [
             'form' => $form,
             'user' => $user,
-            'isPatient' => $isPatient,
         ]);
     }
 
