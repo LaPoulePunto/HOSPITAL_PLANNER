@@ -41,6 +41,9 @@ class Consultation
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $prescription = null;
 
+    #[ORM\Column(type: Types::BLOB, nullable: true)]
+    private $signature = null;
+
     public function __construct()
     {
         $this->healthProfessional = new ArrayCollection();
@@ -152,6 +155,18 @@ class Consultation
     public function setPrescription(?string $prescription): static
     {
         $this->prescription = $prescription;
+
+        return $this;
+    }
+
+    public function getSignature()
+    {
+        return $this->signature;
+    }
+
+    public function setSignature($signature): static
+    {
+        $this->signature = $signature;
 
         return $this;
     }
