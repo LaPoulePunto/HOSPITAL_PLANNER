@@ -32,7 +32,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for consultation in consultations | slice(0, 3) %}
+                            {% for consultation in consultations|slice(0, 3) %}
                                 <tr>
                                     <td>{{ consultation.date|date('d/m/Y') }}</td>
                                     <td>{{ consultation.startTime|date('H:i') }}</td>
