@@ -17,9 +17,11 @@ class ConsultationTypeFixtures extends Fixture
             true
         );
         foreach ($content as $type) {
+            $roomTypeArray = $manager->getRepository(RoomType::class)->findAll();
+            $specialityArray = $manager->getRepository(Speciality::class)->findAll();
 
-            $roomType = $manager->getRepository(RoomType::class)->find(rand(1, 3));
-            $speciality = $manager->getRepository(Speciality::class)->find(rand(1, 4));
+            $roomType = $roomTypeArray[array_rand($roomTypeArray)];
+            $speciality = $specialityArray[array_rand($specialityArray)];
 
             ConsultationTypeFactory::createOne([
                 'label' => $type['label'],
