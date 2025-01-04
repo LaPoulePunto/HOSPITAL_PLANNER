@@ -45,8 +45,7 @@ class HealthProfessionalController extends AbstractController
         #[CurrentUser]
         #[MapEntity(disabled: true)]
         User $healthProfessional,
-    ): Response
-    {
+    ): Response {
         $appointments = $consultationRepository->getAllConsultationsByUser($healthProfessional);
         return $this->render('health_professional/calendar.html.twig', [
             'appointments' => $appointments ?? null,
