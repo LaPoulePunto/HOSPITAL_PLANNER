@@ -49,17 +49,6 @@ class ConsultationFormType extends AbstractType
                     'class' => Room::class,
                     'choice_label' => 'num',
                 ]);
-        } elseif ($this->security->isGranted('ROLE_PATIENT')) {
-            $healthProfessionals = $this->entityManager->getRepository(HealthProfessional::class)->getAllActiveHealthProfessional();
-            $builder
-                ->add('healthProfessional', EntityType::class, [
-                    'class' => HealthProfessional::class,
-                    'choices' => $healthProfessionals,
-                    'choice_label' => function (HealthProfessional $hp) {
-                        return $hp->getLastname().' '.$hp->getFirstname();
-                    },
-                    'multiple' => true,
-                ]);
         }
     }
 
