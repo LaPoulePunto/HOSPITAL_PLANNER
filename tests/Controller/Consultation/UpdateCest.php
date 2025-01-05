@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Tests\Controller\Consultation;
 
 use App\Factory\ConsultationFactory;
