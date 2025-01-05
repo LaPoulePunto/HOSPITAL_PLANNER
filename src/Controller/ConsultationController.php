@@ -29,7 +29,7 @@ class ConsultationController extends AbstractController
 
     #[Route('/consultation/create', name: 'app_consultation_create')]
     #[IsGranted('ROLE_USER')]
-    public function createMedicalAppointment(Request $request, EntityManagerInterface $entityManager): Response
+    public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
         $consultation = new Consultation();
