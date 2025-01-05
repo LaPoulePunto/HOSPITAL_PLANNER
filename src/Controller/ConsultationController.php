@@ -135,11 +135,10 @@ class ConsultationController extends AbstractController
 
         $entityManager->remove($consultation);
         $entityManager->flush();
-        if ($user instanceof Patient) {
+        if ($this->isGranted('ROLE_PATIENT')) {
             return $this->redirectToRoute('app_user_consultations');
-        } else {
-            return $this->redirectToRoute('app_health_professional_calendar');
         }
+        return $this->redirectToRoute('app_health_professional_calendar');
     }
 
     public function isAppointmentConflict(Consultation $consultation): bool
