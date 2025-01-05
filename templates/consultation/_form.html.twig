@@ -19,9 +19,7 @@
                     {{ form_row(form.startTime, {label: 'Heure de début'}) }}
                     {{ form_row(form.endTime, {label: 'Heure de fin'}) }}
                     {{ form_row(form.consultationType, {label: 'Type de consultation'}) }}
-                {% if is_granted('ROLE_PATIENT') %}
-                    {{ form_row(form.healthProfessional, {label: 'Praticien'}) }}
-                {% else %}
+                {% if is_granted('ROLE_HEALTH_PROFESSIONAL') %}
                     {{ form_row(form.patient, {label: 'Patient'}) }}
                     {{ form_row(form.room, {label: 'Salle de consultation'}) }}
                 {% endif %}
