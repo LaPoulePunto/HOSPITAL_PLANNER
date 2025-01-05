@@ -38,8 +38,8 @@ class AppointmentCest
 
     public function testRequiresPatientRole(ControllerTester $I)
     {
-        $patient = HealthProfessionalFactory::createOne()->_real();
-        $I->amLoggedInAs($patient);
+        $healthProfessional = HealthProfessionalFactory::createOne()->_real();
+        $I->amLoggedInAs($healthProfessional);
         $I->amOnPage('/patient/appointment');
         $I->seeResponseCodeIs(403);
     }
