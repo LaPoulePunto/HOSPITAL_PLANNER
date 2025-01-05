@@ -21,9 +21,6 @@ class PatientController extends AbstractController
     #[Route('/patient/consultation', name: 'app_user_consultations')]
     public function consultation(ConsultationRepository $consultationRepository): Response
     {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
         $user = $this->getUser();
         $futurConsultations = $consultationRepository->findConsultationByPatientPastOrFuturReservation($user, true);
         $pastConsultations = $consultationRepository->findConsultationByPatientPastOrFuturReservation($user, false);
