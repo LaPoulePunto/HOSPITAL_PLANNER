@@ -79,7 +79,7 @@ class ConsultationController extends AbstractController
 
     #[Route('/consultation/{id}/update', name: 'app_consultation_update')]
     #[IsGranted('ROLE_USER')]
-    public function updateMedicalAppointment(Request $request, EntityManagerInterface $entityManager, int $id): Response
+    public function update(Request $request, EntityManagerInterface $entityManager, int $id): Response
     {
         $user = $this->getUser();
 
@@ -121,7 +121,7 @@ class ConsultationController extends AbstractController
 
     #[Route('/consultation/{id}/delete', name: 'app_consultation_delete')]
     #[IsGranted('ROLE_USER')]
-    public function deleteMedicalAppointment(int $id, EntityManagerInterface $entityManager): Response
+    public function delete(int $id, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
 
