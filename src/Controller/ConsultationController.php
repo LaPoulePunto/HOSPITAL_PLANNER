@@ -3,10 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Consultation;
-use App\Entity\ConsultationType;
 use App\Entity\HealthProfessional;
 use App\Entity\Patient;
-use App\Entity\Speciality;
 use App\Form\ChooseHealthProfessionalType;
 use App\Form\ConsultationFormType;
 use App\Repository\ConsultationRepository;
@@ -58,15 +56,11 @@ class ConsultationController extends AbstractController
         ]);
     }
 
-    #[Route('/consultation/select-health-professional/{id}', name: 'app_consultation_select_health_professional')]
+    #[Route('/consultation/select-health-professional/{id}', name: 'app_consultation_select_health_professional', requirements: ['id' => '\d+'])]
     #[IsGranted('ROLE_PATIENT')]
-    public function chooseHealthProfessional(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    public function chooseHealthProfessional(Consultation $consultation, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $consultation = $entityManager->getRepository(Consultation::class)->find($id);
-        $consultationType = $entityManager->getRepository(ConsultationType::class)->find($consultation->getConsultationtype()->getId());
-        $specialty = $entityManager->getRepository(Speciality::class)->find($consultationType->getSpeciality()->getId());
-
-        $healthProfessionals = $entityManager->getRepository(HealthProfessional::class)->getHealthProfessionalBySpeciality($specialty->getId());
+        $healthProfessionals = $entityManager->getRepository(HealthProfessional::class)->getAllHealthProfessionalPossible($consultation->getId());
 
         $form = $this->createForm(ChooseHealthProfessionalType::class, $consultation, [
             'health_professionals' => $healthProfessionals,

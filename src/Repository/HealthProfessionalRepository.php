@@ -28,4 +28,18 @@ class HealthProfessionalRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function getAllHealthProfessionalPossible(int $consultationId): array
+    {
+        return $this->createQueryBuilder('hp')
+            ->innerJoin('hp.speciality', 's')
+            ->innerJoin('s.consultationTypes', 'ct')
+            ->innerJoin('ct.consultation', 'c')
+            ->select('hp, s, ct')
+            ->where('c.id = :consultationId')
+            ->setParameter('consultationId', $consultationId)
+            ->getQuery()
+            ->getResult();
+
+    }
 }
