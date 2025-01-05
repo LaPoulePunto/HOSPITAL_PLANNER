@@ -11,9 +11,9 @@ class CreateCest
     {
     }
 
-    public function createConsultation(ControllerTester $I)
+    public function testRedirectToLoginIfNotAuthenticated(ControllerTester $I)
     {
         $I->amOnPage('/consultation/create');
-        $I->seeResponseCodeIsSuccessful();
+        $I->seeCurrentRouteIs('app_login');
     }
 }
