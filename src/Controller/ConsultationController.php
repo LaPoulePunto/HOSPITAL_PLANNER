@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Consultation;
+use App\Entity\ConsultationType;
 use App\Entity\HealthProfessional;
 use App\Entity\Patient;
+use App\Entity\Speciality;
+use App\Form\ChooseHealthProfessionalType;
 use App\Form\ConsultationFormType;
 use App\Repository\ConsultationRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -33,7 +36,7 @@ class ConsultationController extends AbstractController
         $user = $this->getUser();
         $consultation = new Consultation();
 
-        if ($this->isGranted("ROLE_PATIENT")) {
+        if ($this->isGranted('ROLE_PATIENT')) {
             $consultation->setPatient($user);
         } else {
             $consultation->addHealthprofessional($user);
@@ -46,12 +49,37 @@ class ConsultationController extends AbstractController
             $entityManager->persist($consultation);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_user_consultations');
+            return $this->redirectToRoute('app_consultation_select_health_professional', ['id' => $consultation->getId()]);
         }
 
         return $this->render('consultation/create.html.twig', [
             'form' => $form,
             'user' => $user,
+        ]);
+    }
+
+    #[Route('/consultation/select-health-professional/{id}', name: 'app_consultation_select_health_professional')]
+    #[IsGranted('ROLE_PATIENT')]
+    public function chooseHealthProfessional(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $consultation = $entityManager->getRepository(Consultation::class)->find($id);
+        $consultationType = $entityManager->getRepository(ConsultationType::class)->find($consultation->getConsultationtype()->getId());
+        $specialty = $entityManager->getRepository(Speciality::class)->find($consultationType->getSpeciality()->getId());
+
+        $healthProfessionals = $entityManager->getRepository(HealthProfessional::class)->getHealthProfessionalBySpeciality($specialty->getId());
+
+        $form = $this->createForm(ChooseHealthProfessionalType::class, $consultation, [
+            'health_professionals' => $healthProfessionals,
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            return $this->redirectToRoute('app_user_consultations');
+        }
+
+        return $this->render('consultation/select_health_professional.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 
