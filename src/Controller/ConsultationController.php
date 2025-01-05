@@ -110,7 +110,10 @@ class ConsultationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_user_consultations');
+            if ($this->isGranted('ROLE_PATIENT')) {
+                return $this->redirectToRoute('app_user_consultations');
+            }
+            return $this->redirectToRoute('app_health_professional_calendar');
         }
 
         return $this->render('consultation/update.html.twig', [
