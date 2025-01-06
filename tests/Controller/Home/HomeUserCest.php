@@ -3,6 +3,7 @@
 namespace App\Tests\Controller\Home;
 
 use App\Factory\HealthProfessionalFactory;
+use App\Factory\PatientFactory;
 use App\Tests\Support\ControllerTester;
 
 class HomeUserCest
