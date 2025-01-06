@@ -11,6 +11,9 @@ class FaqController extends AbstractController
     #[Route('/faq', name: 'app_faq')]
     public function index(): Response
     {
-        return $this->render('faq/index.html.twig');
+        $faqData = json_decode(file_get_contents(__DIR__ . "/../../assets/data/faq.json"), true);
+        return $this->render('faq/index.html.twig', [
+            'faqData' => $faqData['questions']
+        ]);
     }
 }
