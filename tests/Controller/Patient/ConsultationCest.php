@@ -7,7 +7,7 @@ use App\Factory\HealthProfessionalFactory;
 use App\Factory\PatientFactory;
 use App\Tests\Support\ControllerTester;
 
-class AppointmentCest
+class ConsultationCest
 {
     private object $patient;
 
