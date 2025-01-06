@@ -34,4 +34,14 @@ class HomeUserCest
         $I->click('HOSPITIME');
         $I->seeCurrentRouteIs('app_home_user');
     }
+
+    public function checkLoginButtonVisibilityAndRedirection(ControllerTester $I)
+    {
+        $I->amOnPage('/');
+        $I->seeResponseCodeIsSuccessful();
+        $I->see('Se connecter');
+        $I->click('Se connecter');
+        $I->seeCurrentRouteIs('app_login');
+        $I->seeResponseCodeIsSuccessful();
+    }
 }
