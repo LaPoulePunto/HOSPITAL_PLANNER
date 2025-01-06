@@ -47,7 +47,10 @@ class ConsultationController extends AbstractController
             $entityManager->persist($consultation);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_consultation_select_health_professional', ['id' => $consultation->getId()]);
+            if ($this->isGranted('ROLE_PATIENT')) {
+                return $this->redirectToRoute('app_consultation_select_health_professional', ['id' => $consultation->getId()]);
+            }
+            return $this->redirectToRoute('app_health_professional_calendar');
         }
 
         return $this->render('consultation/create.html.twig', [
