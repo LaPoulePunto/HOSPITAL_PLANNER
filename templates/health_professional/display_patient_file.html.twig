@@ -23,16 +23,16 @@
                     <div class="card-body">
                         <dl class="row">
                             <dt class="col-sm-5">Groupe sanguin :</dt>
-                            <dd class="col-sm-7">{{ patient.bloodGroup ? 'Pas de groupe sanguin renseigné' }}</dd>
+                            <dd class="col-sm-7">{{ patient.bloodGroup ? patient.bloodGroup : 'Pas de groupe sanguin renseigné' }}</dd>
 
                             <dt class="col-sm-5">Allergies :</dt>
-                            <dd class="col-sm-7">{{ patient.allergies ? 'Pas d\'allergie renseignée' }}</dd>
+                            <dd class="col-sm-7">{{ patient.allergies ? patient.allergies : 'Pas d\'allergie renseignée' }}</dd>
 
                             <dt class="col-sm-5">Traitements suivis :</dt>
-                            <dd class="col-sm-7">{{ patient.treatments ? 'Pas de traitement renseigné' }}</dd>
+                            <dd class="col-sm-7">{{ patient.treatments ? patient.treatments : 'Pas de traitement renseigné' }}</dd>
 
                             <dt class="col-sm-5">Commentaires :</dt>
-                            <dd class="col-sm-7">{{ patient.comments ? 'Pas de commentaire laissé' }}</dd>
+                            <dd class="col-sm-7">{{ patient.comments ? patient.comments : 'Pas de commentaire laissé' }}</dd>
                         </dl>
                     </div>
                 </div>
