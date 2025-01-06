@@ -3,8 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Consultation;
-use App\Entity\HealthProfessional;
 use App\Entity\Patient;
+use App\Entity\HealthProfessional;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -61,7 +61,7 @@ class ConsultationRepository extends ServiceEntityRepository
     {
         $todayDate = new \DateTime();
         $query = $this->createQueryBuilder('c')
-            ->innerJoin('c.healthProfessional', 'hp')
+            ->leftJoin('c.healthProfessional', 'hp')
             ->addSelect('hp')
             ->addSelect('c')
             ->innerJoin('c.healthProfessional', 'hp')
