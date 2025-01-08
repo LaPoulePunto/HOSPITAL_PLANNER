@@ -4,13 +4,16 @@ namespace App\Tests\Controller\Consultation;
 
 use App\Entity\Consultation;
 use App\Entity\HealthProfessional;
+use App\Entity\Patient;
 use App\Factory\ConsultationFactory;
 use App\Factory\HealthProfessionalFactory;
 use App\Factory\PatientFactory;
+use App\Factory\RoomFactory;
 use App\Tests\Support\ControllerTester;
 
 class UpdateCest
 {
+    private Patient $patient;
     private HealthProfessional $healthProfessional;
     private Consultation $consultation;
 
@@ -126,6 +129,28 @@ class UpdateCest
             'id' => $this->consultation->getId(),
             'startTime' => '10:30:00',
             'endTime' => '11:30:00',
+        ]);
+    }
+
+    public function testUpdateConsultationRoomAsHealthProfessional(ControllerTester $I)
+    {
+        $newRoom = RoomFactory::createOne()->_real();
+
+        $I->amLoggedInAs($this->healthProfessional);
+        $I->amOnPage("/consultation/{$this->consultation->getId()}/update");
+        $I->seeResponseCodeIsSuccessful();
+
+        // Modifier la salle
+        $I->selectOption('consultation_form[room]', "{$newRoom->getId()}");
+
+        // Soumettre le formulaire
+        $I->click('input[type=submit][value=Modification]');
+
+        // Vérifier la redirection et la modification
+        $I->seeCurrentRouteIs('app_health_professional_calendar');
+        $I->seeInRepository(Consultation::class, [
+            'id' => $this->consultation->getId(),
+            'room' => "{$newRoom->getId()}",
         ]);
     }
 }
