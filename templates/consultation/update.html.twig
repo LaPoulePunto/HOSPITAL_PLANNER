@@ -2,5 +2,5 @@
 
 {% set titlePage = "Modification d'une consultation" %}
 
- {{ include(('consultation/_form.html.twig'), {submit_label: 'Modification',
+{{ include(('consultation/_form.html.twig'), {submit_label: 'Modification',
      form: form, titlePage: titlePage}, with_context = false) }}

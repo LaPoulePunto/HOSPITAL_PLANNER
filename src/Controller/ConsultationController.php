@@ -85,12 +85,15 @@ class ConsultationController extends AbstractController
 
     #[Route('/consultation/{id}/update', name: 'app_consultation_update')]
     #[IsGranted('ROLE_USER')]
-    public function update(Request $request, EntityManagerInterface $entityManager, int $id): Response
-    {
+    public function update(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        int $id,
+        ConsultationRepository $consultationRepository
+    ): Response {
         $user = $this->getUser();
 
         $repository = $entityManager->getRepository(Consultation::class);
-
         if ($user instanceof Patient) {
             $consultation = $repository->find($id);
         } elseif ($user instanceof HealthProfessional) {
@@ -112,8 +115,9 @@ class ConsultationController extends AbstractController
 
         $form = $this->createForm(ConsultationFormType::class, $consultation);
         $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($this->isConsultationConflict($consultation, $consultationRepository)) {
+            $this->addFlash('error', 'Une consultation existe déjà à ce créneau.');
+        } elseif ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
             if ($this->isGranted('ROLE_PATIENT')) {
@@ -160,7 +164,8 @@ class ConsultationController extends AbstractController
             $existingDate = $consultation->getDate();
             $existingStart = $consultation->getStartTime();
             $existingEnd = $consultation->getEndTime();
-            if ($existingDate == $newConsultation->getDate() &&
+            if ($newConsultation->getId() !== $consultation->getId() &&
+                $existingDate == $newConsultation->getDate() &&
                 (
                     ($newStart >= $existingStart && $newStart < $existingEnd) ||
                     ($newEnd > $existingStart && $newEnd <= $existingEnd) ||
