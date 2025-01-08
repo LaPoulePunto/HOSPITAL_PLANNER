@@ -40,7 +40,7 @@ class HealthProfessionalController extends AbstractController
         ]);
     }
 
-    #[Route('/health-professional/list_patients', name: 'app_health_professional_patients')]
+    #[Route('/health-professional/list-patients', name: 'app_health_professional_patients')]
     public function listPatients(
         PatientRepository $patientRepository,
         #[CurrentUser]
