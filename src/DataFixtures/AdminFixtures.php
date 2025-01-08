@@ -4,14 +4,15 @@ namespace App\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use App\Factory\UserFactory;
 
-class  AdminFixtures extends Fixture
+class AdminFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // $product = new Product();
-        // $manager->persist($product);
-
+        UserFactory::createOne([
+            'roles'=>['ROLE_ADMIN'],
+            ]);
         $manager->flush();
     }
 }
