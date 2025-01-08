@@ -41,11 +41,12 @@ class HealthProfessionalController extends AbstractController
     }
 
     #[Route('/health-professional/list_patients', name: 'app_health_professional_patients')]
-    public function listPatients(PatientRepository $patientRepository): Response
-    {
-        $user = $this->getUser();
-
-        $patients = $patientRepository->findPatientsByHealthProfessional($user->getId());
+    public function listPatients(
+        PatientRepository $patientRepository,
+        #[CurrentUser]
+        User $healthProfessional,
+    ): Response {
+        $patients = $patientRepository->findPatientsByHealthProfessional($healthProfessional);
 
         return $this->render('health_professional/list_patients.html.twig', [
             'patients' => $patients,
