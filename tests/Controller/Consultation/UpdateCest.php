@@ -102,4 +102,30 @@ class UpdateCest
             'endTime' => '11:30:00',
         ]);
     }
+
+    public function testUpdateConsultationHourAshealthProfessional(ControllerTester $I)
+    {
+        $I->amLoggedInAs($this->healthProfessional);
+        $I->amOnPage("/consultation/{$this->consultation->getId()}/update");
+        $I->seeResponseCodeIsSuccessful();
+
+        // Heure de début
+        $I->selectOption('consultation_form[startTime][hour]', '10');
+        $I->selectOption('consultation_form[startTime][minute]', '30');
+
+        // Heure de fin
+        $I->selectOption('consultation_form[endTime][hour]', '11');
+        $I->selectOption('consultation_form[endTime][minute]', '30');
+
+        // Soumettre le formulaire
+        $I->click('input[type=submit][value=Modification]');
+
+        // Vérifier la redirection et la modification
+        $I->seeCurrentRouteIs('app_health_professional_calendar');
+        $I->seeInRepository(Consultation::class, [
+            'id' => $this->consultation->getId(),
+            'startTime' => '10:30:00',
+            'endTime' => '11:30:00',
+        ]);
+    }
 }
