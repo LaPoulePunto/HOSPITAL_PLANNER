@@ -147,22 +147,26 @@ class ConsultationController extends AbstractController
         return $this->redirectToRoute('app_health_professional_calendar');
     }
 
-    public function isAppointmentConflict(Consultation $consultation): bool
+    public function isConsultationConflict(Consultation $newConsultation, ConsultationRepository $consultationRepository): bool
     {
-        $appointments = ConsultationRepository::class->findBy([
-            'date' => $consultation->getDate()->format('Y-m-d'),
-            'room' => $consultation->getRoom(),
-        ]);
-
-        $existingStart = $consultation->getStartTime();
-        $existingEnd = $appointments->getEndTime();
-
-        foreach ($appointments as $appointment) {
-            if (($appointment->getStartTime() > $existingStart) && ($appointment->getEndTime() < $existingEnd)) {
+        $user = $this->getUser();
+        $newStart = $newConsultation->getStartTime();
+        $newEnd = $newConsultation->getEndTime();
+        $consultations = $consultationRepository->getAllConsultationsByUser($user);
+        foreach ($consultations as $consultation) {
+            $existingDate = $consultation->getDate();
+            $existingStart = $consultation->getStartTime();
+            $existingEnd = $consultation->getEndTime();
+            if ($existingDate == $newConsultation->getDate() &&
+                (
+                    ($newStart >= $existingStart && $newStart < $existingEnd) ||
+                    ($newEnd > $existingStart && $newEnd <= $existingEnd) ||
+                    ($newStart <= $existingStart && $newEnd >= $existingEnd)
+                )
+            ) {
                 return true;
             }
         }
-
         return false;
     }
 
