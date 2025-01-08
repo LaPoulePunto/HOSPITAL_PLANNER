@@ -43,6 +43,11 @@
                                     <td>{{ consultation.endTime|date('H:i') }}</td>
                                 </tr>
                             {% endfor %}
+                            <tr>
+                                <td colspan="3">
+                                    <a href="{{ path('app_consultation_create') }}" class="btn btn-outline-dark" >Créer une consultation</a>
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>

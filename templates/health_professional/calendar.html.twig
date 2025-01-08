@@ -70,5 +70,14 @@
 {% endblock %}
 
 {% block body %}
-    <div id='calendar'></div>
+    <div class="container mt-4">
+        <div class="card shadow p-4">
+            <div class="d-flex flex-column align-items-start mb-3">
+                <a href="{{ path('app_consultation_create') }}" class="btn btn-outline-danger mb-3 w-100">
+                    Ajouter une nouvelle consultation
+                </a>
+            </div>
+            <div id="calendar"></div>
+        </div>
+    </div>
 {% endblock %}
