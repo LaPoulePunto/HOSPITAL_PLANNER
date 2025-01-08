@@ -4,13 +4,13 @@ namespace App\Form;
 
 use App\Entity\Consultation;
 use App\Entity\ConsultationType;
-use App\Entity\HealthProfessional;
 use App\Entity\Patient;
 use App\Entity\Room;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -30,8 +30,20 @@ class ConsultationFormType extends AbstractType
         $user = $this->security->getUser();
         $builder
             ->add('date')
-            ->add('startTime')
-            ->add('endTime')
+            ->add('startTime', TimeType::class, [
+                'widget' => 'choice',
+                'input' => 'datetime',
+                'hours' => range(0, 23),
+                'minutes' => [0, 30],
+                'attr' => ['class' => 'timepicker'],
+            ])
+            ->add('endTime', TimeType::class, [
+                'widget' => 'choice',
+                'input' => 'datetime',
+                'hours' => range(0, 23),
+                'minutes' => [0, 30],
+                'attr' => ['class' => 'timepicker'],
+            ])
             ->add('consultationType', EntityType::class, [
                 'class' => ConsultationType::class,
                 'choice_label' => 'label',
