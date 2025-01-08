@@ -15,7 +15,7 @@ class ConsultationFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 100; ++$i) {
             $room = $manager->getRepository(Room::class)->find(rand(1, 10));
             $consultationType = $manager->getRepository(ConsultationType::class)->findAll();
             $consultationType = $consultationType[array_rand($consultationType)];
@@ -24,7 +24,7 @@ class ConsultationFixtures extends Fixture implements DependentFixtureInterface
             $consultation = ConsultationFactory::createOne([
                 'room' => $room,
                 'consultationType' => $consultationType,
-                'patient' => $patient
+                'patient' => $patient,
             ])->_real();
             $healthProfessionalArray = $manager->getRepository(HealthProfessional::class)->findAll();
             $healthProfessional = $healthProfessionalArray[array_rand($healthProfessionalArray)];

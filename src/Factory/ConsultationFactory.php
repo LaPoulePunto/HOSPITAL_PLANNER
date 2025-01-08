@@ -54,6 +54,9 @@ final class ConsultationFactory extends PersistentProxyObjectFactory
             'date' => self::faker()->dateTimeBetween('-1 year', '+1 month'),
             'startTime' => $startTime,
             'endTime' => $endTime->modify('+30 minutes'),
+            'room' => RoomFactory::new(),
+            'consultationType' => ConsultationTypeFactory::new(),
+            'patient' => PatientFactory::new(),
         ];
     }
 
