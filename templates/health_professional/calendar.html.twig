@@ -39,12 +39,12 @@
                     icon: 'info',
                     showCancelButton: true,
                     showDenyButton: true,
-                    confirmButtonText: 'OK',
-                    cancelButtonText: 'Modifier',
+                    confirmButtonText: 'Modifier',
+                    cancelButtonText: 'Ok',
                     denyButtonText: 'Supprimer',
                     reverseButtons: true
                 }).then((result) => {
-                    if (result.isDismissed) {
+                    if (result.isConirmed) {
                         window.location.href = '{{ path('app_consultation_update', {id: 'consultation_id'}) }}'.replace('consultation_id', info.event.id);
                     } else if (result.isDenied) {
                         Swal.fire({
@@ -57,7 +57,7 @@
                             confirmButtonText: 'Oui, supprimer',
                             cancelButtonText: 'Annuler'
                         }).then((deleteResult) => {
-                            if (deleteResult.isConfirmed) {
+                            if (deleteResult.isDismissed) {
                                 window.location.href = '{{ path('app_consultation_delete', {id: 'consultation_id'}) }}'.replace('consultation_id', info.event.id);
                             }
                         });
