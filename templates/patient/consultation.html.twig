@@ -12,7 +12,7 @@
                     <h2>Mes consultations futures</h2>
                     <div class="table-responsive">
                         {{ include('patient/_consultation.html.twig',
-                            {appointments: futurConsultations}, with_context = false) }}
+                            {appointments: futurConsultations, type: 'future'}, with_context = false) }}
                     </div>
                 </div>
             </div>
@@ -22,7 +22,7 @@
                     <h2>Mes consultations passées</h2>
                     <div class="table-responsive">
                         {{ include('patient/_consultation.html.twig',
-                            {appointments: pastConsultations}, with_context = false) }}
+                            {appointments: pastConsultations, type: 'past'}, with_context = false) }}
                     </div>
                 </div>
             </div>
