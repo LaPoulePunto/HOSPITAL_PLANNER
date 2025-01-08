@@ -16,20 +16,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
 class HealthProfessionalController extends AbstractController
 {
-    #[Route('/health-professional/consultation/{consultationId}', name: 'app_display_patient_file')]
-    public function displayPatientFile(ConsultationRepository $consultationRepository, int $consultationId): Response
+    #[Route('/health-professional/patient-file/{patientId}', name: 'app_display_patient_file', requirements: ['patientId' => '\d+'])]
+    public function displayPatientFile(PatientRepository $patientRepository, int $patientId): Response
     {
-        $consultation = $consultationRepository->getConsultationById($consultationId);
-        if (!$consultation) {
-            throw $this->createNotFoundException("Aucune consultation trouvée pour l'ID spécifié.");
-        }
+        $patient = $patientRepository->getPatientById($patientId);
 
-        $patient = $consultation->getPatient();
-        if (!$patient) {
-            throw $this->createNotFoundException("Aucun patient n'est associé à cette consultation.");
-        }
-
-        return $this->render('health_professional/display_patient_file.html.twig', ['patient' => $patient]);
+        return $this->render('health_professional/display_patient_file.html.twig', [
+            'patient' => $patient,
+        ]);
     }
 
     #[Route('/health-professional/calendar', name: 'app_health_professional_calendar')]
