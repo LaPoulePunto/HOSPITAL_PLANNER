@@ -21,13 +21,11 @@ final class Version20250104180140 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE consultation ADD signature LONGBLOB DEFAULT NULL');
-        $this->addSql('ALTER TABLE health_professional DROP signature');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE health_professional ADD signature LONGBLOB DEFAULT NULL');
         $this->addSql('ALTER TABLE consultation DROP signature');
     }
 }
