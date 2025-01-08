@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: '`user`')]
 #[ORM\InheritanceType('JOINED')]
 #[ORM\DiscriminatorColumn(name: 'discriminator', type: 'string')]
-#[ORM\DiscriminatorMap(['patient' => Patient::class, 'healthProfessional' => HealthProfessional::class, 'admin' => Admin::class])]
+#[ORM\DiscriminatorMap(['patient' => Patient::class, 'healthProfessional' => HealthProfessional::class])]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
