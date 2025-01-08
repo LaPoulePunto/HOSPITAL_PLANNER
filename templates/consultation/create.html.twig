@@ -1,5 +1,13 @@
 {% set title = "Création d'un nouveau rendez-vous" %}
 
+{% for label, messages in app.flashes %}
+    <div class="alert alert-{{ label }}">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+{% endfor %}
+
 {% set titlePage = "Création d'une consultation" %}
 
  {{ include(('consultation/_form.html.twig'), {submit_label: 'Création',
