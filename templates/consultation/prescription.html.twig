@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une ordonnance{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <script src="{{ asset('js/Signature.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="card shadow p-4 col-md-6 mb-4">
+            <h1>Ajouter une ordonnance pour la consultation</h1>
+            {{ form_start(form) }}
+                {{ form_row(form.prescription) }}
+                <div class="signature-container">
+                    <label for="signatureCanvas" class="form-label">Signature</label>
+                    <canvas id="signatureCanvas" class="border rounded"></canvas>
+                </div>
+                <input id="signatureField" type="hidden" name="signature">
+                <button class="btn btn-primary signature-button">Enregistrer l'ordonnance</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
