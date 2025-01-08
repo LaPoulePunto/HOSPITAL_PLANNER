@@ -29,7 +29,7 @@ class HomeUserCest
     public function redirectingToHomeAsPatient(ControllerTester $I)
     {
         $I->amLoggedInAs($this->patient);
-        $I->amOnPage('/patient/appointment');
+        $I->amOnPage('/patient/consultation');
         $I->seeResponseCodeIsSuccessful();
         $I->click('HOSPITIME');
         $I->seeCurrentRouteIs('app_home_user');
