@@ -26,7 +26,7 @@ class ReservationCrudController extends AbstractCrudController
             }),
             AssociationField::new('healthProfessional', 'Professionnel de santé')
                 ->formatValue(function ($value) {
-                    return $value ? $value->getFirstName().' '.$value->getLastName() : '';
+                    return $value ? $value->getFullName() : null;
                 }),
         ];
     }

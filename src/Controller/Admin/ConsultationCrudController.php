@@ -52,16 +52,16 @@ class ConsultationCrudController extends AbstractCrudController
 
             AssociationField::new('patient', 'Patient')
                 ->setFormTypeOption('choice_label', function ($patient) {
-                    return $patient ? $patient->getFirstName() . ' ' . $patient->getLastName() : '';
+                    return $patient ? $patient->getFullName() : '';
                 })->formatValue(function (?Patient $patient) {
-                    return $patient ? $patient->getFirstName() . ' ' . $patient->getLastName() : 'Aucun patient';
+                    return $patient ? $patient->getFullName() : 'Aucun patient';
                 }),
 
             AssociationField::new('healthProfessional', 'Professionnels de santé')
                 ->setFormTypeOption('multiple', true)
                 ->setFormTypeOption('by_reference', false)
                 ->setFormTypeOption('choice_label', function ($healthProfessional) {
-                    return $healthProfessional ? $healthProfessional->getFirstName() . ' ' . $healthProfessional->getLastName() : '';
+                    return $healthProfessional ? $healthProfessional->getFullName() : '';
                 }),
 
             TextareaField::new('prescription', 'Prescription'),

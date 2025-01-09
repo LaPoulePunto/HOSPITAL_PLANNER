@@ -37,12 +37,12 @@ class AvailabilityCrudController extends AbstractCrudController
             AssociationField::new('healthProfessional', 'Professionnel de santé')
                 ->setFormTypeOptions([
                     'choice_label' => function ($healthProfessional) {
-                        return $healthProfessional ? $healthProfessional->getFirstName().' '.$healthProfessional->getLastName() : '';
+                        return $healthProfessional ? $healthProfessional->getFullName() : '';
                     },
                 ])
                 ->formatValue(function ($value, $entity) {
                     return $entity->getHealthProfessional() ?
-                        $entity->getHealthProfessional()->getFirstName().' '.$entity->getHealthProfessional()->getLastName() : 'Aucun';
+                        $entity->getHealthProfessional()->getFullName() : 'Aucun';
                 }),
         ];
     }
