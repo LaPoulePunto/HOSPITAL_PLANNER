@@ -35,35 +35,37 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav w-100 d-lg-flex flex-row text-center">
                     {% block nav_item %}
-                        {% if is_granted('ROLE_PATIENT') %}
-                            <li class="nav-item">
-                                <a class="nav-link active btn btn-outline-light mx-1 px-4" href="{{ path('app_user_appointments') }}">Mes rendez-vous</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active btn btn-outline-light mx-1 px-4" href="#">Prendre un rendez-vous</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active btn btn-outline-light mx-1 px-4" href="{{ path('app_faq') }}">Voir la FAQ</a>
-                            </li>
-                        {% elseif is_granted('ROLE_HEALTH_PROFESSIONAL') %}
-                            <li class="nav-item">
-                                <a class="nav-link active btn btn-outline-light mx-1 px-4" href="{{ path('app_health_professional_calendar') }}">Mes consultations</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active btn btn-outline-light mx-1 px-4" href="{{ path('app_availability_show', {id: app.user.id}) }}">Voir mes disponibilités</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active btn btn-outline-light mx-1" href="#">Réserver matériel</a>
-                            </li>
-                        {% endif %}
+                        <div class="d-flex align-items-center">
+                            {% if is_granted('ROLE_PATIENT') %}
+                                <li class="nav-item">
+                                    <a class="nav-link active btn btn-outline-light mx-1 px-4" href="{{ path('app_user_appointments') }}">Mes rendez-vous</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active btn btn-outline-light mx-1 px-4" href="#">Prendre un rendez-vous</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active btn btn-outline-light mx-1 px-4" href="{{ path('app_faq') }}">Voir la FAQ</a>
+                                </li>
+                            {% elseif is_granted('ROLE_HEALTH_PROFESSIONAL') %}
+                                <li class="nav-item">
+                                    <a class="nav-link active btn btn-outline-light mx-1 px-4" href="{{ path('app_health_professional_calendar') }}">Mes consultations</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active btn btn-outline-light mx-1 px-4" href="{{ path('app_availability_show', {id: app.user.id}) }}">Voir mes disponibilités</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active btn btn-outline-light mx-1" href="#">Réserver matériel</a>
+                                </li>
+                            {% endif %}
+                        </div>
                         {% if app.user %}
                             <div class="d-flex ms-auto align-items-center">
                                 <li class="nav-item">
-                                    <a href="{{ path('app_logout') }}" class="nav-link active btn btn-outline-light mx-1">Se déconnecter</a>
+                                    <a href="{{ path('app_logout') }}" class="nav-link active btn btn-outline-light mx-0">Se déconnecter</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link mx-1" href="{{ path('app_user_profile') }}">
-                                        <span class="material-symbols-outlined fs-2">account_circle</span>
+                                    <a class="nav-link active btn btn-outline-light btn-sm px-2 py-1 mx-1" href="{{ path('app_user_profile') }}">
+                                        <span class="material-symbols-outlined fs-4">account_circle</span>
                                     </a>
                                 </li>
                             </div>
