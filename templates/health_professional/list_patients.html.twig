@@ -22,13 +22,10 @@
                                class="list-group-item list-group-item-action
                                d-md-flex justify-content-between align-items-center">
                                 <div>
+                                    {{ patient.gender == 0 ? 'M.' : 'Mme.' }}
                                     <strong class="text-primary">{{ patient.lastname }}</strong
                                     >, {{ patient.firstname }}
                                 </div>
-                                <small class="text-secondary">
-                                    Dernière consultation :
-                                    {{ consultation ? consultation.date|date('d/m/Y') : 'Aucune' }}
-                                </small>
                             </a>
                         {% endfor %}
                     </div>
