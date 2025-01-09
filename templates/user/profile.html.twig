@@ -1,25 +1,32 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Profil de {{ user.firstname }} {{ user.lastname }}{% endblock %}
+
 {% block body %}
-    <h1>{{ user.lastname }} {{ user.firstname }}</h1>
-    <dl>
-        <dt>Nom</dt>
-        <dd>{{ user.firstname }}</dd>
 
-        <dt>Prénom</dt>
-        <dd>{{ user.lastname }}</dd>
+    {% embed '_card.html.twig' %}
+        {% block content %}
+            <h2 class="text-center mb-4">Profil de {{ user.firstname }} {{ user.lastname }}</h2>
+            <dl class="row">
+                <dt class="col-sm-4 fw-bold">Nom</dt>
+                <dd class="col-sm-8">{{ user.firstname }}</dd>
 
-        <dt>Identifiant</dt>
-        <dd>{{ user.login }}</dd>
+                <dt class="col-sm-4 fw-bold">Prénom</dt>
+                <dd class="col-sm-8">{{ user.lastname }}</dd>
 
-        <dt>Email</dt>
-        <dd>{{ user.email }}</dd>
+                <dt class="col-sm-4 fw-bold">Identifiant</dt>
+                <dd class="col-sm-8">{{ user.login }}</dd>
 
-        <dt>Genre</dt>
-        <dd>{{ user.gender == 1 ? 'Homme' : (user.gender == 2 ? 'Femme' : 'Genre non spécifié') }}</dd>
-    </dl>
-{% endblock %}
+                <dt class="col-sm-4 fw-bold">Email</dt>
+                <dd class="col-sm-8">{{ user.email }}</dd>
 
-{% block title %}
+                <dt class="col-sm-4 fw-bold">Sexe</dt>
+                <dd class="col-sm-8">
+                    {{ user.gender == 1 ? 'Homme' : (user.gender == 2 ? 'Femme' : 'Genre non spécifié') }}
+                </dd>
+            </dl>
+            <a href="{{ path('app_user_update') }}" class="btn btn-primary">Modifier le profil</a>
+        {% endblock %}
+    {% endembed %}
 
 {% endblock %}
