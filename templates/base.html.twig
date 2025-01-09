@@ -33,41 +33,42 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav w-100 d-lg-flex justify-content-between align-items-center flex-lg-row flex-column text-center">
+                <ul class="navbar-nav w-100 d-lg-flex flex-row text-center">
                     {% block nav_item %}
                         {% if is_granted('ROLE_PATIENT') %}
                             <li class="nav-item">
-                                <a class="nav-link active btn btn-outline-light my-2" href="{{ path('app_user_appointments') }}">Mes rendez-vous</a>
+                                <a class="nav-link active btn btn-outline-light mx-1" href="{{ path('app_user_appointments') }}">Mes rendez-vous</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active btn btn-outline-light my-2" href="#">Prendre un rendez-vous</a>
+                                <a class="nav-link active btn btn-outline-light mx-1" href="#">Prendre un rendez-vous</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active btn btn-outline-light my-2" href="{{ path('app_faq') }}">Voir la FAQ</a>
+                                <a class="nav-link active btn btn-outline-light mx-1" href="{{ path('app_faq') }}">Voir la FAQ</a>
                             </li>
                         {% elseif is_granted('ROLE_HEALTH_PROFESSIONAL') %}
                             <li class="nav-item">
-                                <a class="nav-link active btn btn-outline-light my-2" href="{{ path('app_health_professional_calendar') }}">Mes consultations</a>
+                                <a class="nav-link active btn btn-outline-light mx-1" href="{{ path('app_health_professional_calendar') }}">Mes consultations</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active btn btn-outline-light my-2" href="{{ path('app_availability_show', {id: app.user.id}) }}">Voir mes disponibilités</a>
+                                <a class="nav-link active btn btn-outline-light mx-1" href="{{ path('app_availability_show', {id: app.user.id}) }}">Voir mes disponibilités</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active btn btn-outline-light my-2" href="">Réserver matériel</a>
+                                <a class="nav-link active btn btn-outline-light mx-1" href="">Réserver matériel</a>
                             </li>
                         {% endif %}
                         {% if app.user %}
-                            <li class="nav-item">
-                                <a class="nav-link active btn btn-outline-light my-2" href="{{ path('app_logout') }}">Se déconnecter</a>
+                            <li class="nav-item ms-auto"> <!-- Alignement à droite -->
+                                <a class="nav-link active btn btn-outline-light mx-1" href="{{ path('app_logout') }}">Se déconnecter</a>
                             </li>
                         {% else %}
-                            <li class="nav-item">
-                                <a class="nav-link active btn btn-outline-light my-2" href="{{ path('app_login') }}">Se connecter</a>
+                            <li class="nav-item ms-auto"> <!-- Alignement à droite -->
+                                <a class="nav-link active btn btn-outline-light mx-1" href="{{ path('app_login') }}">Se connecter</a>
                             </li>
                         {% endif %}
                     {% endblock %}
                 </ul>
             </div>
+
         </div>
     </nav>
 
