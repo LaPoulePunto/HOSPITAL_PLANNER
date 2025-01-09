@@ -12,12 +12,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
 class PatientController extends AbstractController
 {
-    #[Route('/patient', name: 'app_patient')]
-    public function index(): Response
-    {
-        return $this->render('patient/index.html.twig');
-    }
-
     #[Route('/patient/appointment', name: 'app_user_appointments')]
     public function appointment(ConsultationRepository $consultationRepository): Response
     {
