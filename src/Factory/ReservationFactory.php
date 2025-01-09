@@ -31,8 +31,6 @@ final class ReservationFactory extends PersistentProxyObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
-     *
-     * @todo inject services if required
      */
     public function __construct()
     {
@@ -45,8 +43,6 @@ final class ReservationFactory extends PersistentProxyObjectFactory
 
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
-     *
-     * @todo add your default values here
      */
     protected function defaults(): array|callable
     {
@@ -58,6 +54,8 @@ final class ReservationFactory extends PersistentProxyObjectFactory
         return [
             'startTime' => $startTime,
             'endTime' => $endTime->modify('+30 minutes'),
+            'material' => MaterialFactory::new(),
+            'healthprofessional' => HealthProfessionalFactory::new(),
         ];
     }
 

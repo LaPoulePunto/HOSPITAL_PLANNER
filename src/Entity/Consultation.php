@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\ConsultationRepository;
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -18,13 +17,13 @@ class Consultation
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?DateTimeInterface $date = null;
+    private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?DateTimeInterface $startTime = null;
+    private ?\DateTimeInterface $startTime = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?DateTimeInterface $endTime = null;
+    private ?\DateTimeInterface $endTime = null;
 
     #[ORM\ManyToOne(inversedBy: 'consultation')]
     private ?Room $room = null;
@@ -42,7 +41,7 @@ class Consultation
     private ?string $prescription = null;
 
     #[ORM\Column(type: Types::BLOB, nullable: true)]
-    private $signature = null;
+    private $signature;
 
     public function __construct()
     {
@@ -54,36 +53,36 @@ class Consultation
         return $this->id;
     }
 
-    public function getDate(): ?DateTimeInterface
+    public function getDate(): ?\DateTimeInterface
     {
         return $this->date;
     }
 
-    public function setDate(DateTimeInterface $date): static
+    public function setDate(\DateTimeInterface $date): static
     {
         $this->date = $date;
 
         return $this;
     }
 
-    public function getStartTime(): ?DateTimeInterface
+    public function getStartTime(): ?\DateTimeInterface
     {
         return $this->startTime;
     }
 
-    public function setStartTime(DateTimeInterface $startTime): static
+    public function setStartTime(\DateTimeInterface $startTime): static
     {
         $this->startTime = $startTime;
 
         return $this;
     }
 
-    public function getEndTime(): ?DateTimeInterface
+    public function getEndTime(): ?\DateTimeInterface
     {
         return $this->endTime;
     }
 
-    public function setEndTime(DateTimeInterface $endTime): static
+    public function setEndTime(\DateTimeInterface $endTime): static
     {
         $this->endTime = $endTime;
 

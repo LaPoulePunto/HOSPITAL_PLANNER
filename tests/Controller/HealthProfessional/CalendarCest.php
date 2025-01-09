@@ -2,12 +2,9 @@
 
 namespace App\Tests\Functional;
 
-use App\Entity\Consultation;
-use App\Entity\HealthProfessional;
 use App\Factory\ConsultationFactory;
 use App\Factory\ConsultationTypeFactory;
 use App\Factory\HealthProfessionalFactory;
-use App\Factory\MaterialFactory;
 use App\Factory\PatientFactory;
 use App\Factory\RoomFactory;
 use App\Factory\RoomTypeFactory;
@@ -26,17 +23,17 @@ class HealthProfessionalCalendarCest
         $endTime->modify('+1 hour');
 
         $roomType = RoomTypeFactory::createOne([
-            'label' => 'Salle de Radiologie'
+            'label' => 'Salle de Radiologie',
         ])->_real();
 
         $room = RoomFactory::createOne([
             'floor' => 0,
             'num' => 10,
-            'roomtype' => $roomType
+            'roomtype' => $roomType,
         ])->_real();
 
         $consultationType = ConsultationTypeFactory::createOne([
-            'label' => 'Kinésithérapie'
+            'label' => 'Kinésithérapie',
         ])->_real();
 
         $patient = PatientFactory::createOne([
@@ -64,9 +61,6 @@ class HealthProfessionalCalendarCest
         $entityManager->persist($patient);
         $entityManager->flush();
     }
-
-
-
 
     public function TryToTest(ControllerTester $I): void
     {

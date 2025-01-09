@@ -31,8 +31,6 @@ final class AvailabilityFactory extends PersistentProxyObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
-     *
-     * @todo inject services if required
      */
     public function __construct()
     {
@@ -45,8 +43,6 @@ final class AvailabilityFactory extends PersistentProxyObjectFactory
 
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
-     *
-     * @todo add your default values here
      */
     protected function defaults(): array|callable
     {
@@ -66,6 +62,7 @@ final class AvailabilityFactory extends PersistentProxyObjectFactory
             'startTime' => $startTime,
             'endTime' => $endTime,
             'recurrenceType' => $recurrenceType,
+            'healthprofessional' => HealthProfessionalFactory::new(),
         ];
     }
 

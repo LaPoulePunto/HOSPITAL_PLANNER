@@ -8,7 +8,6 @@ use App\Form\AvailabilityType;
 use App\Repository\AvailabilityRepository;
 use App\Repository\AvailabilitySplitSlotsRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,6 +31,7 @@ class AvailabilityController extends AbstractController
     {
         $recurringAvailabilities = $availabilityRepository->getRecurringAvailabilitiesByHealthProfessional($this->getUser());
         $exceptionalAvailabilities = $availabilityRepository->getFuturNoneRecurringAvailabilitiesByHealthProfessional($this->getUser());
+
         return $this->render('availability/showAll.html.twig', [
             'recurringAvailabilities' => $recurringAvailabilities,
             'exceptionalAvailabilities' => $exceptionalAvailabilities,
@@ -49,15 +49,18 @@ class AvailabilityController extends AbstractController
             try {
                 if ($availability->getEndTime() <= $availability->getStartTime()) {
                     $this->addFlash('error', 'L\'heure de fin ne peut pas être avant ou égale à l\'heure de début.');
+
                     return $this->redirectToRoute('app_availability_create');
                 }
                 $this->createAvailabilitySplitSlots($availability, $entityManager);
                 $entityManager->flush();
+
                 return $this->redirectToRoute('app_availability_show');
-            } catch (Exception) {
+            } catch (\Exception) {
                 echo 'Erreur de création de la disponibilité';
             }
         }
+
         return $this->render('availability/create.html.twig', [
             'form' => $form,
             'recurrenceType' => $availability->getRecurrenceType(),
@@ -77,14 +80,16 @@ class AvailabilityController extends AbstractController
             try {
                 if ($availability->getEndTime() <= $availability->getStartTime()) {
                     $this->addFlash('error', 'L\'heure de fin ne peut pas être avant ou égale à l\'heure de début.');
+
                     return $this->redirectToRoute('app_availability_update');
                 }
-                if ($availability->getRecurrenceType() !== null) {
+                if (null !== $availability->getRecurrenceType()) {
                     $this->createAvailabilitySplitSlots($availability, $entityManager);
                 }
                 $entityManager->flush();
+
                 return $this->redirectToRoute('app_availability_show');
-            } catch (Exception) {
+            } catch (\Exception) {
                 echo 'Erreur de modification de la disponibilité';
             }
         }
@@ -102,7 +107,7 @@ class AvailabilityController extends AbstractController
         EntityManagerInterface $entityManager,
         Request $request,
         AvailabilityRepository $availabilityRepository,
-        AvailabilitySplitSlotsRepository $availabilitySplitSlotsRepository
+        AvailabilitySplitSlotsRepository $availabilitySplitSlotsRepository,
     ): Response {
         // Si type vaut 0, c'est une Availability, sinon c'est une Avai labilitySplitSlots
         if (!$type) {
@@ -120,8 +125,10 @@ class AvailabilityController extends AbstractController
                 $entityManager->remove($entity);
                 $entityManager->flush();
             }
+
             return $this->redirectToRoute('app_availability_show', ['id' => $entity->getId()]);
         }
+
         return $this->render('availability/delete.html.twig', [
             'form' => $form,
         ]);

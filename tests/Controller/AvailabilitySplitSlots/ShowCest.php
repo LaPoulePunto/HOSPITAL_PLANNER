@@ -8,7 +8,6 @@ use App\Factory\AvailabilitySplitSlotsFactory;
 use App\Factory\HealthProfessionalFactory;
 use App\Factory\PatientFactory;
 use App\Tests\Support\ControllerTester;
-use DateTime;
 use Zenstruck\Foundry\Persistence\Proxy;
 
 class ShowCest
@@ -21,37 +20,37 @@ class ShowCest
         $entityManager = $I->grabService('doctrine.orm.entity_manager');
 
         $availabilityExceptional = AvailabilityFactory::createOne([
-            'date' => new DateTime('2034-12-29'),
-            'startTime' => new DateTime('2034-12-29 12:00'),
-            'endTime' => new DateTime('2034-12-29 12:30'),
+            'date' => new \DateTime('2034-12-29'),
+            'startTime' => new \DateTime('2034-12-29 12:00'),
+            'endTime' => new \DateTime('2034-12-29 12:30'),
             'recurrenceType' => null,
         ])->_real();
 
         $availabilityRecurring = AvailabilityFactory::createOne([
-            'date' => new DateTime('2027-12-17'),
-            'startTime' => new DateTime('2027-12-17 10:00'),
-            'endTime' => new DateTime('2027-12-17 11:00'),
+            'date' => new \DateTime('2027-12-17'),
+            'startTime' => new \DateTime('2027-12-17 10:00'),
+            'endTime' => new \DateTime('2027-12-17 11:00'),
             'recurrenceType' => 1,
         ])->_real();
 
         $availabilitySplitSlots1 = AvailabilitySplitSlotsFactory::createOne([
-            'date' => new DateTime('2027-12-17'),
-            'startTime' => new DateTime('2027-12-17 10:00'),
-            'endTime' => new DateTime('2027-12-17 10:30'),
+            'date' => new \DateTime('2027-12-17'),
+            'startTime' => new \DateTime('2027-12-17 10:00'),
+            'endTime' => new \DateTime('2027-12-17 10:30'),
             'availability' => $availabilityRecurring,
         ])->_real();
 
         $availabilitySplitSlots2 = AvailabilitySplitSlotsFactory::createOne([
-            'date' => new DateTime('2027-12-17'),
-            'startTime' => new DateTime('2027-12-17 10:30'),
-            'endTime' => new DateTime('2027-12-17 11:00'),
+            'date' => new \DateTime('2027-12-17'),
+            'startTime' => new \DateTime('2027-12-17 10:30'),
+            'endTime' => new \DateTime('2027-12-17 11:00'),
             'availability' => $availabilityRecurring,
         ])->_real();
 
         $availabilitySplitSlots3 = AvailabilitySplitSlotsFactory::createOne([
-            'date' => new DateTime('2034-12-29'),
-            'startTime' => new DateTime('2034-12-29 12:00'),
-            'endTime' => new DateTime('2034-12-29 12:30'),
+            'date' => new \DateTime('2034-12-29'),
+            'startTime' => new \DateTime('2034-12-29 12:00'),
+            'endTime' => new \DateTime('2034-12-29 12:30'),
             'availability' => $availabilityExceptional,
         ])->_real();
 
@@ -69,7 +68,6 @@ class ShowCest
         $entityManager->persist($this->healthProfessional);
         $entityManager->flush();
     }
-
 
     public function tryToTestWithConnection(ControllerTester $I)
     {

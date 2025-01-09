@@ -2,7 +2,6 @@
 
 namespace App\Tests\Controller\Patient;
 
-use App\Entity\HealthProfessional;
 use App\Factory\ConsultationFactory;
 use App\Factory\HealthProfessionalFactory;
 use App\Factory\PatientFactory;
@@ -63,6 +62,5 @@ class AppointmentCest
         $I->see('02/12/1924');
         $I->see('03/12/1924');
         $I->see('04/12/1924');
-
     }
 }

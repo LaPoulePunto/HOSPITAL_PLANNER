@@ -88,6 +88,7 @@ class UpdateCest
             'lastname' => 'Gillard',
         ]);
     }
+
     public function testHealthProfessionalCannotUpdateAccount(ControllerTester $I): void
     {
         $healthProfessional = HealthProfessionalFactory::createOne(['email' => 'health.pro@example.com']);
@@ -95,5 +96,4 @@ class UpdateCest
         $I->amOnPage('/user/update');
         $I->seeCurrentRouteIs('app_home');
     }
-
 }

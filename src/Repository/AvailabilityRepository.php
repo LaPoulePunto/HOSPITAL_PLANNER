@@ -38,6 +38,7 @@ class AvailabilityRepository extends ServiceEntityRepository
     public function getFuturNoneRecurringAvailabilitiesByHealthProfessional(HealthProfessional $hp)
     {
         $today = new \DateTime();
+
         return $this->createQueryBuilder('a')
             ->innerJoin('a.availabilitySplitSlots', 'slots')
             ->addSelect('slots')

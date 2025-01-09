@@ -49,6 +49,7 @@ final class RoomFactory extends PersistentProxyObjectFactory
         return [
             'floor' => self::faker()->lexify('???'),
             'num' => self::faker()->randomNumber(),
+            'roomtype' => RoomTypeFactory::new(),
         ];
     }
 
