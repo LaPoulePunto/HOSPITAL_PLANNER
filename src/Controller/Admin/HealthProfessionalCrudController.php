@@ -48,7 +48,7 @@ class HealthProfessionalCrudController extends AbstractCrudController
                     return 'Inconnu';
                 })->hideOnForm(),
             TextField::new('login', 'Identifiant')->hideOnIndex(),
-            TextField::new('email', 'Mail')->hideOnIndex(),
+            EmailField::new('email', 'Mail')->hideOnIndex(),
             Field::new('plainPassword', 'Mot de passe')
                 ->onlyOnForms()
                 ->setFormType(PasswordType::class)
@@ -80,13 +80,13 @@ class HealthProfessionalCrudController extends AbstractCrudController
 
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
-        $this->setUserPassword($entityInstance);
+        $this->setHealthProfessionalPassword($entityInstance);
         parent::persistEntity($entityManager, $entityInstance);
     }
 
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
-        $this->setUserPassword($entityInstance);
+        $this->setHealthProfessionalPassword($entityInstance);
         parent::updateEntity($entityManager, $entityInstance);
     }
 
@@ -94,7 +94,7 @@ class HealthProfessionalCrudController extends AbstractCrudController
      * @param $entityInstance
      * @return void
      */
-    public function setUserPassword($entityInstance): void
+    public function setHealthProfessionalPassword($entityInstance): void
     {
         $request = $this->getContext()->getRequest();
 
