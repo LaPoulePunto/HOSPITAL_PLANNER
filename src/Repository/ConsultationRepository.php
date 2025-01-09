@@ -57,22 +57,30 @@ class ConsultationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findConsultationByPatientPastOrFuturReservation(Patient $patient, bool $isFuture)
+    public function findConsultationByPatientPastOrFuturReservation(User $user, bool $isFuture)
     {
         $todayDate = new \DateTime();
         $query = $this->createQueryBuilder('c')
             ->addSelect('c')
-            ->where('c.patient = :id');
-        // Si time vaut true, alors on récupère les consultations futures
+            ->innerJoin('c.healthProfessional', 'hp')
+            ->innerJoin('c.patient', 'p');
+
+        // Health Professional ou patient
+        if (in_array('ROLE_HEALTH_PROFESSIONAL', $user->getRoles())) {
+            $query->where('hp.id = :id');
+        }
+        if (in_array('ROLE_PATIENT', $user->getRoles())) {
+            $query->where('p.id = :id');
+        }
+
+        // Passé ou futur
         if ($isFuture) {
             $query->andWhere('c.date >= :todayDate');
-        }
-        // Sinon, on récupère les passées
-        else {
+        } else {
             $query->andWhere('c.date < :todayDate');
         }
 
-        return $query->setParameter('id', $patient)
+        return $query->setParameter('id', $user)
             ->setParameter('todayDate', $todayDate)
             ->orderBy('c.date', 'ASC')
             ->getQuery()
