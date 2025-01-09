@@ -37,9 +37,7 @@ class CreateCest
         $I->seeResponseCodeIsSuccessful();
 
         // Choisir la date
-        $I->selectOption('consultation_form[date][day]', '15');
-        $I->selectOption('consultation_form[date][month]', '5');
-        $I->selectOption('consultation_form[date][year]', '2025');
+        $I->fillField('consultation_form[date]', '2025-05-15');
 
         // Heure de début
         $I->selectOption('consultation_form[startTime][hour]', '10');
@@ -67,9 +65,7 @@ class CreateCest
         $I->seeResponseCodeIsSuccessful();
 
         // Sélectionner la date de consultation
-        $I->selectOption('consultation_form[date][day]', '15');
-        $I->selectOption('consultation_form[date][month]', '5');
-        $I->selectOption('consultation_form[date][year]', '2025');
+        $I->fillField('consultation_form[date]', '2025-05-15');
 
         // Sélectionner l'heure de début
         $I->selectOption('consultation_form[startTime][hour]', '10');

@@ -43,9 +43,7 @@ class UpdateCest
         $I->seeResponseCodeIsSuccessful();
 
         // Modifier la date
-        $I->selectOption('consultation_form[date][day]', '16');
-        $I->selectOption('consultation_form[date][month]', '5');
-        $I->selectOption('consultation_form[date][year]', '2025');
+        $I->fillField('consultation_form[date]', '2025-05-16');
 
         // Soumettre le formulaire
         $I->click('input[type=submit][value=Modification]');
@@ -65,9 +63,7 @@ class UpdateCest
         $I->seeResponseCodeIsSuccessful();
 
         // Modifier la date
-        $I->selectOption('consultation_form[date][day]', '16');
-        $I->selectOption('consultation_form[date][month]', '5');
-        $I->selectOption('consultation_form[date][year]', '2025');
+        $I->fillField('consultation_form[date]', '2025-05-16');
 
         // Soumettre le formulaire
         $I->click('input[type=submit][value=Modification]');
