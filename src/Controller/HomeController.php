@@ -27,7 +27,7 @@ class HomeController extends AbstractController
     ): Response {
         return $this->render('home/user_home.html.twig', [
             'user' => $user,
-            'consultations' => $consultationRepository->getAllConsultationsByUser($user),
+            'consultations' => $consultationRepository->findConsultationByPatientPastOrFuturReservation($user, true),
         ]);
     }
 
