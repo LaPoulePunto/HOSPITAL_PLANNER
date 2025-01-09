@@ -1,0 +1,24 @@
+{
+  "questions": [
+    {
+      "question": "Comment puis-je réserver une consultation en ligne ?",
+      "answer": "Vous pouvez réserver une consultation en ligne en vous rendant sur notre page de réservation. Sélectionnez votre spécialité, le médecin de votre choix (si vous le souhaitez), et un créneau disponible. Une confirmation vous sera envoyée par email une fois la réservation effectuée."
+    },
+    {
+      "question": "Dois-je créer un compte pour prendre rendez-vous ?",
+      "answer": "Oui, il est nécessaire de créer un compte patient pour accéder à notre service de réservation en ligne. Cela permet de gérer vos rendez-vous et de recevoir des rappels automatiquement."
+    },
+    {
+      "question": "Quels documents dois-je apporter pour ma consultation ?",
+      "answer": "Merci d'apporter votre pièce d'identité, votre carte d'assurance santé, et, si applicable, vos résultats d'examens récents ou votre dossier médical."
+    },
+    {
+      "question": "Avez-vous un parking pour les patients ?",
+      "answer": "Oui, un parking est disponible pour les patients et visiteurs. Les 30 premières minutes sont gratuites, et un tarif horaire est appliqué au-delà."
+    },
+    {
+      "question": "Combien coûte une consultation chez un spécialiste ?",
+      "answer": "Les tarifs varient selon les spécialités et les praticiens. Vous pouvez consulter les tarifs sur notre site dans la section 'Nos médecins' ou directement lors de la réservation en ligne."
+    }
+  ]
+}

@@ -6,86 +6,43 @@
     <link href="{{ asset('/styles/app.css') }}" rel="stylesheet">
 {% endblock %}
 
+{% set compteur = 0 %}
+
 {% block body %}
     <div class="container my-5">
         <h1 class="text-center mb-4">Consultez la Foire aux Questions</h1>
 
-        <!-- Accordéon FAQ -->
-        <div class="accordion" id="faqAccordion">
-            <!-- Question 1 -->
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingOne">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                        Comment puis-je réserver une consultation en ligne ?
-                    </button>
-                </h2>
-                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne">
-                    <div class="accordion-body">
-                        Vous pouvez réserver une consultation en ligne en vous rendant sur notre page de réservation.
-                        Sélectionnez votre spécialité, le médecin de votre choix (si vous le souhaitez), et un créneau disponible.
-                        Une confirmation vous sera envoyée par email une fois la réservation effectuée.
+        {% for faqElmt in faqData %}
+            <div class="accordion" id="faqAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading{{ compteur }}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ compteur }}" aria-expanded="false" aria-controls="collapse{{ compteur }}">
+                            {{ faqElmt.question }}
+                        </button>
+                    </h2>
+                    <div id="collapse{{ compteur }}" class="accordion-collapse collapse" aria-labelledby="heading{{ compteur }}">
+                        <div class="accordion-body">
+                            {{ faqElmt.answer }}
+                        </div>
                     </div>
                 </div>
             </div>
+            {% set compteur = compteur + 1 %}
+        {% endfor %}
+    </div>
 
-            <!-- Question 2 -->
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingTwo">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        Dois-je créer un compte pour prendre rendez-vous ?
-                    </button>
-                </h2>
-                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo">
-                    <div class="accordion-body">
-                        Oui, il est nécessaire de créer un compte patient pour accéder à notre service de réservation en ligne.
-                        Cela permet de gérer vos rendez-vous et de recevoir des rappels automatiquement.
-                    </div>
-                </div>
+    <div class="container my-5">
+        <h2 class="text-center mb-4">Informations de Contact</h2>
+        <p class="text-center">Pour toute question ou assistance supplémentaire, n'hésitez pas à nous contacter :</p>
+        <div class="list text-center">
+            <span class="material-symbols-outlined">call</span>
+            <div>
+                <strong>Numéro de téléphone :</strong> <a href="tel:+33101010101">+33 1 01 01 01 01</a>
             </div>
-
-            <!-- Question 3 -->
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingThree">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        Quels documents dois-je apporter pour ma consultation ?
-                    </button>
-                </h2>
-                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree">
-                    <div class="accordion-body">
-                        Merci d'apporter votre pièce d'identité, votre carte d'assurance santé, et, si applicable, vos résultats d'examens récents ou votre dossier médical.
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 4 -->
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingFour">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                        Avez-vous un parking pour les patients ?
-                    </button>
-                </h2>
-                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour">
-                    <div class="accordion-body">
-                        Oui, un parking est disponible pour les patients et visiteurs. Les 30 premières minutes sont gratuites, et un tarif horaire est appliqué au-delà.
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 5 -->
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingFive">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                        Combien coûte une consultation chez un spécialiste ?
-                    </button>
-                </h2>
-                <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive">
-                    <div class="accordion-body">
-                        Les tarifs varient selon les spécialités et les praticiens.
-                        Vous pouvez consulter les tarifs sur notre site dans la section "Nos médecins" ou directement lors de la réservation en ligne.
-                    </div>
-                </div>
+            <span class="material-symbols-outlined">mail</span>
+            <div>
+                <strong>Email :</strong> <a href="mailto:contact@exemple.com">contact@exemple.com</a>
             </div>
         </div>
     </div>
-
 {% endblock %}
