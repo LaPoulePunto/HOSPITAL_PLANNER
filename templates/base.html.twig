@@ -61,7 +61,7 @@
                         {% if app.user %}
                             <div class="d-flex ms-auto align-items-center">
                                 <li class="nav-item">
-                                    <a href="{{ path('app_logout') }}" class="nav-link active btn btn-outline-light mx-0">Se déconnecter</a>
+                                    <a href="{{ path('app_logout') }}" class="nav-link active btn btn-outline-light mx-0 px-4">Se déconnecter</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link active btn btn-outline-light btn-sm px-2 py-1 mx-1" href="{{ path('app_user_profile') }}">
@@ -71,7 +71,7 @@
                             </div>
                         {% else %}
                             <li class="nav-item ms-auto">
-                                <a class="nav-link active btn btn-outline-light mx-1" href="{{ path('app_login') }}">Se connecter</a>
+                                <a class="nav-link active btn btn-outline-light mx-1 px-4" href="{{ path('app_login') }}">Se connecter</a>
                             </li>
                         {% endif %}
                     {% endblock %}
