@@ -40,6 +40,5 @@ class HealthProfessionalRepository extends ServiceEntityRepository
             ->setParameter('consultationId', $consultationId)
             ->getQuery()
             ->getResult();
-
     }
 }

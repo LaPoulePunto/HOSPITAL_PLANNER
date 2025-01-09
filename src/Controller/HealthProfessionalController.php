@@ -39,6 +39,7 @@ class HealthProfessionalController extends AbstractController
         User $healthProfessional,
     ): Response {
         $consultations = $consultationRepository->getAllConsultationsByUser($healthProfessional);
+
         return $this->render('health_professional/calendar.html.twig', [
             'consultations' => $consultations ?? null,
         ]);

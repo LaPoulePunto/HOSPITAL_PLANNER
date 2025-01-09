@@ -46,13 +46,13 @@ class ConsultationController extends AbstractController
         if ($this->isConsultationConflict($consultation, $consultationRepository)) {
             $this->addFlash('error', 'Une consultation existe déjà à ce créneau.');
         } elseif ($form->isSubmitted() && $form->isValid()) {
-
             $entityManager->persist($consultation);
             $entityManager->flush();
 
             if ($this->isGranted('ROLE_PATIENT')) {
                 return $this->redirectToRoute('app_consultation_select_health_professional', ['id' => $consultation->getId()]);
             }
+
             return $this->redirectToRoute('app_health_professional_calendar');
         }
 
@@ -75,6 +75,7 @@ class ConsultationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+
             return $this->redirectToRoute('app_user_consultations');
         }
 
@@ -89,7 +90,7 @@ class ConsultationController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         int $id,
-        ConsultationRepository $consultationRepository
+        ConsultationRepository $consultationRepository,
     ): Response {
         $user = $this->getUser();
 
@@ -123,6 +124,7 @@ class ConsultationController extends AbstractController
             if ($this->isGranted('ROLE_PATIENT')) {
                 return $this->redirectToRoute('app_user_consultations');
             }
+
             return $this->redirectToRoute('app_health_professional_calendar');
         }
 
@@ -151,6 +153,7 @@ class ConsultationController extends AbstractController
         if ($this->isGranted('ROLE_PATIENT')) {
             return $this->redirectToRoute('app_user_consultations');
         }
+
         return $this->redirectToRoute('app_health_professional_calendar');
     }
 
@@ -164,17 +167,18 @@ class ConsultationController extends AbstractController
             $existingDate = $consultation->getDate();
             $existingStart = $consultation->getStartTime();
             $existingEnd = $consultation->getEndTime();
-            if ($newConsultation->getId() !== $consultation->getId() &&
-                $existingDate == $newConsultation->getDate() &&
-                (
-                    ($newStart >= $existingStart && $newStart < $existingEnd) ||
-                    ($newEnd > $existingStart && $newEnd <= $existingEnd) ||
-                    ($newStart <= $existingStart && $newEnd >= $existingEnd)
+            if ($newConsultation->getId() !== $consultation->getId()
+                && $existingDate == $newConsultation->getDate()
+                && (
+                    ($newStart >= $existingStart && $newStart < $existingEnd)
+                    || ($newEnd > $existingStart && $newEnd <= $existingEnd)
+                    || ($newStart <= $existingStart && $newEnd >= $existingEnd)
                 )
             ) {
                 return true;
             }
         }
+
         return false;
     }
 

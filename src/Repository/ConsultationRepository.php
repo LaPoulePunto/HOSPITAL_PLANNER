@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Consultation;
 use App\Entity\Patient;
-use App\Entity\HealthProfessional;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;

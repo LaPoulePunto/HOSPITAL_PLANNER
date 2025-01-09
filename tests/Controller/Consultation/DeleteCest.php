@@ -13,7 +13,7 @@ use App\Tests\Support\ControllerTester;
 class DeleteCest
 {
     private Patient $patient;
-    private HealthProfessional  $healthProfessional;
+    private HealthProfessional $healthProfessional;
 
     public function _before(ControllerTester $I)
     {
