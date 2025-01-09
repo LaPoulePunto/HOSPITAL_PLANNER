@@ -2,17 +2,18 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\RoomType;
+use App\Entity\Room;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
-class RoomTypeCrudController extends AbstractCrudController
+class RoomCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return RoomType::class;
+        return Room::class;
     }
 
 
@@ -20,7 +21,8 @@ class RoomTypeCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->hideOnForm(),
-            TextField::new('label', 'Nom du type de salle'),
+            Field::new('num', 'Numéro'),
+            TextField::new('floor', 'Étage'),
         ];
     }
 

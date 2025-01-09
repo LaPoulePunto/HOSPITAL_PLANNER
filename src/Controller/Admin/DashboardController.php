@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Room;
 use App\Entity\RoomType;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -44,5 +45,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('User', 'fas fa-user', User::class);
         yield MenuItem::linkToCrud('RoomType', 'fas fa-list', RoomType::class);
+        yield MenuItem::linkToCrud('Room', 'fas fa-list', Room::class);
     }
 }
