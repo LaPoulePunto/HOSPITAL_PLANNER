@@ -55,7 +55,7 @@ class UserCrudController extends AbstractCrudController
                     'Homme' => 0,
                     'Femme' => 1,
                 ]),
-            Field::new('birthDate', 'Date de naissance'),
+            DateField::new('birthDate', 'Date de naissance'),
             ArrayField::new('roles', 'Role')
                 ->formatValue(function (?array $role) {
                     if (in_array('ROLE_ADMIN', $role)) {
