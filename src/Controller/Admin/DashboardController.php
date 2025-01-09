@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\ConsultationType;
 use App\Entity\Material;
 use App\Entity\Reservation;
 use App\Entity\Room;
@@ -52,5 +53,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Material', 'fas fa-list', Material::class);
         yield MenuItem::linkToCrud('Speciality', 'fas fa-list', Speciality::class);
         yield MenuItem::linkToCrud('Reservation', 'fas fa-list', Reservation::class);
+        yield MenuItem::linkToCrud('Consultation Type', 'fas fa-list', ConsultationType::class);
     }
 }
