@@ -42,6 +42,7 @@ class UserController extends AbstractController
             $originalUser = clone $user;
             if ($user instanceof HealthProfessional) {
                 $this->addFlash('error', 'Votre compte peut seulement être mis à jour par un administrateur.');
+
                 return $this->redirectToRoute('app_home');
             }
             $form = $this->createForm(UpdateUserForm::class, $user);

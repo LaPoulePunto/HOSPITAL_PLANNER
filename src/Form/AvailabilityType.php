@@ -20,7 +20,7 @@ class AvailabilityType extends AbstractType
                 'required' => true,
                 'attr' => [
                     'min' => (new \DateTime())->format('Y-m-d'),
-                ]
+                ],
             ])
             ->add('startTime', TimeType::class, [
                 'widget' => 'choice',

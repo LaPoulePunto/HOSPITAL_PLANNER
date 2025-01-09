@@ -38,7 +38,6 @@ class DeleteCest
         $I->amOnPage('/user/delete');
         $I->click('Annuler');
         $I->seeCurrentRouteIs('app_home');
-
     }
 
     public function testDeletePatientAccount(ControllerTester $I)

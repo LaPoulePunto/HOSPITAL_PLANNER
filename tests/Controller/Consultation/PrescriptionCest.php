@@ -31,6 +31,7 @@ class PrescriptionCest
         $I->amOnPage('/consultation/prescription/1');
         $I->seeResponseCodeIs(200);
     }
+
     public function testRequiresAuthentication(ControllerTester $I)
     {
         $I->amOnPage('/consultation/prescription/1');

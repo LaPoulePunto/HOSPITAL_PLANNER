@@ -27,6 +27,7 @@ class PatientController extends AbstractController
         $user = $this->getUser();
         $futurAppointments = $consultationRepository->findConsultationByPatientPastOrFuturReservation($user, true);
         $pastAppointments = $consultationRepository->findConsultationByPatientPastOrFuturReservation($user, false);
+
         return $this->render('patient/appointment.html.twig', [
             'futurAppointments' => $futurAppointments,
             'pastAppointments' => $pastAppointments,

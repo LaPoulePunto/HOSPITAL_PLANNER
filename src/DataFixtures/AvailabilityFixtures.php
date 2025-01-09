@@ -48,7 +48,7 @@ class AvailabilityFixtures extends Fixture implements DependentFixtureInterface
                     }
                 }
 
-                $isRecurring = (bool)rand(0, 1);
+                $isRecurring = (bool) rand(0, 1);
                 $recurrenceType = null;
 
                 if ($isRecurring) {

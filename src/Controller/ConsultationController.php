@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Consultation;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Dompdf\Dompdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,7 +28,7 @@ class ConsultationController extends AbstractController
     public function prescription(
         Consultation $consultation,
         Request $request,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
     ): Response {
         if (!in_array($this->getUser(), $consultation->getHealthprofessional()->toArray())) {
             throw $this->createAccessDeniedException('Ces consultations ne sont pas les vôtres');
@@ -53,6 +52,7 @@ class ConsultationController extends AbstractController
 
             return $this->redirectToRoute('app_health_professional_calendar');
         }
+
         return $this->render('consultation/prescription.html.twig', [
             'form' => $form,
             'consultation' => $consultation,
@@ -61,7 +61,7 @@ class ConsultationController extends AbstractController
 
     public function HTMLToPDF(Consultation $consultation): Response
     {
-        $date = new DateTime();
+        $date = new \DateTime();
         $html = $this->renderView('consultation/prescription_pdf.html.twig', [
             'date' => $date,
             'consultation' => $consultation,
@@ -72,6 +72,7 @@ class ConsultationController extends AbstractController
         $dompdf->setPaper('A4');
         $dompdf->render();
         $pdfContent = $dompdf->output();
+
         return new Response($pdfContent, 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'attachment; filename="ordonnance.pdf"',
