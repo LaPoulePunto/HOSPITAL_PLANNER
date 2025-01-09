@@ -167,7 +167,7 @@ class ConsultationController extends AbstractController
             $existingDate = $consultation->getDate();
             $existingStart = $consultation->getStartTime();
             $existingEnd = $consultation->getEndTime();
-            if ($newConsultation->getId() !== $consultation->getId()
+            if (($newConsultation->getId() === null || $newConsultation->getId() !== $consultation->getId())
                 && $existingDate == $newConsultation->getDate()
                 && (
                     ($newStart >= $existingStart && $newStart < $existingEnd)
