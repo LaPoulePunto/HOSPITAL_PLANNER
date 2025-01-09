@@ -6,6 +6,7 @@ use App\Entity\Patient;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
@@ -58,6 +59,11 @@ class PatientCrudController extends AbstractCrudController
                         'autocomplete' => 'new-password',
                     ],
                 ]),
+            ChoiceField::new('gender', 'Genre')
+                ->setChoices([
+                    'Homme' => 0,
+                    'Femme' => 1,
+                ]),
             DateField::new('birthDate', 'Date de naissance'),
             TextField::new('city', 'Ville')
                 ->setHelp('La ville ne peut pas dépasser 32 caractères.'),
@@ -84,6 +90,17 @@ class PatientCrudController extends AbstractCrudController
                 ->hideOnIndex(),
             TextareaField::new('treatments', 'Traitements')
                 ->hideOnIndex(),
+            ArrayField::new('roles', 'Role')
+                ->formatValue(function (?array $role) {
+                    if (in_array('ROLE_ADMIN', $role)) {
+                        return '<span class="material-symbols-outlined">shield_person</span>';
+                    } elseif (in_array('ROLE_PATIENT', $role)) {
+                        return '<span class="material-symbols-outlined">personal_injury</span>';
+                    } elseif (in_array('ROLE_HEALTH_PROFESSIONAL', $role)) {
+                        return '<span class="material-symbols-outlined">medical_information</span>';
+                    }
+                    return '';
+                })->hideOnIndex(),
         ];
     }
 
