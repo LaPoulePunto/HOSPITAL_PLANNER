@@ -6,6 +6,7 @@ use App\Entity\Availability;
 use App\Entity\Consultation;
 use App\Entity\ConsultationType;
 use App\Entity\Material;
+use App\Entity\Patient;
 use App\Entity\Reservation;
 use App\Entity\Room;
 use App\Entity\RoomType;
@@ -50,6 +51,7 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('User', 'fas fa-user', User::class);
+        yield MenuItem::linkToCrud('Patient', 'fas fa-user', Patient::class);
         yield MenuItem::linkToCrud('RoomType', 'fas fa-list', RoomType::class);
         yield MenuItem::linkToCrud('Room', 'fas fa-list', Room::class);
         yield MenuItem::linkToCrud('Material', 'fas fa-list', Material::class);
