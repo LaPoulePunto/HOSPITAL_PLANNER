@@ -6,17 +6,13 @@ use App\Entity\HealthProfessional;
 use App\Entity\User;
 use App\Repository\SpecialityRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -31,11 +27,11 @@ class HealthProfessionalCrudController extends AbstractCrudController
         $this->passwordHasher = $passwordHasher;
         $this->specialityRepository = $specialityRepository;
     }
+
     public static function getEntityFqcn(): string
     {
         return HealthProfessional::class;
     }
-
 
     public function configureFields(string $pageName): iterable
     {
@@ -51,6 +47,7 @@ class HealthProfessionalCrudController extends AbstractCrudController
                     if ($entity instanceof User) {
                         return $entity->getFullName();
                     }
+
                     return 'Inconnu';
                 })->hideOnForm(),
             TextField::new('login', 'Identifiant')->hideOnIndex(),
@@ -86,6 +83,7 @@ class HealthProfessionalCrudController extends AbstractCrudController
                     } elseif (in_array('ROLE_HEALTH_PROFESSIONAL', $role)) {
                         return '<span class="material-symbols-outlined">medical_information</span>';
                     }
+
                     return '';
                 })->hideOnIndex(),
         ];
@@ -115,10 +113,6 @@ class HealthProfessionalCrudController extends AbstractCrudController
         parent::updateEntity($entityManager, $entityInstance);
     }
 
-    /**
-     * @param $entityInstance
-     * @return void
-     */
     public function setHealthProfessionalPassword($entityInstance): void
     {
         $request = $this->getContext()->getRequest();
@@ -131,5 +125,4 @@ class HealthProfessionalCrudController extends AbstractCrudController
             $entityInstance->setPassword($hashedPassword);
         }
     }
-
 }
