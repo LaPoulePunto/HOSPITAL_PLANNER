@@ -61,10 +61,9 @@ class ConsultationRepository extends ServiceEntityRepository
         $todayDate = new \DateTime();
         $query = $this->createQueryBuilder('c')
             ->leftJoin('c.healthProfessional', 'hp')
+            ->leftJoin('c.patient', 'p')
             ->addSelect('hp')
-            ->addSelect('c')
-            ->innerJoin('c.healthProfessional', 'hp')
-            ->innerJoin('c.patient', 'p');
+            ->addSelect('c');
 
         // Health Professional ou patient
         if (in_array('ROLE_HEALTH_PROFESSIONAL', $user->getRoles())) {
