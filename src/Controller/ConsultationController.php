@@ -46,6 +46,11 @@ class ConsultationController extends AbstractController
         if ($this->isConsultationConflict($consultation, $consultationRepository)) {
             $this->addFlash('error', 'Une consultation existe déjà à ce créneau.');
         } elseif ($form->isSubmitted() && $form->isValid()) {
+            if ($consultation->getEndTime() <= $consultation->getStartTime()) {
+                $this->addFlash('error', 'L\'heure de fin ne peut pas être avant ou égale à l\'heure de début.');
+
+                return $this->redirectToRoute('app_consultation_create');
+            }
             $entityManager->persist($consultation);
             $entityManager->flush();
 
@@ -93,7 +98,6 @@ class ConsultationController extends AbstractController
         ConsultationRepository $consultationRepository,
     ): Response {
         $user = $this->getUser();
-
         $repository = $entityManager->getRepository(Consultation::class);
         if ($user instanceof Patient) {
             $consultation = $repository->find($id);
@@ -116,11 +120,14 @@ class ConsultationController extends AbstractController
 
         $form = $this->createForm(ConsultationFormType::class, $consultation);
         $form->handleRequest($request);
-        if ($this->isConsultationConflict($consultation, $consultationRepository)) {
+        if ($consultation->getEndTime() <= $consultation->getStartTime()) {
+            $this->addFlash('error', 'L\'heure de fin ne peut pas être avant ou égale à l\'heure de début.');
+
+            return $this->redirectToRoute('app_consultation_create');
+        } elseif ($this->isConsultationConflict($consultation, $consultationRepository)) {
             $this->addFlash('error', 'Une consultation existe déjà à ce créneau.');
         } elseif ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
             if ($this->isGranted('ROLE_PATIENT')) {
                 return $this->redirectToRoute('app_user_consultations');
             }
@@ -167,7 +174,7 @@ class ConsultationController extends AbstractController
             $existingDate = $consultation->getDate();
             $existingStart = $consultation->getStartTime();
             $existingEnd = $consultation->getEndTime();
-            if (($newConsultation->getId() === null || $newConsultation->getId() !== $consultation->getId())
+            if ((null === $newConsultation->getId() || $newConsultation->getId() !== $consultation->getId())
                 && $existingDate == $newConsultation->getDate()
                 && (
                     ($newStart >= $existingStart && $newStart < $existingEnd)

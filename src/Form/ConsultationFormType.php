@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -29,7 +30,13 @@ class ConsultationFormType extends AbstractType
     {
         $user = $this->security->getUser();
         $builder
-            ->add('date')
+            ->add('date', DateType::class, [
+                'widget' => 'single_text',
+                'required' => true,
+                'attr' => [
+                    'min' => (new \DateTime())->format('Y-m-d'),
+                ],
+            ])
             ->add('startTime', TimeType::class, [
                 'widget' => 'choice',
                 'input' => 'datetime',
