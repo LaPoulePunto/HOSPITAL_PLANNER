@@ -3,50 +3,48 @@
 {% block title %}Se connecter{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="card shadow p-4 col-md-6">
-                <h2 class="mb-4 text-center">Connectez-vous</h2>
+    {% embed '_card.html.twig' %}
+        {% block content %}
+            <h2 class="mb-4 text-center">Connectez-vous</h2>
 
-                <form method="post" name="login_form">
+            <form method="post" name="login_form">
 
-                    {% if error %}
-                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                    {% endif %}
+                {% if error %}
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
 
-                    <div class="form-floating">
-                        <input placeholder="Email"
-                               type="email"
-                               value="{{ last_username }}"
-                               name="email"
-                               id="inputEmail"
-                               class="form-control mb-4"
-                               autocomplete="email"
-                               required autofocus>
-                        <label for="inputEmail">Email</label>
-                    </div>
+                <div class="form-floating">
+                    <input placeholder="Email"
+                           type="email"
+                           value="{{ last_username }}"
+                           name="email"
+                           id="inputEmail"
+                           class="form-control mb-4"
+                           autocomplete="email"
+                           required autofocus>
+                    <label for="inputEmail">Email</label>
+                </div>
 
-                    <div class="form-floating">
-                        <input placeholder="Mot de passe"
-                               type="password"
-                               name="password"
-                               id="inputPassword"
-                               class="form-control"
-                               autocomplete="current-password"
-                               required>
-                        <label for="inputPassword">Mot de passe</label>
-                    </div>
+                <div class="form-floating">
+                    <input placeholder="Mot de passe"
+                           type="password"
+                           name="password"
+                           id="inputPassword"
+                           class="form-control"
+                           autocomplete="current-password"
+                           required>
+                    <label for="inputPassword">Mot de passe</label>
+                </div>
 
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-                    <button class="btn btn-lg btn-danger mt-4" type="submit">
-                        Se connecter
-                    </button>
-                </form>
+                <button class="btn btn-lg btn-danger mt-4" type="submit">
+                    Se connecter
+                </button>
+            </form>
 
-                <a href="{{ path('app_register') }}">Pas encore de compte ?</a>
-            </div>
-        </div>
-    </div>
+            <a href="{{ path('app_register') }}">Pas encore de compte ?</a>
+        {% endblock %}
+    {% endembed %}
 
 {% endblock %}
