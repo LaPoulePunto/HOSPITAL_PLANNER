@@ -42,7 +42,8 @@ class ConsultationRepository extends ServiceEntityRepository
             ->innerJoin('c.consultationType', 'ct')
             ->innerJoin('c.room', 'r')
             ->innerJoin('r.roomType', 'rt')
-            ->addSelect('hp', 'p', 'ct', 'r', 'rt');
+            ->addSelect('hp', 'p', 'ct', 'r', 'rt')
+            ->orderBy('c.date', 'DESC');
 
         if (in_array('ROLE_HEALTH_PROFESSIONAL', $user->getRoles())) {
             $qb->where('hp.id = :id');
@@ -52,8 +53,8 @@ class ConsultationRepository extends ServiceEntityRepository
         }
 
         return $qb->setParameter('id', $user->getId())
-        ->getQuery()
-        ->getResult();
+            ->getQuery()
+            ->getResult();
     }
 
     public function findConsultationByPatientPastOrFuturReservation(Patient $patient, bool $isFuture)
