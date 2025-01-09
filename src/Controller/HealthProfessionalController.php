@@ -17,12 +17,17 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class HealthProfessionalController extends AbstractController
 {
     #[Route('/health-professional/patient-file/{patientId}', name: 'app_display_patient_file', requirements: ['patientId' => '\d+'])]
-    public function displayPatientFile(PatientRepository $patientRepository, int $patientId): Response
+    public function displayPatientFile(ConsultationRepository $consultationRepository, PatientRepository $patientRepository, int $patientId): Response
     {
         $patient = $patientRepository->getPatientById($patientId);
 
+        $pastAppointments = $consultationRepository->findConsultationByPatientPastOrFuturReservation($patient, false);
+        $futureAppointments = $consultationRepository->findConsultationByPatientPastOrFuturReservation($patient, true);
+
         return $this->render('health_professional/display_patient_file.html.twig', [
             'patient' => $patient,
+            'pastAppointments' => $pastAppointments,
+            'futureAppointments' => $futureAppointments,
         ]);
     }
 
