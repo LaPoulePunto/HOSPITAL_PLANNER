@@ -6,6 +6,7 @@ use App\Factory\ConsultationFactory;
 use App\Factory\HealthProfessionalFactory;
 use App\Factory\PatientFactory;
 use App\Tests\Support\ControllerTester;
+use PHPUnit\Framework\Assert;
 
 class DisplayPatientFileCest
 {
@@ -80,5 +81,18 @@ class DisplayPatientFileCest
         $I->see('Allergies : Arachide');
         $I->see('Traitements suivis : Pas de traitement renseigné');
         $I->see('Commentaires : Pas de commentaire laissé');
+    }
+
+    public function ConsultationsAreSortedByDateTest(ControllerTester $I)
+    {
+        $I->amOnPage('/health-professional/patient-file/'.$this->patient->getId());
+        $I->seeNumberOfElements('ul>li.list-group-item', 3);
+        $actualOrder = $I->grabMultiple('li.list-group-item');
+        $expectedOrder = [
+            'Consultera Médecin Généraliste Rogue Severus le : 01/12/2030',
+            'A consulté Chirurgien Ombrage Dolores le : 01/12/1940',
+            'A consulté Kinésithérapeute McGonagall Minerva le : 01/12/1930',
+        ];
+        Assert::assertEquals($expectedOrder, $actualOrder);
     }
 }
