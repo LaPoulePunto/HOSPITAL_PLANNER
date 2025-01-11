@@ -43,9 +43,7 @@ class ConsultationController extends AbstractController
         $form = $this->createForm(ConsultationFormType::class, $consultation);
         $form->handleRequest($request);
 
-        if ($this->isConsultationConflict($consultation, $consultationRepository)) {
-            $this->addFlash('error', 'Une consultation existe déjà à ce créneau.');
-        } elseif ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             if ($consultation->getEndTime() <= $consultation->getStartTime()) {
                 $this->addFlash('error', 'L\'heure de fin ne peut pas être avant ou égale à l\'heure de début.');
 
@@ -71,7 +69,7 @@ class ConsultationController extends AbstractController
     #[IsGranted('ROLE_PATIENT')]
     public function chooseHealthProfessional(Consultation $consultation, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $healthProfessionals = $entityManager->getRepository(HealthProfessional::class)->getAllHealthProfessionalPossible($consultation->getId());
+        $healthProfessionals = $entityManager->getRepository(HealthProfessional::class)->getAllHealthProfessionalPossible($consultation);
 
         $form = $this->createForm(ChooseHealthProfessionalType::class, $consultation, [
             'health_professionals' => $healthProfessionals,

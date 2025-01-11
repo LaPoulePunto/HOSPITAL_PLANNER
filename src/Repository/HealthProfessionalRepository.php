@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Consultation;
 use App\Entity\HealthProfessional;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -29,15 +30,22 @@ class HealthProfessionalRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function getAllHealthProfessionalPossible(int $consultationId): array
+    public function getAllHealthProfessionalPossible(Consultation $consultation): array
     {
         return $this->createQueryBuilder('hp')
             ->innerJoin('hp.speciality', 's')
             ->innerJoin('s.consultationTypes', 'ct')
             ->innerJoin('ct.consultation', 'c')
-            ->select('hp, s, ct')
+            ->innerJoin('hp.availability', 'a')
+            ->select('hp, s, ct, a')
             ->where('c.id = :consultationId')
-            ->setParameter('consultationId', $consultationId)
+            ->andWhere('a.date = :date')
+            ->andWhere('a.startTime <= :startTime')
+            ->andWhere('a.endTime >= :endTime')
+            ->setParameter('consultationId', $consultation->getId())
+            ->setParameter('date', $consultation->getDate()->format('Y-m-d'))
+            ->setParameter('startTime', $consultation->getStartTime()->format('H:i:s'))
+            ->setParameter('endTime', $consultation->getEndTime()->format('H:i:s'))
             ->getQuery()
             ->getResult();
     }
