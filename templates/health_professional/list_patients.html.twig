@@ -14,18 +14,16 @@
 
         <div class="row">
             {% if patients|length > 0 %}
-                <div class="col-12">
+                <div class="col-8 mx-auto">
                     <div class="list-group">
                         {% for patient in patients %}
                             <a href="{{ path('app_display_patient_file', {patientId: patient.id}) }}"
                                class="list-group-item list-group-item-action
-                               d-md-flex justify-content-between align-items-center">
-                                <div>
-                                    {{ patient.gender == 0 ? 'M.' : 'Mme.' }}
-                                    <strong class="text-primary">{{ patient.lastname }}</strong
-                                    >, {{ patient.firstname }}
-                                </div>
-                            </a>
+                               d-md-flex justify-content-between align-items-center"><div
+                                >{{ patient.gender == 0 ? 'Mme' : 'M.' }} <strong class="text-primary"
+                                    >{{ patient.lastname }}</strong
+                                    >, {{ patient.firstname }}</div
+                                ></a>
                         {% endfor %}
                     </div>
                 </div>
