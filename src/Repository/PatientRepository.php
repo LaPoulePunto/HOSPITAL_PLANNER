@@ -33,12 +33,14 @@ class PatientRepository extends ServiceEntityRepository
     public function findPatientsByHealthProfessional($healthProfessionalId)
     {
         return $this->createQueryBuilder('p')
+            ->select('DISTINCT p')
             ->join('p.consultation', 'c')
             ->join('c.healthProfessional', 'hp')
             ->where('hp.id = :healthProfessionalId')
             ->setParameter('healthProfessionalId', $healthProfessionalId)
+            ->orderBy('p.lastname')
             ->getQuery()
-            ->execute();
+            ->getResult();
     }
 
     //    /**
