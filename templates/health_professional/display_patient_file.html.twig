@@ -23,7 +23,7 @@
                     <div class="card-body">
                         <dl class="row">
                             <dt class="col-sm-5">Date de naissance :</dt>
-                            <dd class="col-sm-7">{{ patient.birthDate ? patient.birthDate|date('j F Y') : '<i>Pas de date de naissance renseignée</i>' }}</dd>
+                            <dd class="col-sm-7">{{ patient.birthDate ? patient.birthDate|date('d/m/Y') : '<i>Pas de date de naissance renseignée</i>' }}</dd>
 
                             <dt class="col-sm-5">Groupe sanguin :</dt>
                             <dd class="col-sm-7">{{ patient.bloodGroup ? patient.bloodGroup : '<i>Pas de groupe sanguin renseigné</i>' }}</dd>
@@ -50,12 +50,33 @@
                     <div class="card-body">
                         {% if patient.consultation|length > 0 %}
                             <ul class="list-group">
-                                {% for consultation in patient.consultation %}
+                                {% for futureAppointment in futureAppointments %}
+                                    {% set healthprofessionalArray = [] %}
                                     <li class="list-group-item
-                                    d-flex justify-content-between align-items-center">
-                                        A consulté le :
-                                        <span class="badge bg-success">{{ consultation.date|date('d/m/Y') }}</span>
-                                    </li>
+                                    d-flex justify-content-between align-items-center"
+                                    >Consultera {% for healthprofessional in futureAppointment.healthprofessional
+                                        %}{% set healthprofessionalArray = healthprofessionalArray|merge(
+                                                [healthprofessional.job ~ ' ' ~ healthprofessional.lastname ~ ' ' ~ healthprofessional.firstname]
+                                            ) %}{%
+                                            endfor %}{{ healthprofessionalArray|join(', ')
+                                        }} le : <span class="badge bg-success"
+                                        >{{ futureAppointment.date|date('d/m/Y') }}</span
+                                    ></li>
+                                {% endfor %}
+
+                                {% for pastAppointment in pastAppointments|reverse %}
+                                    {% set healthprofessionalArray = [] %}
+                                    <li class="list-group-item
+                                    d-flex justify-content-between align-items-center"
+                                    >A consulté {%
+                                            for healthprofessional in pastAppointment.healthprofessional
+                                        %}{% set healthprofessionalArray = healthprofessionalArray|merge(
+                                            [healthprofessional.job ~ ' ' ~ healthprofessional.lastname ~ ' ' ~ healthprofessional.firstname]
+                                        ) %}{%
+                                            endfor %}{{ healthprofessionalArray|join(', ')
+                                        }} le : <span class="badge bg-success"
+                                        >{{ pastAppointment.date|date('d/m/Y') }}</span
+                                        ></li>
                                 {% endfor %}
                             </ul>
                         {% else %}
