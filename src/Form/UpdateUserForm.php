@@ -16,11 +16,6 @@ class UpdateUserForm extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => 'Adresse e-mail',
             ])
-            ->add('currentPassword', PasswordType::class, [
-                'label' => 'Mot de passe actuel',
-                'mapped' => false,
-                'required' => true,
-            ])
             ->add('password', PasswordType::class, [
                 'label' => 'Nouveau mot de passe',
                 'required' => false,
