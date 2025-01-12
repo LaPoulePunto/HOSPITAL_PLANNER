@@ -50,34 +50,8 @@
                     <div class="card-body">
                         {% if patient.consultation|length > 0 %}
                             <ul class="list-group">
-                                {% for futureAppointment in futureAppointments %}
-                                    {% set healthprofessionalArray = [] %}
-                                    <li class="list-group-item
-                                    d-flex justify-content-between align-items-center"
-                                    >Consultera {% for healthprofessional in futureAppointment.healthprofessional
-                                        %}{% set healthprofessionalArray = healthprofessionalArray|merge(
-                                                [healthprofessional.job ~ ' ' ~ healthprofessional.lastname ~ ' ' ~ healthprofessional.firstname]
-                                            ) %}{%
-                                            endfor %}{{ healthprofessionalArray|join(', ')
-                                        }} le : <span class="badge bg-success"
-                                        >{{ futureAppointment.date|date('d/m/Y') }}</span
-                                    ></li>
-                                {% endfor %}
-
-                                {% for pastAppointment in pastAppointments|reverse %}
-                                    {% set healthprofessionalArray = [] %}
-                                    <li class="list-group-item
-                                    d-flex justify-content-between align-items-center"
-                                    >A consulté {%
-                                            for healthprofessional in pastAppointment.healthprofessional
-                                        %}{% set healthprofessionalArray = healthprofessionalArray|merge(
-                                            [healthprofessional.job ~ ' ' ~ healthprofessional.lastname ~ ' ' ~ healthprofessional.firstname]
-                                        ) %}{%
-                                            endfor %}{{ healthprofessionalArray|join(', ')
-                                        }} le : <span class="badge bg-success"
-                                        >{{ pastAppointment.date|date('d/m/Y') }}</span
-                                        ></li>
-                                {% endfor %}
+                                {{ include('health_professional/_display_patient_file.html.twig', {appointments: futureAppointments, appointmentType: 'future'}) }}
+                                {{ include('health_professional/_display_patient_file.html.twig', {appointments: pastAppointments|reverse, appointmentType: 'past'}) }}
                             </ul>
                         {% else %}
                             <p>Aucune consultation trouvée.</p>
