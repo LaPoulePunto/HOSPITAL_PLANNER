@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Consultation;
 use App\Entity\HealthProfessional;
-use App\Entity\Patient;
 use App\Form\ChooseHealthProfessionalType;
 use App\Form\ConsultationFormType;
 use App\Repository\ConsultationRepository;
@@ -92,40 +91,25 @@ class ConsultationController extends AbstractController
     public function update(
         Request $request,
         EntityManagerInterface $entityManager,
-        int $id,
-        ConsultationRepository $consultationRepository,
+        Consultation $consultation,
     ): Response {
         $user = $this->getUser();
-        $repository = $entityManager->getRepository(Consultation::class);
-        if ($user instanceof Patient) {
-            $consultation = $repository->find($id);
-        } elseif ($user instanceof HealthProfessional) {
-            $query = $repository->createQueryBuilder('c')
-                ->innerJoin('c.healthProfessional', 'hp')
-                ->where('c.id = :id')
-                ->andWhere('hp.id = :userId')
-                ->setParameter('id', $id)
-                ->setParameter('userId', $user->getId())
-                ->getQuery();
-            $consultation = $query->getOneOrNullResult();
-        } else {
-            throw $this->createAccessDeniedException('Accès refusé.');
-        }
 
-        if (!$consultation) {
+        if (!$this->canEditConsultation($consultation, $user)) {
             throw $this->createNotFoundException('Aucune consultation trouvée pour cet ID et cet utilisateur.');
         }
 
         $form = $this->createForm(ConsultationFormType::class, $consultation);
         $form->handleRequest($request);
+
         if ($consultation->getEndTime() <= $consultation->getStartTime()) {
             $this->addFlash('error', 'L\'heure de fin ne peut pas être avant ou égale à l\'heure de début.');
-
             return $this->redirectToRoute('app_consultation_create');
-        } elseif ($this->isConsultationConflict($consultation, $consultationRepository)) {
-            $this->addFlash('error', 'Une consultation existe déjà à ce créneau.');
-        } elseif ($form->isSubmitted() && $form->isValid()) {
+        }
+
+        if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+
             if ($this->isGranted('ROLE_PATIENT')) {
                 return $this->redirectToRoute('app_user_consultations');
             }
@@ -139,12 +123,24 @@ class ConsultationController extends AbstractController
         ]);
     }
 
+    private function canEditConsultation(Consultation $consultation, $user): bool
+    {
+        if ($user === $consultation->getPatient()) {
+            return true;
+        }
+        foreach ($consultation->getHealthProfessional() as $healthProfessional) {
+            if ($user === $healthProfessional) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     #[Route('/consultation/{id}/delete', name: 'app_consultation_delete')]
     #[IsGranted('ROLE_USER')]
     public function delete(int $id, EntityManagerInterface $entityManager): Response
     {
-        $user = $this->getUser();
-
         $consultationRepository = $entityManager->getRepository(Consultation::class);
 
         $consultation = $consultationRepository->find($id);

@@ -21,7 +21,14 @@ class UpdateCest
     {
         $this->patient = PatientFactory::createOne()->_real();
         $this->healthProfessional = HealthProfessionalFactory::createOne()->_real();
-        $this->consultation = ConsultationFactory::createOne()
+
+        $startTime = new \DateTime();
+        $endTime = new \DateTime();
+        $this->consultation = ConsultationFactory::createOne([
+            'patient' => $this->patient,
+            'start_time' => $startTime->setTime(10, 0),
+            'end_time' => $endTime->setTime(10, 30),
+        ])
             ->_real()
             ->addHealthprofessional($this->healthProfessional);
 
