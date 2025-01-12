@@ -6,6 +6,15 @@
 **Thibault Martin** (mart0495)\
 **Nathan Villette** (vill0127)
 
+## Description du projet
+Notre projet porte sur la gestion du planning d’un hôpital, en particulier sur le plateau technique de rééducation en Soins Médicaux et de Réadaptation (SMR) du CHU Sébastopol.\
+Ce plateau mobilise divers professionnels, comme des kinésithérapeutes, ergothérapeutes, et enseignants en activités physiques adaptées, ainsi que des ressources matérielles et locales spécifiques.
+
+Actuellement, la planification des rendez-vous repose sur un outil Excel, qui, bien que flexible, montre ses limites face à la croissance de l'activité et à la complexité croissante des besoins des patients.
+
+L’objectif principal de ce projet est de concevoir et développer une application web capable de prendre en compte l’ensemble des contraintes des acteurs et des ressources, et d’automatiser efficacement la gestion des plannings.
+
+
 ## Voir le projet
 
 Le projet est disponible à l'adresse suivante (avec le vpn activé):\
