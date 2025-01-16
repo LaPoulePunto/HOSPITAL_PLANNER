@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Consultation;
 use App\Entity\HealthProfessional;
+use App\Entity\User;
 use App\Form\ChooseHealthProfessionalType;
 use App\Form\ConsultationFormType;
 use App\Repository\ConsultationRepository;
@@ -48,7 +49,7 @@ class ConsultationController extends AbstractController
 
                 return $this->redirectToRoute('app_consultation_create');
             }
-            if ($this->isConsultationConflict($consultation, $consultationRepository)) {
+            if ($this->isConsultationConflict($consultation, $consultationRepository, $user)) {
                 $this->addFlash('error', 'Le créneau de cette consultation est déjà réservé.');
 
                 return $this->redirectToRoute('app_consultation_create');
@@ -57,7 +58,9 @@ class ConsultationController extends AbstractController
             $entityManager->flush();
 
             if ($this->isGranted('ROLE_PATIENT')) {
-                return $this->redirectToRoute('app_consultation_select_health_professional', ['id' => $consultation->getId()]);
+                return $this->redirectToRoute('app_consultation_select_health_professional', [
+                    'id' => $consultation->getId(),
+                ]);
             }
 
             return $this->redirectToRoute('app_health_professional_calendar');
@@ -74,7 +77,13 @@ class ConsultationController extends AbstractController
     public function chooseHealthProfessional(Consultation $consultation, Request $request, EntityManagerInterface $entityManager): Response
     {
         $healthProfessionals = $entityManager->getRepository(HealthProfessional::class)->getAllHealthProfessionalPossible($consultation);
+        if (empty($healthProfessionals)) {
+            $entityManager->remove($consultation);
+            $entityManager->flush();
+            $this->addFlash('error', 'Aucun professionnel de santé adapté disponible à cette heure');
 
+            return $this->redirectToRoute('app_consultation_create');
+        }
         $form = $this->createForm(ChooseHealthProfessionalType::class, $consultation, [
             'health_professionals' => $healthProfessionals,
         ]);
@@ -113,7 +122,8 @@ class ConsultationController extends AbstractController
 
             return $this->redirectToRoute('app_consultation_update');
         }
-        if ($this->isConsultationConflict($consultation, $consultationRepository)) {
+        if ($this->isConsultationConflict($consultation, $consultationRepository, $user)
+        || $this->isConsultationConflict($consultation, $consultationRepository, $consultation->getHealthprofessional()[0])) {
             $this->addFlash('error', 'Un créneau à cette horaire est déjà réservé');
 
             return $this->redirectToRoute('app_consultation_update', ['id' => $consultation->getId()]);
@@ -169,9 +179,10 @@ class ConsultationController extends AbstractController
         return $this->redirectToRoute('app_health_professional_calendar');
     }
 
-    public function isConsultationConflict(Consultation $newConsultation, ConsultationRepository $consultationRepository): bool
-    {
-        $user = $this->getUser();
+    public function isConsultationConflict(Consultation $newConsultation,
+        ConsultationRepository $consultationRepository,
+        User $user,
+    ): bool {
         $newStart = $newConsultation->getStartTime();
         $newEnd = $newConsultation->getEndTime();
         $consultations = $consultationRepository->getAllConsultationsByUser($user);
