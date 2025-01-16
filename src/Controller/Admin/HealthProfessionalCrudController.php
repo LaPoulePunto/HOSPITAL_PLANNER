@@ -5,9 +5,11 @@ namespace App\Controller\Admin;
 use App\Entity\HealthProfessional;
 use App\Entity\User;
 use App\Repository\SpecialityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
@@ -20,12 +22,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class HealthProfessionalCrudController extends AbstractCrudController
 {
     private UserPasswordHasherInterface $passwordHasher;
-    private SpecialityRepository $specialityRepository;
 
     public function __construct(UserPasswordHasherInterface $passwordHasher, SpecialityRepository $specialityRepository)
     {
         $this->passwordHasher = $passwordHasher;
-        $this->specialityRepository = $specialityRepository;
     }
 
     public static function getEntityFqcn(): string
@@ -35,7 +35,6 @@ class HealthProfessionalCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        $specialityChoices = $this->getSpecialityChoices();
 
         return [
             IdField::new('id')->hideOnForm(),
@@ -71,9 +70,20 @@ class HealthProfessionalCrudController extends AbstractCrudController
             DateField::new('birthDate', 'Date de naissance'),
             DateField::new('hiringDate', 'Date d\'embauche')->setRequired(false),
             DateField::new('departureDate', 'Date de départ')->setRequired(false),
-            ChoiceField::new('job', 'Métier')
-                ->setChoices($specialityChoices)
-                ->setRequired(true),
+            AssociationField::new('speciality', 'Spécialités')
+                ->setFormTypeOption('multiple', true)
+                ->setFormTypeOption('by_reference', false)
+                ->setFormTypeOption('choice_label', function ($speciality) {
+                    return $speciality ? $speciality->getLabel() : '';
+                })
+                ->setRequired(true)
+                ->formatValue(function (?Collection $specialities) {
+                    if ($specialities && $specialities->count() > 0) {
+                        return implode(', ', $specialities->map(fn ($speciality) => $speciality->getLabel())->toArray());
+                    }
+
+                    return 'Aucune spécialité';
+                }),
             ArrayField::new('roles', 'Role')
                 ->formatValue(function (?array $role) {
                     if (in_array('ROLE_ADMIN', $role)) {
@@ -89,17 +99,6 @@ class HealthProfessionalCrudController extends AbstractCrudController
         ];
     }
 
-    private function getSpecialityChoices(): array
-    {
-        $jobs = $this->specialityRepository->findAll();
-
-        $choices = [];
-        foreach ($jobs as $job) {
-            $choices[$job->getLabel()] = $job->getId();
-        }
-
-        return $choices;
-    }
 
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
