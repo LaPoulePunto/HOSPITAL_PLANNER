@@ -48,6 +48,11 @@ class ConsultationController extends AbstractController
 
                 return $this->redirectToRoute('app_consultation_create');
             }
+            if ($this->isConsultationConflict($consultation, $consultationRepository)) {
+                $this->addFlash('error', 'Le créneau de cette consultation est déjà réservé.');
+
+                return $this->redirectToRoute('app_consultation_create');
+            }
             $entityManager->persist($consultation);
             $entityManager->flush();
 
@@ -92,6 +97,7 @@ class ConsultationController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         Consultation $consultation,
+        ConsultationRepository $consultationRepository,
     ): Response {
         $user = $this->getUser();
 
@@ -104,9 +110,14 @@ class ConsultationController extends AbstractController
 
         if ($consultation->getEndTime() <= $consultation->getStartTime()) {
             $this->addFlash('error', 'L\'heure de fin ne peut pas être avant ou égale à l\'heure de début.');
-            return $this->redirectToRoute('app_consultation_create');
-        }
 
+            return $this->redirectToRoute('app_consultation_update');
+        }
+        if ($this->isConsultationConflict($consultation, $consultationRepository)) {
+            $this->addFlash('error', 'Un créneau à cette horaire est déjà réservé');
+
+            return $this->redirectToRoute('app_consultation_update', ['id' => $consultation->getId()]);
+        }
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
@@ -133,9 +144,9 @@ class ConsultationController extends AbstractController
                 return true;
             }
         }
+
         return false;
     }
-
 
     #[Route('/consultation/{id}/delete', name: 'app_consultation_delete')]
     #[IsGranted('ROLE_USER')]
