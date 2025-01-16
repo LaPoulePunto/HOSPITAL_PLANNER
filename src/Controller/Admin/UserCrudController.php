@@ -67,7 +67,36 @@ class UserCrudController extends AbstractCrudController
                     }
 
                     return '';
-                }),
+                })->hideOnForm(),
+            ChoiceField::new('roles', 'Rôles')
+                ->setChoices([
+                    'ROLE_ADMIN' => 'Administrateur',
+                    'ROLE_PATIENT' => 'Patient',
+                    'Professionel de santé' => 'ROLE_HEALTH_PROFESSIONAL',
+                    'Utilisateur' => 'ROLE_USER',
+                ])
+                ->allowMultipleChoices(true)
+                ->setFormTypeOption('expanded', true)
+                ->setFormTypeOption('multiple', true)
+                ->setFormTypeOption('by_reference', false)
+                ->setFormTypeOption('constraints', [
+                    new \Symfony\Component\Validator\Constraints\Callback(function ($roles, $context) {
+                        if (count($roles) > 2) {
+                            $context->buildViolation('Vous ne pouvez sélectionner que 2 rôles maximum.')
+                                ->addViolation();
+                        }
+                    }),
+                ])
+                ->formatValue(function ($roles) {
+                    $roleLabels = [
+                        'ROLE_ADMIN' => 'Administrateur',
+                        'ROLE_PATIENT' => 'Patient',
+                        'ROLE_HEALTH_PROFESSIONAL' => 'Professionel de santé',
+                        'ROLE_USER' => 'Utilisateur',
+                    ];
+
+                    return implode(', ', array_map(fn ($role) => $roleLabels[$role] ?? $role, $roles));
+                })->hideOnIndex(),
             BooleanField::new('isVerified', 'Compte vérifié'),
         ];
     }

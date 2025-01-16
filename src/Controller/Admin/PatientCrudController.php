@@ -6,7 +6,6 @@ use App\Entity\Patient;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
@@ -44,6 +43,7 @@ class PatientCrudController extends AbstractCrudController
                     if ($entity instanceof User) {
                         return $entity->getFullName();
                     }
+
                     return 'Inconnu';
                 })->hideOnForm(),
             TextField::new('login', 'Identifiant')->hideOnIndex(),
@@ -90,16 +90,35 @@ class PatientCrudController extends AbstractCrudController
                 ->hideOnIndex(),
             TextareaField::new('treatments', 'Traitements')
                 ->hideOnIndex(),
-            ArrayField::new('roles', 'Role')
-                ->formatValue(function (?array $role) {
-                    if (in_array('ROLE_ADMIN', $role)) {
-                        return '<span class="material-symbols-outlined">shield_person</span>';
-                    } elseif (in_array('ROLE_PATIENT', $role)) {
-                        return '<span class="material-symbols-outlined">personal_injury</span>';
-                    } elseif (in_array('ROLE_HEALTH_PROFESSIONAL', $role)) {
-                        return '<span class="material-symbols-outlined">medical_information</span>';
-                    }
-                    return '';
+            ChoiceField::new('roles', 'Rôles')
+                ->setChoices([
+                    'Patient' => 'ROLE_PATIENT',
+                    'Utilisateur' => 'ROLE_USER',
+                ])
+                ->allowMultipleChoices(true)
+                ->setFormTypeOption('expanded', true)
+                ->setFormTypeOption('multiple', true)
+                ->setFormTypeOption('by_reference', false)
+                ->setFormTypeOption('data', ['ROLE_PATIENT', 'ROLE_USER'])
+                ->setFormTypeOption('constraints', [
+                    new \Symfony\Component\Validator\Constraints\Callback(function ($roles, $context) {
+                        if (count($roles) > 2) {
+                            $context->buildViolation('Vous ne pouvez sélectionner que 2 rôles maximum.')
+                                ->addViolation();
+                        }
+                        if (!in_array('ROLE_PATIENT', $roles, true) || !in_array('ROLE_USER', $roles, true)) {
+                            $context->buildViolation('Les rôles "Patient" et "Utilisateur" sont obligatoires.')
+                                ->addViolation();
+                        }
+                    }),
+                ])
+                ->formatValue(function ($roles) {
+                    $roleLabels = [
+                        'ROLE_PATIENT' => 'Patient',
+                        'ROLE_USER' => 'Utilisateur',
+                    ];
+
+                    return implode(', ', array_map(fn ($role) => $roleLabels[$role] ?? $role, $roles));
                 })->hideOnIndex(),
         ];
     }
@@ -116,10 +135,6 @@ class PatientCrudController extends AbstractCrudController
         parent::updateEntity($entityManager, $entityInstance);
     }
 
-    /**
-     * @param $entityInstance
-     * @return void
-     */
     public function setUserPassword($entityInstance): void
     {
         $request = $this->getContext()->getRequest();

@@ -84,17 +84,35 @@ class HealthProfessionalCrudController extends AbstractCrudController
 
                     return 'Aucune spécialité';
                 }),
-            ArrayField::new('roles', 'Role')
-                ->formatValue(function (?array $role) {
-                    if (in_array('ROLE_ADMIN', $role)) {
-                        return '<span class="material-symbols-outlined">shield_person</span>';
-                    } elseif (in_array('ROLE_PATIENT', $role)) {
-                        return '<span class="material-symbols-outlined">personal_injury</span>';
-                    } elseif (in_array('ROLE_HEALTH_PROFESSIONAL', $role)) {
-                        return '<span class="material-symbols-outlined">medical_information</span>';
-                    }
+            ChoiceField::new('roles', 'Rôles')
+                ->setChoices([
+                    'Professionel de santé' => 'ROLE_HEALTH_PROFESSIONAL',
+                    'Utilisateur' => 'ROLE_USER',
+                ])
+                ->allowMultipleChoices(true)
+                ->setFormTypeOption('expanded', true)
+                ->setFormTypeOption('multiple', true)
+                ->setFormTypeOption('by_reference', false)
+                ->setFormTypeOption('data', ['ROLE_HEALTH_PROFESSIONAL', 'ROLE_USER'])
+                ->setFormTypeOption('constraints', [
+                    new \Symfony\Component\Validator\Constraints\Callback(function ($roles, $context) {
+                        if (count($roles) > 2) {
+                            $context->buildViolation('Vous ne pouvez sélectionner que 2 rôles maximum.')
+                                ->addViolation();
+                        }
+                        if (!in_array('ROLE_HEALTH_PROFESSIONAL', $roles, true) || !in_array('ROLE_USER', $roles, true)) {
+                            $context->buildViolation('Les rôles "Professionel de santé" et "Utilisateur" sont obligatoires.')
+                                ->addViolation();
+                        }
+                    }),
+                ])
+                ->formatValue(function ($roles) {
+                    $roleLabels = [
+                        'ROLE_HEALTH_PROFESSIONAL' => 'Professionel de santé',
+                        'ROLE_USER' => 'Utilisateur',
+                    ];
 
-                    return '';
+                    return implode(', ', array_map(fn ($role) => $roleLabels[$role] ?? $role, $roles));
                 })->hideOnIndex(),
         ];
     }
