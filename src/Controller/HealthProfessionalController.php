@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\HealthProfessional;
 use App\Entity\User;
+use App\Repository\AvailabilityRepository;
 use App\Repository\ConsultationRepository;
 use App\Repository\PatientRepository;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
@@ -36,12 +38,15 @@ class HealthProfessionalController extends AbstractController
         ConsultationRepository $consultationRepository,
         #[CurrentUser]
         #[MapEntity(disabled: true)]
-        User $healthProfessional,
+        HealthProfessional $healthProfessional,
+        AvailabilityRepository $availabilityRepository,
     ): Response {
         $consultations = $consultationRepository->getAllConsultationsByUser($healthProfessional);
+        $availabilities = $availabilityRepository->findBy(['healthProfessional' => $healthProfessional]);
 
         return $this->render('health_professional/calendar.html.twig', [
-            'consultations' => $consultations ?? null,
+            'consultations' => $consultations,
+            'availabilities' => $availabilities,
         ]);
     }
 

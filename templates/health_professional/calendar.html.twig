@@ -7,8 +7,7 @@
 {% block javascripts %}
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
     <script type="module">
-        import {calendar} from "/js/calendarConfig.js";
-        import { addEventSource } from "/js/calendarConfig.js";
+        import {calendar, addEventSource} from "/js/calendarConfig.js";
         document.addEventListener('DOMContentLoaded', function () {
 
             addEventSource([
@@ -22,6 +21,18 @@
                         start: '{{ consultation.date|date('Y-m-d') }}T{{ consultation.startTime|date('H:i:s') }}',
                         end: '{{ consultation.date|date('Y-m-d') }}T{{ consultation.endTime|date('H:i:s') }}',
                         button: 'modifier'
+                    },
+                    {% endfor %}
+                {% endif %}
+            ]);
+            addEventSource([
+                {% if availabilities is not null %}
+                    {% for availability in availabilities %}
+                    {
+                        id: {{ availability.id }},
+                        start: '{{ availability.date|date('Y-m-d') }}T{{ availability.startTime|date('H:i:s') }}',
+                        end: '{{ availability.date|date('Y-m-d') }}T{{ availability.endTime|date('H:i:s') }}',
+                        display: 'background',
                     },
                     {% endfor %}
                 {% endif %}
@@ -82,6 +93,10 @@
                 <a href="#" class="btn btn-outline-danger mb-3 w-100">
                     Réserver du matériel
                 </a>
+            </div>
+            <div>
+                <button class="btn btn-success btn disabled"></button>
+                <b>Le fond en vert représente vos disponibilités</b>
             </div>
             <div id="calendar"></div>
         </div>
