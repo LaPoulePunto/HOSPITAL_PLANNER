@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Consultation;
 use App\Entity\HealthProfessional;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -21,28 +22,31 @@ class HealthProfessionalRepository extends ServiceEntityRepository
         parent::__construct($registry, HealthProfessional::class);
     }
 
-    //    /**
-    //     * @return HealthProfessionnal[] Returns an array of HealthProfessionnal objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('h')
-    //            ->andWhere('h.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('h.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function getAllActiveHealthProfessional()
+    {
+        return $this->createQueryBuilder('hp')
+            ->where('hp.departureDate IS NULL')
+            ->getQuery()
+            ->getResult();
+    }
 
-    //    public function findOneBySomeField($value): ?HealthProfessionnal
-    //    {
-    //        return $this->createQueryBuilder('h')
-    //            ->andWhere('h.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function getAllHealthProfessionalPossible(Consultation $consultation): array
+    {
+        return $this->createQueryBuilder('hp')
+            ->innerJoin('hp.speciality', 's')
+            ->innerJoin('s.consultationTypes', 'ct')
+            ->innerJoin('ct.consultation', 'c')
+            ->innerJoin('hp.availability', 'a')
+            ->select('hp, s, ct, a')
+            ->where('c.id = :consultationId')
+            ->andWhere('a.date = :date')
+            ->andWhere('a.startTime <= :startTime')
+            ->andWhere('a.endTime >= :endTime')
+            ->setParameter('consultationId', $consultation->getId())
+            ->setParameter('date', $consultation->getDate()->format('Y-m-d'))
+            ->setParameter('startTime', $consultation->getStartTime()->format('H:i:s'))
+            ->setParameter('endTime', $consultation->getEndTime()->format('H:i:s'))
+            ->getQuery()
+            ->getResult();
+    }
 }

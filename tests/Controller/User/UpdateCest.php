@@ -13,7 +13,7 @@ class UpdateCest
     public function testGeneralPageStructure(ControllerTester $I): void
     {
         $patient = PatientFactory::createOne([]);
-        $I->amLoggedInAs($patient->object());
+        $I->amLoggedInAs($patient->_real());
         $I->amOnPage('/user/update');
         $I->seeCurrentRouteIs('app_user_update');
 
@@ -34,7 +34,7 @@ class UpdateCest
     public function testUpdateEmailSuccessfully(ControllerTester $I)
     {
         $patient = PatientFactory::createOne(['email' => 'old.email@example.com']);
-        $I->amLoggedInAs($patient->object());
+        $I->amLoggedInAs($patient->_real());
         $I->amOnPage('/user/update');
 
         $I->fillField('update_user_form[email]', 'new.email@example.com');
@@ -51,7 +51,7 @@ class UpdateCest
     public function testUpdatePasswordSuccessfully(ControllerTester $I)
     {
         $patient = PatientFactory::createOne([]);
-        $I->amLoggedInAs($patient->object());
+        $I->amLoggedInAs($patient->_real());
         $I->amOnPage('/user/update');
 
         $I->fillField('update_user_form[password]', 'new_password');
@@ -76,7 +76,7 @@ class UpdateCest
             'firstName' => 'Jérôme',
             'lastname' => 'Cutrona',
         ]);
-        $I->amLoggedInAs($patient->object());
+        $I->amLoggedInAs($patient->_real());
         $I->amOnPage('/user/update');
 
         $I->fillField('update_user_form[firstname]', 'Didier');
@@ -92,7 +92,7 @@ class UpdateCest
     public function testHealthProfessionalCannotUpdateAccount(ControllerTester $I): void
     {
         $healthProfessional = HealthProfessionalFactory::createOne(['email' => 'health.pro@example.com']);
-        $I->amLoggedInAs($healthProfessional->object());
+        $I->amLoggedInAs($healthProfessional->_real());
         $I->amOnPage('/user/update');
         $I->seeCurrentRouteIs('app_home');
     }

@@ -12,19 +12,22 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
 class PatientController extends AbstractController
 {
-    #[Route('/patient/appointment', name: 'app_user_appointments')]
-    public function appointment(ConsultationRepository $consultationRepository): Response
+    #[Route('/patient', name: 'app_patient')]
+    public function index(): Response
     {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
-        $user = $this->getUser();
-        $futurAppointments = $consultationRepository->findConsultationByPatientPastOrFuturReservation($user, true);
-        $pastAppointments = $consultationRepository->findConsultationByPatientPastOrFuturReservation($user, false);
+        return $this->render('patient/index.html.twig');
+    }
 
-        return $this->render('patient/appointment.html.twig', [
-            'futurAppointments' => $futurAppointments,
-            'pastAppointments' => $pastAppointments,
+    #[Route('/patient/consultation', name: 'app_user_consultations')]
+    public function consultation(ConsultationRepository $consultationRepository): Response
+    {
+        $user = $this->getUser();
+        $futurConsultations = $consultationRepository->findConsultationByPatientPastOrFuturReservation($user, true);
+        $pastConsultations = $consultationRepository->findConsultationByPatientPastOrFuturReservation($user, false);
+
+        return $this->render('patient/consultation.html.twig', [
+            'futurConsultations' => $futurConsultations,
+            'pastConsultations' => $pastConsultations,
         ]);
     }
 }

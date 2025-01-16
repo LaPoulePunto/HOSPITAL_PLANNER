@@ -12,8 +12,8 @@
         document.addEventListener('DOMContentLoaded', function () {
 
             addEventSource([
-                {% if appointments is not null %}
-                    {% for consultation in appointments %}
+                {% if consultations is not null %}
+                    {% for consultation in consultations %}
                     {
                         id: '{{ consultation.id }}',
                         title: 'PATIENT : {{ consultation.patient.lastname|upper }} {{ consultation.patient.firstname
@@ -21,15 +21,69 @@
                         }} | ÉTAGE : {{ consultation.room.floor }} | TYPE DE SALLE : {{ consultation.room.roomtype.label }}',
                         start: '{{ consultation.date|date('Y-m-d') }}T{{ consultation.startTime|date('H:i:s') }}',
                         end: '{{ consultation.date|date('Y-m-d') }}T{{ consultation.endTime|date('H:i:s') }}',
+                        button: 'modifier'
                     },
                     {% endfor %}
                 {% endif %}
             ]);
             calendar.render();
+            calendar.on('eventClick', function(info) {
+                const consultationDetails = `
+            ${info.event.title}<br>
+            <strong>Date :</strong> ${info.event.start.toLocaleString()}
+        `;
+
+                Swal.fire({
+                    title: 'Détail de la consultation',
+                    html: consultationDetails,
+                    icon: 'info',
+                    showCancelButton: true,
+                    showDenyButton: true,
+                    confirmButtonText: 'Modifier',
+                    cancelButtonText: 'OK',
+                    confirmButtonColor: '#A9A9A9',
+                    cancelButtonColor: '#3085d6',
+                    denyButtonText: 'Supprimer',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '{{ path('app_consultation_update', {id: 'consultation_id'}) }}'.replace('consultation_id', info.event.id);
+                    } else if (result.isDenied) {
+                        Swal.fire({
+                            title: 'Êtes-vous sûr ?',
+                            text: "Cette action est irréversible !",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#3085d6',
+                            confirmButtonText: 'Oui, supprimer',
+                            cancelButtonText: 'Annuler'
+                        }).then((deleteResult) => {
+                            if (deleteResult.isConfirmed) {
+                                window.location.href = '{{ path('app_consultation_delete', {id: 'consultation_id'}) }}'.replace('consultation_id', info.event.id);
+                            }
+                        });
+                    }
+                });
+            });
         });
     </script>
 {% endblock %}
 
 {% block body %}
-    <div id='calendar'></div>
+    <div class="container mt-5 mb-5">
+        <div class="card shadow p-4">
+            <div class="d-flex flex-column align-items-start mb-3">
+                <a href="{{ path('app_consultation_create') }}" class="btn btn-outline-danger mb-3 w-100">
+                    Ajouter une nouvelle consultation
+                </a>
+                <a href="{{ path('app_availability_show') }}" class="btn btn-outline-danger mb-3 w-100">
+                    Voir mes disponibilités
+                </a>
+                <a href="#" class="btn btn-outline-danger mb-3 w-100">
+                    Réserver du matériel
+                </a>
+            </div>
+            <div id="calendar"></div>
+        </div>
+    </div>
 {% endblock %}

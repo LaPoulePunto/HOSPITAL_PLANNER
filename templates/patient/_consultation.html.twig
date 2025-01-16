@@ -4,6 +4,9 @@
         <th>Heure de Début</th>
         <th>Heure de Fin</th>
         <th>Praticien</th>
+        {% if type == 'future' %}
+            <th>Actions</th>
+        {% endif %}
     </tr>
     {% if appointments is not empty %}
         {% for appointment in appointments %}
@@ -26,6 +29,12 @@
                     {% endfor %}
                     {{ healthprofessionalArray|join(', ') }}
                 </td>
+                {% if appointment.date > date() %}
+                    <td>
+                        <a href="{{ path('app_consultation_update', {id: appointment.id}) }}" class="text-primary" title="Modifier"><span class="material-symbols-outlined">edit</span></a>
+                        <a href="{{ path('app_consultation_delete', {id: appointment.id}) }}" class="text-danger" title="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette consultation ?')"><span class="material-symbols-outlined">delete</span></a>
+                    </td>
+                {% endif %}
             </tr>
         {% endfor %}
     {% else %}

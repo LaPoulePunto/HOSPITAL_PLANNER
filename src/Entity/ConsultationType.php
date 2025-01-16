@@ -18,7 +18,7 @@ class ConsultationType
     #[ORM\Column(length: 32)]
     private ?string $label = null;
 
-    #[ORM\OneToMany(targetEntity: Consultation::class, mappedBy: 'consultationtype')]
+    #[ORM\OneToMany(targetEntity: Consultation::class, mappedBy: 'consultationType')]
     private Collection $consultation;
 
     #[ORM\ManyToOne(inversedBy: 'consultationTypes')]

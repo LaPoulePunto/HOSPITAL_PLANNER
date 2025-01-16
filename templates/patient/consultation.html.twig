@@ -6,12 +6,18 @@
 
 {% block body %}
     <div class="container mt-5">
+        <a href="{{ path('app_consultation_create') }}"
+           class="btn btn-outline-danger mb-3">
+            Ajouter une nouvelle consultation
+        </a>
+
         <div class="row">
             <div class="col-lg-6 col-12 mb-4">
                 <div class="card shadow p-4">
                     <h2>Mes consultations futures</h2>
                     <div class="table-responsive">
-                        {{ include('patient/_appointment.html.twig', {appointments: futurAppointments}) }}
+                        {{ include('patient/_consultation.html.twig',
+                            {appointments: futurConsultations, type: 'future'}, with_context = false) }}
                     </div>
                 </div>
             </div>
@@ -20,7 +26,8 @@
                 <div class="card shadow p-4">
                     <h2>Mes consultations passées</h2>
                     <div class="table-responsive">
-                        {{ include('patient/_appointment.html.twig', {appointments: pastAppointments}) }}
+                        {{ include('patient/_consultation.html.twig',
+                            {appointments: pastConsultations, type: 'past'}, with_context = false) }}
                     </div>
                 </div>
             </div>

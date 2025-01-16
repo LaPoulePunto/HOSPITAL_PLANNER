@@ -3,6 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Consultation;
+use App\Entity\HealthProfessional;
+use App\Entity\User;
+use App\Form\ChooseHealthProfessionalType;
+use App\Form\ConsultationFormType;
+use App\Repository\ConsultationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Dompdf\Dompdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,6 +25,184 @@ class ConsultationController extends AbstractController
         return $this->render('consultation/index.html.twig', [
             'controller_name' => 'ConsultationController',
         ]);
+    }
+
+    #[Route('/consultation/create', name: 'app_consultation_create')]
+    #[IsGranted('ROLE_USER')]
+    public function create(Request $request, EntityManagerInterface $entityManager, ConsultationRepository $consultationRepository): Response
+    {
+        $user = $this->getUser();
+        $consultation = new Consultation();
+
+        if ($this->isGranted('ROLE_PATIENT')) {
+            $consultation->setPatient($user);
+        } else {
+            $consultation->addHealthprofessional($user);
+        }
+
+        $form = $this->createForm(ConsultationFormType::class, $consultation);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($consultation->getEndTime() <= $consultation->getStartTime()) {
+                $this->addFlash('error', 'L\'heure de fin ne peut pas être avant ou égale à l\'heure de début.');
+
+                return $this->redirectToRoute('app_consultation_create');
+            }
+            if ($this->isConsultationConflict($consultation, $consultationRepository, $user)) {
+                $this->addFlash('error', 'Le créneau de cette consultation est déjà réservé.');
+
+                return $this->redirectToRoute('app_consultation_create');
+            }
+            $entityManager->persist($consultation);
+            $entityManager->flush();
+
+            if ($this->isGranted('ROLE_PATIENT')) {
+                return $this->redirectToRoute('app_consultation_select_health_professional', [
+                    'id' => $consultation->getId(),
+                ]);
+            }
+
+            return $this->redirectToRoute('app_health_professional_calendar');
+        }
+
+        return $this->render('consultation/create.html.twig', [
+            'form' => $form,
+            'user' => $user,
+        ]);
+    }
+
+    #[Route('/consultation/select-health-professional/{id}', name: 'app_consultation_select_health_professional', requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_PATIENT')]
+    public function chooseHealthProfessional(Consultation $consultation, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $healthProfessionals = $entityManager->getRepository(HealthProfessional::class)->getAllHealthProfessionalPossible($consultation);
+        if (empty($healthProfessionals)) {
+            $entityManager->remove($consultation);
+            $entityManager->flush();
+            $this->addFlash('error', 'Aucun professionnel de santé adapté disponible à cette heure');
+
+            return $this->redirectToRoute('app_consultation_create');
+        }
+        $form = $this->createForm(ChooseHealthProfessionalType::class, $consultation, [
+            'health_professionals' => $healthProfessionals,
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_user_consultations');
+        }
+
+        return $this->render('consultation/select_health_professional.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/consultation/{id}/update', name: 'app_consultation_update')]
+    #[IsGranted('ROLE_USER')]
+    public function update(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        Consultation $consultation,
+        ConsultationRepository $consultationRepository,
+    ): Response {
+        $user = $this->getUser();
+
+        if (!$this->canEditConsultation($consultation, $user)) {
+            throw $this->createNotFoundException('Aucune consultation trouvée pour cet ID et cet utilisateur.');
+        }
+
+        $form = $this->createForm(ConsultationFormType::class, $consultation);
+        $form->handleRequest($request);
+
+        if ($consultation->getEndTime() <= $consultation->getStartTime()) {
+            $this->addFlash('error', 'L\'heure de fin ne peut pas être avant ou égale à l\'heure de début.');
+
+            return $this->redirectToRoute('app_consultation_update');
+        }
+        if ($this->isConsultationConflict($consultation, $consultationRepository, $user)
+        || $this->isConsultationConflict($consultation, $consultationRepository, $consultation->getHealthprofessional()[0])) {
+            $this->addFlash('error', 'Un créneau à cette horaire est déjà réservé');
+
+            return $this->redirectToRoute('app_consultation_update', ['id' => $consultation->getId()]);
+        }
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            if ($this->isGranted('ROLE_PATIENT')) {
+                return $this->redirectToRoute('app_user_consultations');
+            }
+
+            return $this->redirectToRoute('app_health_professional_calendar');
+        }
+
+        return $this->render('consultation/update.html.twig', [
+            'form' => $form,
+            'patient' => $user,
+        ]);
+    }
+
+    private function canEditConsultation(Consultation $consultation, $user): bool
+    {
+        if ($user === $consultation->getPatient()) {
+            return true;
+        }
+        foreach ($consultation->getHealthProfessional() as $healthProfessional) {
+            if ($user === $healthProfessional) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    #[Route('/consultation/{id}/delete', name: 'app_consultation_delete')]
+    #[IsGranted('ROLE_USER')]
+    public function delete(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $consultationRepository = $entityManager->getRepository(Consultation::class);
+
+        $consultation = $consultationRepository->find($id);
+
+        if (!$consultation) {
+            throw $this->createNotFoundException('Rendez-vous non trouvé.');
+        }
+
+        $entityManager->remove($consultation);
+        $entityManager->flush();
+        if ($this->isGranted('ROLE_PATIENT')) {
+            return $this->redirectToRoute('app_user_consultations');
+        }
+
+        return $this->redirectToRoute('app_health_professional_calendar');
+    }
+
+    public function isConsultationConflict(Consultation $newConsultation,
+        ConsultationRepository $consultationRepository,
+        User $user,
+    ): bool {
+        $newStart = $newConsultation->getStartTime();
+        $newEnd = $newConsultation->getEndTime();
+        $consultations = $consultationRepository->getAllConsultationsByUser($user);
+        foreach ($consultations as $consultation) {
+            $existingDate = $consultation->getDate();
+            $existingStart = $consultation->getStartTime();
+            $existingEnd = $consultation->getEndTime();
+            if ((null === $newConsultation->getId() || $newConsultation->getId() !== $consultation->getId())
+                && $existingDate == $newConsultation->getDate()
+                && (
+                    ($newStart >= $existingStart && $newStart < $existingEnd)
+                    || ($newEnd > $existingStart && $newEnd <= $existingEnd)
+                    || ($newStart <= $existingStart && $newEnd >= $existingEnd)
+                )
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     #[IsGranted('ROLE_HEALTH_PROFESSIONAL')]

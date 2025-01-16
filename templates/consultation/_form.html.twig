@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ titlePage }}
+{% endblock %}
+
+{% block body %}
+    {% embed '_card.html.twig' %}
+        {% block content %}
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-danger" role="alert">{{ message }}</div>
+                    {% endfor %}
+                {% endfor %}
+                <h1>{{ titlePage }}</h1>
+                {{ form_start(form) }}
+                    {{ form_row(form.date, {label: 'Date de consultation'}) }}
+                    {{ form_row(form.startTime, {label: 'Heure de début'}) }}
+                    {{ form_row(form.endTime, {label: 'Heure de fin'}) }}
+                    {{ form_row(form.consultationType, {label: 'Type de consultation'}) }}
+                {% if is_granted('ROLE_HEALTH_PROFESSIONAL') %}
+                    {{ form_row(form.patient, {label: 'Patient'}) }}
+                    {{ form_row(form.room, {label: 'Salle de consultation'}) }}
+                {% endif %}
+                <input type="submit" value="{{ submit_label }}" class="btn btn-primary" />
+                {{ form_end(form) }}
+        {% endblock %}
+    {% endembed %}
+{% endblock %}

@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Consultation;
-use App\Entity\HealthProfessional;
 use App\Entity\Patient;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -34,7 +33,7 @@ class ConsultationRepository extends ServiceEntityRepository
         ;
     }
 
-    public function getAllConsultationsByUser(User|Patient|HealthProfessional $user)
+    public function getAllConsultationsByUser(User $user): array
     {
         $qb = $this->createQueryBuilder('c')
             ->innerJoin('c.healthProfessional', 'hp')
@@ -61,16 +60,17 @@ class ConsultationRepository extends ServiceEntityRepository
     {
         $todayDate = new \DateTime();
         $query = $this->createQueryBuilder('c')
+            ->leftJoin('c.healthProfessional', 'hp')
+            ->leftJoin('c.patient', 'p')
+            ->addSelect('hp')
             ->addSelect('c');
 
-        // Professionnel de santé ou patient
+        // Health Professional ou patient
         if (in_array('ROLE_HEALTH_PROFESSIONAL', $user->getRoles())) {
-            $query->innerJoin('c.healthProfessional', 'hp')
-                ->where('hp.id = :id');
+            $query->where('hp.id = :id');
         }
         if (in_array('ROLE_PATIENT', $user->getRoles())) {
-            $query->innerJoin('c.patient', 'p')
-                ->where('p.id = :id');
+            $query->where('p.id = :id');
         }
 
         // Passé ou futur
