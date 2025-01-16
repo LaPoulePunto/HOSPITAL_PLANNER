@@ -21,10 +21,20 @@ class ReservationCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             Field::new('startTime', 'Début'),
             Field::new('endTime', 'Fin'),
-            AssociationField::new('material', 'Matériel')->formatValue(function ($value) {
-                return $value ? $value->getLabel() : '';
-            }),
-            AssociationField::new('healthProfessional', 'Professionnel de santé')
+            AssociationField::new('material', 'Matériel')
+                ->setFormTypeOption('by_reference', false)
+                ->setFormTypeOption('choice_label', function ($material) {
+                    return $material ? $material->getLabel() : '';
+                })
+                ->formatValue(function ($value) {
+                    return $value ? $value->getLabel() : '';
+                }),
+            AssociationField::new('healthProfessional', 'Professionnels de santé')
+                ->setFormTypeOption('multiple', true)
+                ->setFormTypeOption('by_reference', false)
+                ->setFormTypeOption('choice_label', function ($healthProfessional) {
+                    return $healthProfessional ? $healthProfessional->getFullName() : '';
+                })
                 ->formatValue(function ($value) {
                     return $value ? $value->getFullName() : null;
                 }),
