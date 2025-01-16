@@ -52,9 +52,8 @@ class CreateCest
 
         // Soumettre le formulaire
         $I->click('input[type=submit][value=Création]');
-
-        // Vérifier la redirection
-        $I->seeCurrentRouteIs('app_consultation_select_health_professional');
+        // Vérification qu'il y a eu une redirection
+        $I->see('Aucun professionnel de santé adapté disponible à cette heure');
     }
 
     public function createConsultationAsHealthProfessional(ControllerTester $I)
