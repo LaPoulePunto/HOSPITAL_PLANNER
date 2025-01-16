@@ -83,9 +83,12 @@ class AvailabilityController extends AbstractController
 
                     return $this->redirectToRoute('app_availability_update');
                 }
-                if (null !== $availability->getRecurrenceType()) {
-                    $this->createAvailabilitySplitSlots($availability, $entityManager);
+                $availabilitySplitSlots = $availability->getAvailabilitySplitSlots();
+                foreach ($availabilitySplitSlots as $splitSlot) {
+                    $entityManager->remove($splitSlot);
                 }
+                $this->createAvailabilitySplitSlots($availability, $entityManager);
+
                 $entityManager->flush();
 
                 return $this->redirectToRoute('app_availability_show');
@@ -109,7 +112,7 @@ class AvailabilityController extends AbstractController
         AvailabilityRepository $availabilityRepository,
         AvailabilitySplitSlotsRepository $availabilitySplitSlotsRepository,
     ): Response {
-        // Si type vaut 0, c'est une Availability, sinon c'est une Avai labilitySplitSlots
+        // Si type vaut 0, c'est une Availability, sinon c'est une AvailabilitySplitSlots
         if (!$type) {
             $entity = $availabilityRepository->findOneBy(['id' => $id]);
         } else {
