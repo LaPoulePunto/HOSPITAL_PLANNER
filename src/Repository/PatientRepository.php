@@ -21,6 +21,28 @@ class PatientRepository extends ServiceEntityRepository
         parent::__construct($registry, Patient::class);
     }
 
+    public function getPatientById(int $patientId): ?Patient
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.id = :patientId')
+            ->setParameter('patientId', $patientId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findPatientsByHealthProfessional($healthProfessionalId)
+    {
+        return $this->createQueryBuilder('p')
+            ->select('DISTINCT p')
+            ->join('p.consultation', 'c')
+            ->join('c.healthProfessional', 'hp')
+            ->where('hp.id = :healthProfessionalId')
+            ->setParameter('healthProfessionalId', $healthProfessionalId)
+            ->orderBy('p.lastname')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Patient[] Returns an array of Patient objects
     //     */

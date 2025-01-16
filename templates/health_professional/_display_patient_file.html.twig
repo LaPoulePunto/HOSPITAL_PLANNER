@@ -1,0 +1,13 @@
+{% for appointment in appointments %}
+    {% set healthprofessionalArray = [] %}
+        <li class="list-group-item d-flex justify-content-between align-items-center"
+        >{{ appointmentType == 'future' ? 'Consultera ' : 'A consulté '
+            }}{% for healthprofessional in appointment.healthprofessional
+                %}{% set healthprofessionalArray = healthprofessionalArray|merge(
+                    [healthprofessional.job ~ ' ' ~ healthprofessional.lastname ~ ' ' ~ healthprofessional.firstname]
+                ) %}{%
+                endfor %}{{ healthprofessionalArray|join(', ')
+            }} le : <span class="badge bg-success"
+            >{{ appointment.date|date('d/m/Y') }}</span
+        ></li>
+{% endfor %}

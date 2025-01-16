@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\ConsultationRepository;
+use App\Repository\PatientRepository;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,20 +16,19 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
 class HealthProfessionalController extends AbstractController
 {
-    #[Route('/health-professional/consultation/{consultationId}', name: 'app_display_patient_file')]
-    public function displayPatientFile(ConsultationRepository $consultationRepository, int $consultationId): Response
+    #[Route('/health-professional/patient-file/{patientId}', name: 'app_display_patient_file', requirements: ['patientId' => '\d+'])]
+    public function displayPatientFile(ConsultationRepository $consultationRepository, PatientRepository $patientRepository, int $patientId): Response
     {
-        $consultation = $consultationRepository->getConsultationById($consultationId);
-        if (!$consultation) {
-            throw $this->createNotFoundException("Aucune consultation trouvée pour l'ID spécifié.");
-        }
+        $patient = $patientRepository->getPatientById($patientId);
 
-        $patient = $consultation->getPatient();
-        if (!$patient) {
-            throw $this->createNotFoundException("Aucun patient n'est associé à cette consultation.");
-        }
+        $pastAppointments = $consultationRepository->findConsultationByPatientPastOrFuturReservation($patient, false);
+        $futureAppointments = $consultationRepository->findConsultationByPatientPastOrFuturReservation($patient, true);
 
-        return $this->render('health_professional/displayPatientFile.html.twig', ['patient' => $patient]);
+        return $this->render('health_professional/display_patient_file.html.twig', [
+            'patient' => $patient,
+            'pastAppointments' => $pastAppointments,
+            'futureAppointments' => $futureAppointments,
+        ]);
     }
 
     #[Route('/health-professional/calendar', name: 'app_health_professional_calendar')]
@@ -42,6 +42,19 @@ class HealthProfessionalController extends AbstractController
 
         return $this->render('health_professional/calendar.html.twig', [
             'appointments' => $appointments ?? null,
+        ]);
+    }
+
+    #[Route('/health-professional/list-patients', name: 'app_health_professional_patients')]
+    public function listPatients(
+        PatientRepository $patientRepository,
+        #[CurrentUser]
+        User $healthProfessional,
+    ): Response {
+        $patients = $patientRepository->findPatientsByHealthProfessional($healthProfessional);
+
+        return $this->render('health_professional/list_patients.html.twig', [
+            'patients' => $patients,
         ]);
     }
 }

@@ -40,6 +40,14 @@ class HealthProfessional extends User
         $this->speciality = new ArrayCollection();
     }
 
+    public function getRoles(): array
+    {
+        $roles = parent::getRoles();
+        $roles[] = 'ROLE_HEALTH_PROFESSIONAL';
+
+        return array_unique($roles);
+    }
+
     public function getJob(): ?string
     {
         return $this->job;

@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Fiche du patient {{ patient.lastname }} {{ patient.firstname }}
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12 text-center mb-4">
+                <h1 class="display-4">Fiche du patient</h1>
+                <h2 class="text-muted">{{ patient.lastname }} {{ patient.firstname }}</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            {# Informations du patient #}
+            <div class="col-lg-6">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="card-title text-center mb-0">Informations du patient</h4>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-5">Date de naissance :</dt>
+                            <dd class="col-sm-7">{{ patient.birthDate ? patient.birthDate|date('d/m/Y') : '<i>Pas de date de naissance renseignée</i>' }}</dd>
+
+                            <dt class="col-sm-5">Groupe sanguin :</dt>
+                            <dd class="col-sm-7">{{ patient.bloodGroup ? patient.bloodGroup : '<i>Pas de groupe sanguin renseigné</i>' }}</dd>
+
+                            <dt class="col-sm-5">Allergies :</dt>
+                            <dd class="col-sm-7">{{ patient.allergies ? patient.allergies : '<i>Pas d\'allergie renseignée</i>' }}</dd>
+
+                            <dt class="col-sm-5">Traitements suivis :</dt>
+                            <dd class="col-sm-7">{{ patient.treatments ? patient.treatments : '<i>Pas de traitement renseigné</i>' }}</dd>
+
+                            <dt class="col-sm-5">Commentaires :</dt>
+                            <dd class="col-sm-7">{{ patient.comments ? patient.comments : '<i>Pas de commentaire laissé</i>' }}</dd>
+                        </dl>
+                    </div>
+                </div>
+
+            </div>
+            {# Liste des consultations #}
+            <div class="col-lg-6">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="card-title text-center mb-0">Historique des consultations</h4>
+                    </div>
+                    <div class="card-body">
+                        {% if patient.consultation|length > 0 %}
+                            <ul class="list-group">
+                                {{ include('health_professional/_display_patient_file.html.twig', {appointments: futureAppointments, appointmentType: 'future'}) }}
+                                {{ include('health_professional/_display_patient_file.html.twig', {appointments: pastAppointments|reverse, appointmentType: 'past'}) }}
+                            </ul>
+                        {% else %}
+                            <p>Aucune consultation trouvée.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -39,9 +39,9 @@ class HomeUserCest
     {
         $I->amOnPage('/');
         $I->seeResponseCodeIsSuccessful();
-        $I->see('Se connecter');
-        $I->click('Se connecter');
-        $I->seeCurrentRouteIs('app_login');
+        $I->see('Se connecter / S\'inscrire');
+        $I->click('Se connecter / S\'inscrire');
+        $I->seeCurrentRouteIs('app_home_session');
         $I->seeResponseCodeIsSuccessful();
     }
 }

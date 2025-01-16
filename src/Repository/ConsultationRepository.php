@@ -61,16 +61,16 @@ class ConsultationRepository extends ServiceEntityRepository
     {
         $todayDate = new \DateTime();
         $query = $this->createQueryBuilder('c')
-            ->addSelect('c')
-            ->innerJoin('c.healthProfessional', 'hp')
-            ->innerJoin('c.patient', 'p');
+            ->addSelect('c');
 
-        // Health Professional ou patient
+        // Professionnel de santé ou patient
         if (in_array('ROLE_HEALTH_PROFESSIONAL', $user->getRoles())) {
-            $query->where('hp.id = :id');
+            $query->innerJoin('c.healthProfessional', 'hp')
+                ->where('hp.id = :id');
         }
         if (in_array('ROLE_PATIENT', $user->getRoles())) {
-            $query->where('p.id = :id');
+            $query->innerJoin('c.patient', 'p')
+                ->where('p.id = :id');
         }
 
         // Passé ou futur
