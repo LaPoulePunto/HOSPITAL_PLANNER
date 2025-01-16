@@ -6,17 +6,14 @@ use App\Entity\Consultation;
 use App\Entity\ConsultationType;
 use App\Entity\Patient;
 use App\Entity\Room;
-use Doctrine\ORM\PersistentCollection;
+use Doctrine\Common\Collections\Collection;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TimeField;
 
 class ConsultationCrudController extends AbstractCrudController
 {
@@ -25,18 +22,17 @@ class ConsultationCrudController extends AbstractCrudController
         return Consultation::class;
     }
 
-
     public function configureFields(string $pageName): iterable
     {
         return [
             IdField::new('id')->hideOnForm(),
             DateField::new('date', 'Date'),
-            DateTimeField::new('startTime', 'Début'),
-            DateTimeField::new('endTime', 'Fin'),
+            TimeField::new('startTime', 'Début'),
+            TimeField::new('endTime', 'Fin'),
 
             AssociationField::new('room', 'Salle')
                 ->setFormTypeOption('choice_label', function ($room) {
-                    return $room ? 'Salle ' . $room->getNum() . ' (Étage ' . $room->getFloor() . ')' : '';
+                    return $room ? 'Salle '.$room->getNum().' (Étage '.$room->getFloor().')' : '';
                 })
                 ->formatValue(function (?Room $room) {
                     return $room?->getNum() ?? 'Aucun type de consultation';
@@ -62,14 +58,20 @@ class ConsultationCrudController extends AbstractCrudController
                 ->setFormTypeOption('by_reference', false)
                 ->setFormTypeOption('choice_label', function ($healthProfessional) {
                     return $healthProfessional ? $healthProfessional->getFullName() : '';
+                })
+                ->formatValue(function (?Collection $healthProfessionals) {
+                    if ($healthProfessionals && $healthProfessionals->count() > 0) {
+                        return implode(', ', $healthProfessionals->map(fn ($healthProfessional) => $healthProfessional->getFullName())->toArray());
+                    }
+
+                    return 'Aucun professionnel de santé';
                 }),
 
             TextareaField::new('prescription', 'Prescription'),
 
             ImageField::new('signature', 'Signature')
                 ->setBasePath('/uploads/signatures')
-                ->onlyOnDetail()
+                ->onlyOnDetail(),
         ];
     }
-
 }
