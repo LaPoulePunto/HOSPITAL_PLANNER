@@ -2,10 +2,11 @@
     <thead>
     <tr>
         <th>Date</th>
-        <th>Heure de Début</th>
-        <th>Heure de Fin</th>
         {% if availabilities is not empty and availabilities|first.recurrenceType is not null %}
-            <th>Type de Disponibilité</th>
+            <th>Type de Récurrence</th>
+        {% else %}
+            <th>Heure de Début</th>
+            <th>Heure de Fin</th>
         {% endif %}
     </tr>
     </thead>
@@ -13,10 +14,16 @@
     {% if availabilities is not empty %}
         {% for availability in availabilities %}
             <tr class="rowAvailability">
-                <td>{{ availability.date|format_datetime(locale = 'fr', pattern = 'EEEE dd MMMM YYYY') }}</td>
-                <td>{{ availability.startTime|date('H:i') }}</td>
-                <td>{{ availability.endTime|date('H:i') }}</td>
                 {% if availability.recurrenceType is not null %}
+                    <td>
+                        {% if availability.recurrenceType == 1 %}
+                            Tous les {{ availability.date|format_datetime(locale = 'fr', pattern = 'EEEE') }}
+                        {% elseif availability.recurrenceType == 2 %}
+                            Tous les {{ availability.date|format_datetime(locale = 'fr', pattern = 'd') }} du mois
+                        {% elseif availability.recurrenceType == 3 %}
+                            Tous les {{ availability.date|format_datetime(locale = 'fr', pattern = 'd MMMM') }}
+                        {% endif %}
+                    </td>
                     <td>
                         {% if availability.recurrenceType == 1 %}
                             Toutes les semaines
@@ -26,6 +33,10 @@
                             Tous les ans
                         {% endif %}
                     </td>
+                {% else %}
+                        <td>{{ availability.date|format_datetime(locale = 'fr', pattern = 'EEEE dd MMMM YYYY') }}</td>
+                        <td>{{ availability.startTime|date('H:i') }}</td>
+                        <td>{{ availability.endTime|date('H:i') }}</td>
                 {% endif %}
                 <td>
                     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal-{{ availability.id }}">
