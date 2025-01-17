@@ -39,8 +39,11 @@ class AvailabilityController extends AbstractController
     }
 
     #[Route('/availability/create', name: 'app_availability_create')]
-    public function create(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    public function create(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        AvailabilityRepository $availabilityRepository,
+    ): Response {
         $availability = new Availability();
         $availability->setHealthprofessional($this->getUser());
         $form = $this->createForm(AvailabilityType::class, $availability);
@@ -49,6 +52,11 @@ class AvailabilityController extends AbstractController
             try {
                 if ($availability->getEndTime() <= $availability->getStartTime()) {
                     $this->addFlash('error', 'L\'heure de fin ne peut pas être avant ou égale à l\'heure de début.');
+
+                    return $this->redirectToRoute('app_availability_create');
+                }
+                if ($this->isAvailabilityConflict($availability, $availabilityRepository)) {
+                    $this->addFlash('error', 'Vous ne pouvez pas superposé des disponibilités.');
 
                     return $this->redirectToRoute('app_availability_create');
                 }
@@ -68,8 +76,12 @@ class AvailabilityController extends AbstractController
     }
 
     #[Route('/availability/{id}/update', name: 'app_availability_update')]
-    public function update(Availability $availability, Request $request, EntityManagerInterface $entityManager): Response
-    {
+    public function update(
+        Availability $availability,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        AvailabilityRepository $availabilityRepository,
+    ): Response {
         if ($availability->getHealthprofessional() !== $this->getUser()) {
             throw new AccessDeniedHttpException('Ces disponibilités ne sont pas les vôtres');
         }
@@ -82,6 +94,11 @@ class AvailabilityController extends AbstractController
                     $this->addFlash('error', 'L\'heure de fin ne peut pas être avant ou égale à l\'heure de début.');
 
                     return $this->redirectToRoute('app_availability_update');
+                }
+                if ($this->isAvailabilityConflict($availability, $availabilityRepository)) {
+                    $this->addFlash('error', 'Vous ne pouvez pas superposé des disponibilités.');
+
+                    return $this->redirectToRoute('app_availability_create');
                 }
                 $availabilitySplitSlots = $availability->getAvailabilitySplitSlots();
                 foreach ($availabilitySplitSlots as $splitSlot) {
@@ -154,5 +171,31 @@ class AvailabilityController extends AbstractController
             $entityManager->persist($newAvailability);
             $startTime = $nextStartTime;
         }
+    }
+
+    public function isAvailabilityConflict(
+        Availability $newAvailability,
+        AvailabilityRepository $availabilityRepository,
+    ): bool {
+        $newStart = $newAvailability->getStartTime();
+        $newEnd = $newAvailability->getEndTime();
+        $availabilities = $availabilityRepository->findBy(['healthProfessional' => $newAvailability->getHealthProfessional()]);
+        foreach ($availabilities as $availability) {
+            $existingDate = $availability->getDate();
+            $existingStart = $availability->getStartTime();
+            $existingEnd = $availability->getEndTime();
+            if ((null === $newAvailability->getId() || $newAvailability->getId() !== $availability->getId())
+                && $existingDate == $newAvailability->getDate()
+                && (
+                    ($newStart >= $existingStart && $newStart < $existingEnd)
+                    || ($newEnd > $existingStart && $newEnd <= $existingEnd)
+                    || ($newStart <= $existingStart && $newEnd >= $existingEnd)
+                )
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
