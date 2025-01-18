@@ -100,7 +100,7 @@ class ShowCest
     {
         $I->amLoggedInAs($this->healthProfessional);
         $I->amOnPage('/availability/show');
-        $I->seeNumberOfElements('ul>li.elementAvailabilitySplitSlots', 3);
+        $I->seeNumberOfElements('table>tr.elementAvailabilitySplitSlots', 3);
     }
 
     public function seeElementAreGood(ControllerTester $I)
@@ -108,14 +108,14 @@ class ShowCest
         $I->amLoggedInAs($this->healthProfessional);
         $I->amOnPage('/availability/show');
 
-        $I->see('vendredi 17 décembre 2027', '.rowAvailability');
+        $I->see(' Tous les vendredi', '.rowAvailability');
         $I->see('10:00', '.rowAvailability');
         $I->see('11:00', '.rowAvailability');
-        $I->see('10:00 - 10:30', 'ul>li.elementAvailabilitySplitSlots');
-        $I->see('10:30 - 11:00', 'ul>li.elementAvailabilitySplitSlots');
+        $I->see('10:00 - 10:30', 'table>tr.elementAvailabilitySplitSlots>td');
+        $I->see('10:30 - 11:00', 'table>tr.elementAvailabilitySplitSlots>td');
 
         $I->see('vendredi 29 décembre 2034', '.rowAvailability');
-        $I->see('12:00 - 12:30', 'ul>li.elementAvailabilitySplitSlots');
+        $I->see('12:00 - 12:30', 'table>tr.elementAvailabilitySplitSlots>td');
         $I->see('12:00', '.rowAvailability');
         $I->see('12:30', '.rowAvailability');
     }
