@@ -25,6 +25,10 @@ class HomeController extends AbstractController
         User $user,
         ConsultationRepository $consultationRepository,
     ): Response {
+        if (in_array('ROLE_ADMIN', $user->getRoles())) {
+            return $this->redirectToRoute('app_admin');
+        }
+
         return $this->render('home/user_home.html.twig', [
             'user' => $user,
             'consultations' => $consultationRepository->findConsultationByPatientPastOrFuturReservation($user, true),
