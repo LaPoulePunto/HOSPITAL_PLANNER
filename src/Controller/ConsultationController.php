@@ -207,7 +207,7 @@ class ConsultationController extends AbstractController
 
     #[IsGranted('ROLE_HEALTH_PROFESSIONAL')]
     #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
-    #[Route('/consultation/prescription/{id}', name: 'app_consultation_prescription', requirements: ['id' => '\d+'])]
+    #[Route('/consultation/prescription/{id}', name: 'app_consultation_prescription')]
     public function prescription(
         Consultation $consultation,
         Request $request,
@@ -242,6 +242,7 @@ class ConsultationController extends AbstractController
         ]);
     }
 
+    #[Route('/prescription/{id}', name: 'app_consultation_pdf')]
     public function HTMLToPDF(Consultation $consultation): Response
     {
         $date = new \DateTime();
