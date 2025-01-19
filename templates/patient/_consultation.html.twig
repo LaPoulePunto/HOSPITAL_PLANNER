@@ -32,7 +32,7 @@
                         <a href="{{ path('app_consultation_update', {id: appointment.id}) }}" class="text-primary" title="Modifier"><span class="material-symbols-outlined">edit</span></a>
                         <a href="{{ path('app_consultation_delete', {id: appointment.id}) }}" class="text-danger" title="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette consultation ?')"><span class="material-symbols-outlined">delete</span></a>
                 {% elseif appointment.prescription is not empty %}
-                    <a href="{{ path('app_consultation_pdf', { id: appointment.id }) }}" class="text-success"><span class="material-symbols-outlined">download</span></a>
+                    <a href="{{ path('app_consultation_pdf', {id: appointment.id}) }}" class="text-success"><span class="material-symbols-outlined">download</span></a>
                 {% endif %}
                 </td>
             </tr>

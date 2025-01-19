@@ -121,10 +121,6 @@ class UserCrudController extends AbstractCrudController
             );
     }
 
-    /**
-     * @param $entityInstance
-     * @return void
-     */
     public function setUserPassword($entityInstance): void
     {
         $request = $this->getContext()->getRequest();
@@ -137,6 +133,4 @@ class UserCrudController extends AbstractCrudController
             $entityInstance->setPassword($hashedPassword);
         }
     }
-
-
 }

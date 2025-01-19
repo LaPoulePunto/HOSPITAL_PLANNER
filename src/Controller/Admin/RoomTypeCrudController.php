@@ -5,7 +5,6 @@ namespace App\Controller\Admin;
 use App\Entity\RoomType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class RoomTypeCrudController extends AbstractCrudController
@@ -15,7 +14,6 @@ class RoomTypeCrudController extends AbstractCrudController
         return RoomType::class;
     }
 
-
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -23,5 +21,4 @@ class RoomTypeCrudController extends AbstractCrudController
             TextField::new('label', 'Nom du type de salle'),
         ];
     }
-
 }

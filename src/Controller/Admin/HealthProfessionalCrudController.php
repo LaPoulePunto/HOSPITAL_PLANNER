@@ -8,7 +8,6 @@ use App\Repository\SpecialityRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
@@ -35,7 +34,6 @@ class HealthProfessionalCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-
         return [
             IdField::new('id')->hideOnForm(),
             TextField::new('firstname', 'Prénom')->hideOnIndex(),
@@ -116,7 +114,6 @@ class HealthProfessionalCrudController extends AbstractCrudController
                 })->hideOnIndex(),
         ];
     }
-
 
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
