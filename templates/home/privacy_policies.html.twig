@@ -1,0 +1,120 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique de confidentialité{% endblock %}
+
+{% block body %}
+    <div class="container py-5">
+        <h1 class="mb-4 text-center">Politique de confidentialité</h1>
+
+        <div class="row">
+            <div class="col-lg-12 mb-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">1. Collecte des données personnelles</h5>
+                        <p class="card-text">Nous collectons des données personnelles lorsque vous vous inscrivez sur notre site, créez un compte, prenez un rendez-vous ou interagissez avec nos services. Ces données peuvent inclure :</p>
+                        <ul>
+                            <li><strong>Informations d’identification personnelle :</strong> nom, prénom, adresse e-mail, numéro de téléphone, etc.</li>
+                            <li><strong>Informations médicales :</strong> informations relatives à votre état de santé, vos rendez-vous, etc.</li>
+                            <li><strong>Informations de connexion :</strong> adresse IP, informations de connexion et cookies utilisés pour améliorer votre expérience.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 mb-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">2. Utilisation des données</h5>
+                        <p class="card-text">Les données personnelles collectées sont utilisées pour :</p>
+                        <ul>
+                            <li>Gérer vos rendez-vous et votre accès aux services du site.</li>
+                            <li>Communiquer avec vous pour confirmer des rendez-vous, vous envoyer des rappels ou répondre à vos demandes.</li>
+                            <li>Améliorer nos services et l’expérience utilisateur.</li>
+                            <li>Respecter nos obligations légales et réglementaires.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 mb-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">3. Partage des données</h5>
+                        <p class="card-text">Nous ne partageons vos données personnelles avec des tiers que dans les cas suivants :</p>
+                        <ul>
+                            <li>Avec des prestataires de services qui nous aident à exploiter notre site et à fournir nos services (hébergement, gestion des plannings, etc.), sous réserve qu’ils respectent également la confidentialité de vos données.</li>
+                            <li>Si la loi l’exige, pour répondre à des obligations légales ou réglementaires, ou pour protéger nos droits légaux.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 mb-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">4. Sécurité des données</h5>
+                        <p class="card-text">Nous mettons en place des mesures de sécurité techniques et organisationnelles pour protéger vos données personnelles contre toute perte, utilisation abusive ou accès non autorisé. Cependant, aucune méthode de transmission de données sur Internet ou de stockage électronique n'est totalement sécurisée, et nous ne pouvons garantir une sécurité absolue.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 mb-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">5. Cookies</h5>
+                        <p class="card-text">Nous utilisons des cookies pour améliorer votre expérience sur notre site, analyser l’utilisation du site, et vous offrir des services personnalisés. Vous pouvez configurer votre navigateur pour refuser les cookies, bien que cela puisse affecter certaines fonctionnalités du site.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 mb-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">6. Conservation des données</h5>
+                        <p class="card-text">Nous conservons vos données personnelles aussi longtemps que nécessaire pour les finalités pour lesquelles elles ont été collectées, conformément aux exigences légales ou contractuelles. Lorsque vos données ne sont plus nécessaires, elles sont supprimées ou anonymisées.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 mb-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">7. Vos droits</h5>
+                        <p class="card-text">Conformément à la réglementation en vigueur, vous disposez des droits suivants sur vos données personnelles :</p>
+                        <ul>
+                            <li><strong>Droit d’accès :</strong> Vous pouvez demander une copie des données personnelles que nous détenons à votre sujet.</li>
+                            <li><strong>Droit de rectification :</strong> Vous pouvez demander la correction de données incorrectes ou incomplètes.</li>
+                            <li><strong>Droit à l’effacement :</strong> Vous pouvez demander la suppression de vos données dans certaines conditions.</li>
+                            <li><strong>Droit à la portabilité :</strong> Vous pouvez obtenir une copie de vos données dans un format structuré, couramment utilisé.</li>
+                            <li><strong>Droit d’opposition :</strong> Vous pouvez vous opposer à l’utilisation de vos données à des fins spécifiques.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 mb-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">8. Contact</h5>
+                        <p class="card-text">Pour toute question concernant cette politique de confidentialité ou pour exercer vos droits, vous pouvez nous contacter via notre <a href="{{ path('app_contact_page') }}">page de contact</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
