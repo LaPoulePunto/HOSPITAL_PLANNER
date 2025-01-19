@@ -15,6 +15,6 @@ class PatientFixtures extends Fixture
             'lastname' => 'Weasley',
             'email' => 'patient@example.com',
         ]);
-        PatientFactory::createMany(10);
+        PatientFactory::createMany(3);
     }
 }

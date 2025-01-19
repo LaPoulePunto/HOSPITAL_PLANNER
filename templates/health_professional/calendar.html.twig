@@ -69,6 +69,7 @@
                     confirmButtonColor: '#A9A9A9',
                     cancelButtonColor: '#3085d6',
                     denyButtonText: 'Supprimer',
+                    footer: '<a id="detailsButton" href="{{ path('app_consultation_prescription', {id: 'consultation_id'}) }}" class="btn btn-success">Créer ordonnance</a>'.replace('consultation_id', info.event.id),
                 }).then((result) => {
                     if (result.isConfirmed) {
                         window.location.href = '{{ path('app_consultation_update', {id: 'consultation_id'}) }}'.replace('consultation_id', info.event.id);

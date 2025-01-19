@@ -153,7 +153,7 @@ class UpdateCest
         $I->seeCurrentRouteIs('app_health_professional_calendar');
         $I->seeInRepository(Consultation::class, [
             'id' => $this->consultation->getId(),
-            'room' => "{$newRoom->getId()}",
+            'room' => $newRoom->getId(),
         ]);
     }
 }
