@@ -48,4 +48,22 @@ class HomeController extends AbstractController
             'controller_name' => 'ContactPageController',
         ]);
     }
+
+    #[Route('/conditions-generales', name: 'app_cgu')]
+    public function generalConditionsOfUse(): Response
+    {
+        return $this->render('home/cgu.html.twig');
+    }
+
+    #[Route('/a-propos', name: 'app_about_us')]
+    public function aboutUs(): Response
+    {
+        return $this->render('home/about_us.html.twig');
+    }
+
+    #[Route('/politiques-confidentialite', name: 'app_privacy_policies')]
+    public function privacyPolities(): Response
+    {
+        return $this->render('home/privacy_policies.html.twig');
+    }
 }
