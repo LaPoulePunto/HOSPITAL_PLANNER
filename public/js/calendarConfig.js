@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 center: 'title',
                 end: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
+        slotMinTime: '07:00:00',
+        slotMaxTime: '20:00:00',
             eventClick: function(info) {
                 Swal.fire({
                     title:  "Détail de la consultation",

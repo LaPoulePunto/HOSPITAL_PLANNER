@@ -7,6 +7,7 @@ use App\Entity\AvailabilitySplitSlots;
 use App\Form\AvailabilityType;
 use App\Repository\AvailabilityRepository;
 use App\Repository\AvailabilitySplitSlotsRepository;
+use App\Repository\ConsultationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -39,8 +40,11 @@ class AvailabilityController extends AbstractController
     }
 
     #[Route('/availability/create', name: 'app_availability_create')]
-    public function create(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    public function create(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        AvailabilityRepository $availabilityRepository,
+    ): Response {
         $availability = new Availability();
         $availability->setHealthprofessional($this->getUser());
         $form = $this->createForm(AvailabilityType::class, $availability);
@@ -49,6 +53,11 @@ class AvailabilityController extends AbstractController
             try {
                 if ($availability->getEndTime() <= $availability->getStartTime()) {
                     $this->addFlash('error', 'L\'heure de fin ne peut pas être avant ou égale à l\'heure de début.');
+
+                    return $this->redirectToRoute('app_availability_create');
+                }
+                if ($this->isAvailabilityConflict($availability, $availabilityRepository)) {
+                    $this->addFlash('error', 'Vous ne pouvez pas superposé des disponibilités.');
 
                     return $this->redirectToRoute('app_availability_create');
                 }
@@ -68,8 +77,12 @@ class AvailabilityController extends AbstractController
     }
 
     #[Route('/availability/{id}/update', name: 'app_availability_update')]
-    public function update(Availability $availability, Request $request, EntityManagerInterface $entityManager): Response
-    {
+    public function update(
+        Availability $availability,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        AvailabilityRepository $availabilityRepository,
+    ): Response {
         if ($availability->getHealthprofessional() !== $this->getUser()) {
             throw new AccessDeniedHttpException('Ces disponibilités ne sont pas les vôtres');
         }
@@ -83,9 +96,17 @@ class AvailabilityController extends AbstractController
 
                     return $this->redirectToRoute('app_availability_update');
                 }
-                if (null !== $availability->getRecurrenceType()) {
-                    $this->createAvailabilitySplitSlots($availability, $entityManager);
+                if ($this->isAvailabilityConflict($availability, $availabilityRepository)) {
+                    $this->addFlash('error', 'Vous ne pouvez pas superposé des disponibilités.');
+
+                    return $this->redirectToRoute('app_availability_create');
                 }
+                $availabilitySplitSlots = $availability->getAvailabilitySplitSlots();
+                foreach ($availabilitySplitSlots as $splitSlot) {
+                    $entityManager->remove($splitSlot);
+                }
+                $this->createAvailabilitySplitSlots($availability, $entityManager);
+
                 $entityManager->flush();
 
                 return $this->redirectToRoute('app_availability_show');
@@ -107,9 +128,10 @@ class AvailabilityController extends AbstractController
         EntityManagerInterface $entityManager,
         Request $request,
         AvailabilityRepository $availabilityRepository,
+        ConsultationRepository $consultationRepository,
         AvailabilitySplitSlotsRepository $availabilitySplitSlotsRepository,
     ): Response {
-        // Si type vaut 0, c'est une Availability, sinon c'est une Avai labilitySplitSlots
+        // Si type vaut 0, c'est une Availability, sinon c'est une AvailabilitySplitSlots
         if (!$type) {
             $entity = $availabilityRepository->findOneBy(['id' => $id]);
         } else {
@@ -123,6 +145,10 @@ class AvailabilityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->get('delete')->isClicked()) {
                 $entityManager->remove($entity);
+                $consultations = $consultationRepository->getConsultationInAvailability($entity);
+                foreach ($consultations as $consultation) {
+                    $entityManager->remove($consultation);
+                }
                 $entityManager->flush();
             }
 
@@ -151,5 +177,31 @@ class AvailabilityController extends AbstractController
             $entityManager->persist($newAvailability);
             $startTime = $nextStartTime;
         }
+    }
+
+    public function isAvailabilityConflict(
+        Availability $newAvailability,
+        AvailabilityRepository $availabilityRepository,
+    ): bool {
+        $newStart = $newAvailability->getStartTime();
+        $newEnd = $newAvailability->getEndTime();
+        $availabilities = $availabilityRepository->findBy(['healthProfessional' => $newAvailability->getHealthProfessional()]);
+        foreach ($availabilities as $availability) {
+            $existingDate = $availability->getDate();
+            $existingStart = $availability->getStartTime();
+            $existingEnd = $availability->getEndTime();
+            if ((null === $newAvailability->getId() || $newAvailability->getId() !== $availability->getId())
+                && $existingDate == $newAvailability->getDate()
+                && (
+                    ($newStart >= $existingStart && $newStart < $existingEnd)
+                    || ($newEnd > $existingStart && $newEnd <= $existingEnd)
+                    || ($newStart <= $existingStart && $newEnd >= $existingEnd)
+                )
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
