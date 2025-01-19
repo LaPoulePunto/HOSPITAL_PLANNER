@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Availability;
+use App\Entity\AvailabilitySplitSlots;
 use App\Entity\Consultation;
 use App\Entity\Patient;
 use App\Entity\User;
@@ -87,7 +88,7 @@ class ConsultationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function getConsultationInAvailability(Availability $availability): array
+    public function getConsultationInAvailability(Availability|AvailabilitySplitSlots $availability): array
     {
         return $this->createQueryBuilder('c')
             ->where('c.date = :date')
