@@ -72,7 +72,9 @@ Une fois la configuration du projet mise en place et les données factices gén�
 - Pour se connecter en tant que HealthProfessional :
   - email : health_professional@example.com
   - mot de passe : password
-
+- Pour se connecter en tant qu'Admin' :
+  - email : admin@example.com
+  - mot de passe : password
 ## Scripts
 
 ### Pour maintenir un code propre en PHP et en twig

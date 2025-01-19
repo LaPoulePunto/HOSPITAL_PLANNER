@@ -13,7 +13,7 @@ class AdminFixtures extends Fixture
         UserFactory::createOne([
             'firstname' => 'Valentin',
             'lastname' => 'Portier',
-            'email' => 'admin@gmail.com',
+            'email' => 'admin@example.com',
             'roles' => ['ROLE_ADMIN'],
         ]);
         $manager->flush();
