@@ -20,7 +20,8 @@
                         }} | ÉTAGE : {{ consultation.room.floor }} | TYPE DE SALLE : {{ consultation.room.roomtype.label }}',
                         start: '{{ consultation.date|date('Y-m-d') }}T{{ consultation.startTime|date('H:i:s') }}',
                         end: '{{ consultation.date|date('Y-m-d') }}T{{ consultation.endTime|date('H:i:s') }}',
-                        button: 'modifier'
+                        button: 'modifier',
+                        isAvailability: false,
                     },
                     {% endfor %}
                 {% endif %}
@@ -33,12 +34,25 @@
                         start: '{{ availability.date|date('Y-m-d') }}T{{ availability.startTime|date('H:i:s') }}',
                         end: '{{ availability.date|date('Y-m-d') }}T{{ availability.endTime|date('H:i:s') }}',
                         display: 'background',
+                        extendedProps: {
+                            isAvailability: true
+                        },
                     },
                     {% endfor %}
                 {% endif %}
             ]);
             calendar.render();
             calendar.on('eventClick', function(info) {
+                if (info.event.extendedProps.isAvailability) {
+                    Swal.fire({
+                        title: 'Votre disponibilité',
+                        text: info.event.start.getHours() + ':' + info.event.start.getMinutes() + ' - ' +
+                            info.event.end.getHours() + ':' + info.event.end.getMinutes(),
+
+                        icon: 'info',
+                    });
+                    return;
+                }
                 const consultationDetails = `
             ${info.event.title}<br>
             <strong>Date :</strong> ${info.event.start.toLocaleString()}
