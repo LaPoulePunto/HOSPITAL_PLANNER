@@ -21,7 +21,7 @@ Le projet est disponible à l'adresse suivante (avec le vpn activé):\
 [Hospitime lien](http://10.31.33.118:8000/)
 
 La machine virtuelle contenant le serveur est accessible en ssh :\
-**IP** : 10.31.33.118\
+**IP** : 10.31.33.118:8000\
 **Utilisateur** : user\
 **Mot de passe** : user
 
