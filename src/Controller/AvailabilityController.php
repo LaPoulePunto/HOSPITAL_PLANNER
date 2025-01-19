@@ -7,6 +7,7 @@ use App\Entity\AvailabilitySplitSlots;
 use App\Form\AvailabilityType;
 use App\Repository\AvailabilityRepository;
 use App\Repository\AvailabilitySplitSlotsRepository;
+use App\Repository\ConsultationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -127,6 +128,7 @@ class AvailabilityController extends AbstractController
         EntityManagerInterface $entityManager,
         Request $request,
         AvailabilityRepository $availabilityRepository,
+        ConsultationRepository $consultationRepository,
         AvailabilitySplitSlotsRepository $availabilitySplitSlotsRepository,
     ): Response {
         // Si type vaut 0, c'est une Availability, sinon c'est une AvailabilitySplitSlots
@@ -143,6 +145,10 @@ class AvailabilityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->get('delete')->isClicked()) {
                 $entityManager->remove($entity);
+                $consultations = $consultationRepository->getConsultationInAvailability($entity);
+                foreach ($consultations as $consultation) {
+                    $entityManager->remove($consultation);
+                }
                 $entityManager->flush();
             }
 
