@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Availability;
 use App\Entity\Consultation;
 use App\Entity\Patient;
 use App\Entity\User;
@@ -29,8 +30,7 @@ class ConsultationRepository extends ServiceEntityRepository
             ->andWhere('c.id = :consultationID')
             ->setParameter('consultationID', $consultationId)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
 
     public function getAllConsultationsByUser(User $user): array
@@ -83,6 +83,19 @@ class ConsultationRepository extends ServiceEntityRepository
         return $query->setParameter('id', $user)
             ->setParameter('todayDate', $todayDate)
             ->orderBy('c.date', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getConsultationInAvailability(Availability $availability): array
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.date = :date')
+            ->andWhere('c.startTime >= :startTime')
+            ->andWhere('c.endTime <= :endTime')
+            ->setParameter('date', $availability->getDate()->format('Y-m-d'))
+            ->setParameter('startTime', $availability->getStartTime()->format('H:i:s'))
+            ->setParameter('endTime', $availability->getEndTime()->format('H:i:s'))
             ->getQuery()
             ->getResult();
     }
